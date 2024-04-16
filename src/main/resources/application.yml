@@ -1,0 +1,27 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: Pdf
+
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+      
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=DAISHIN;encrypt=true;trustServerCertificate=true
+    username: pdfuser
+    password: 1234
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+mybatis:
+  mapper-locations: mapper/*.xml
+  type-aliases-package: com.daishin.pdf.dto
+  configuration:
+    map-underscore-to-camel-case: true
+    
+storage:
+  path: C:\DATA
+  
