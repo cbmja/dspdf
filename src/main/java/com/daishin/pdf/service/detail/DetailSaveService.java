@@ -26,11 +26,7 @@ public class DetailSaveService {
         if(detail.getPdfYn().equals("Y")){
             //파일저장
             savePdfFile(detail);
-        } else {
-            //docDataFile 저장
         }
-
-
         detailRepository.save(detail);
     }
 
