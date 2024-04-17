@@ -5,7 +5,7 @@ import com.daishin.pdf.repository.DetailRepository;
 import com.daishin.pdf.util.Common;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
+
 
 
 import java.io.File;

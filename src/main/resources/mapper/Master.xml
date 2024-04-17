@@ -11,14 +11,16 @@
         , PAGE_CNT
         , PRINT_TYPE_NM
         , TOTAL_SEND_CNT
-        , TR_KEY)
+        , TR_KEY
+        , PST_FILE)
         VALUES
         (#{apiKey}
         , #{dlvSttusCd}
         , #{pageCnt}
         , #{printTypeNm}
         , #{totalSendCnt}
-        , #{trKey})
+        , #{trKey}
+        ,#{pstFile})
     </insert>
 
 

@@ -11,6 +11,7 @@ public class Master {
     private String dlvSttusCd; //배달 항목 : 일반 , 등기 , 내용증명 , 배달증명 등
     private String printTypeNm; //인쇄 유형 : 안내장 , 등
     private String pageCnt; //페이지 수
+    private String pstFile;
 
 
 

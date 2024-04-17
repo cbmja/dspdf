@@ -35,23 +35,78 @@ public class PostalCreationRequestController {
     /*@RequestBody Master master , @RequestBody(required = false) Map test*/
     public Map<String, String> jsonRequest(@RequestBody Map requests){
 
+        //결과 코드
+        Map<String , String> response = new LinkedHashMap<>();
+
+        //우편 제작 요청 데이터 map -> DTO
         Master master = mapToMaster(requests);
         List<Detail> detailList = mapToDetailList(requests);
 
-        for(Detail d : detailList){
-            detailSaveService.save(d);
-            System.out.println("+++++++++++++++");
-            System.out.println(d);
+        //필수 항목 null 체크
+        masterNullCheck(master , response);
+        detailNullCheck(detailList , response);
+
+        //누락된 항목 있을 경우
+        if(response.size() > 0){
+            return response;
         }
 
-        Map<String , String > response = new LinkedHashMap<>();
-        response.put("succ" , "성공");
-        System.out.println("/////////////////");
-        System.out.println(master);
+        for(Detail d : detailList){
+            detailSaveService.save(d);
+        }
+
+        response.put("전송 완료" , "전송 완료");
         masterSaveService.save(master);
         return response;
     }
 
+    //master 필수값 체크
+    private void masterNullCheck(Master master , Map response){
+
+        if(master.getApiKey() == null){
+            response.put("apikey 누락" , "apikey 누락");
+        }
+        if(master.getPstFile() == null){
+            response.put("pstFile 누락" , "pstFile 누락");
+        }
+        if(master.getTrKey() == null){
+            response.put("trKey 누락" , "trKey 누락");
+        }
+        if(master.getDlvSttusCd() == null){
+            response.put("dlvSttusCd 누락" , "dlvSttusCd 누락");
+        }
+        if(master.getPrintTypeNm() == null){
+            response.put("printTypeNm 누락" , "printTypeNm 누락");
+        }
+
+    }
+    //detail 필수값 체크
+    private void detailNullCheck(List<Detail> detailList , Map response){
+
+        if (detailList.size() <= 0){
+            response.put("detail이 없습니다" , "detail이 없습니다");
+        } else {
+        //dmlinkKey 누락된 사람은 어떻게 알려줘야함
+            for (Detail detail : detailList){
+                if(detail.getRecvNum() == null){
+                    response.put("["+detail.getDmLinkKey()+"] recvNum 누락" , "recvNum 누락");
+                }
+                if(detail.getDmLinkKey() == null){
+                    response.put("["+detail.getDmLinkKey()+"] dmLinkKey 누락" , "dmLinkKey 누락");
+                }
+                if(detail.getPostCode() == null){
+                    response.put("["+detail.getDmLinkKey()+"] postCode 누락" , "postCode 누락");
+                }
+                if(detail.getPdfYn() == null){
+                    response.put("["+detail.getDmLinkKey()+"] pdfYn 누락" , "pdfYn 누락");
+                }
+                //pdfYn 이 Y 인데 pdf파일이 없을 경우
+                if(detail.getPdfYn().equals("Y") && detail.getPdf() == null){
+                    response.put("["+detail.getDmLinkKey()+"] pdf 누락" , "pdf 누락");
+                }
+            }
+        }
+    }
 
 
     private Master mapToMaster(Map requests){
@@ -62,6 +117,7 @@ public class PostalCreationRequestController {
         master.setDlvSttusCd((String)requests.get("dlvSttusCd"));
         master.setPrintTypeNm((String)requests.get("printTypeNm"));
         master.setPageCnt((String)requests.get("pageCnt"));
+        master.setPstFile((String)requests.get("pstFile"));
         return master;
     }
 
