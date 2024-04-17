@@ -2,7 +2,6 @@ package com.daishin.pdf.controller;
 
 import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.dto.Master;
-import com.daishin.pdf.dto.Test;
 import com.daishin.pdf.service.detail.DetailSaveService;
 import com.daishin.pdf.service.master.MasterSaveService;
 import lombok.RequiredArgsConstructor;
@@ -37,10 +36,12 @@ public class PostalCreationRequestController {
     public Map<String, String> jsonRequest(@RequestBody Map requests){
 
         Master master = mapToMaster(requests);
-        List<Detail> detailList = mapToDetail(requests);
+        List<Detail> detailList = mapToDetailList(requests);
 
         for(Detail d : detailList){
             detailSaveService.save(d);
+            System.out.println("+++++++++++++++");
+            System.out.println(d);
         }
 
         Map<String , String > response = new LinkedHashMap<>();
@@ -64,7 +65,7 @@ public class PostalCreationRequestController {
         return master;
     }
 
-    private List<Detail> mapToDetail(Map requests){
+    private List<Detail> mapToDetailList(Map requests){
         List<Map> details = (List<Map>) requests.get("details");
         List<Detail> detailList = new ArrayList<>();
         for (Map detail : details){
@@ -76,8 +77,8 @@ public class PostalCreationRequestController {
             d.setPostCode((String)detail.get("postCode"));
             d.setRetYn((String)detail.get("retYn"));
             d.setPdfYn((String)detail.get("pdfYn"));
-            d.setDocData(null);
-            d.setPdf(null);
+            d.setDocData((String)detail.get("docData"));
+            d.setPdf((String)detail.get("pdf"));
             detailList.add(d);
         }
         return detailList;

@@ -18,7 +18,7 @@ public class Detail {
     private String pdfNm; //pdf 파일명
     private String pdfPath; //pdf 저장 위치
 
-    private MultipartFile docData; //가변 데이터
-    private MultipartFile pdf; //첨부 파일
+    private String docData; //가변 데이터
+    private String pdf; //첨부 파일
 
 }
