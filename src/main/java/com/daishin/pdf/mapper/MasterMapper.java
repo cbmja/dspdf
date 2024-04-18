@@ -8,4 +8,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface MasterMapper {
 
     void save(Master master);
+
+    Master findByTrKey(String trKey);
 }

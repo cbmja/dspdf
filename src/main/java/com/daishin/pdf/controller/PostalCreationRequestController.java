@@ -3,6 +3,7 @@ package com.daishin.pdf.controller;
 import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.service.detail.DetailSaveService;
+import com.daishin.pdf.service.master.MasterInfoService;
 import com.daishin.pdf.service.master.MasterSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,26 +17,35 @@ import java.util.*;
 public class PostalCreationRequestController {
 
         private final MasterSaveService masterSaveService;
+        private final MasterInfoService masterInfoService;
+
         private final DetailSaveService detailSaveService;
 
-    @PostMapping("/pcReq/docData")
+
+    @PostMapping("/pcReq")
     @ResponseBody
     /*@RequestBody Master master , @RequestBody(required = false) Map test*/
     public Map<String, String> jsonRequest(@RequestPart(name="master" , required = false) Map master , @RequestPart(name="pdf", required = false) MultipartFile pdf
                                             , @RequestPart(name="detail", required = false) List<Map> detail){
 
-        System.out.println(master);
-        for(Map m : detail){
-            System.out.println(m);
-        }
-        System.out.println("/////////////////");
+
         //결과 코드
         Map<String , String> response = new LinkedHashMap<>();
 
         //우편 제작 요청 데이터 map -> DTO
         Master master_ = mapToMaster(master);
+        List<Detail> detailList = mapToDetailList(detail , master_ , pdf);
 
-        List<Detail> detailList = mapToDetailList(detail , master_);
+        System.out.println(detailList.size()+"[[[[[[[");
+        System.out.println(detailList);
+        //nullcheck
+        masterNullCheck(master_ , response);
+        detailNullCheck(detailList , response);
+
+        //master중복체크
+        if(masterInfoService.findByTrKey(master_.getTrKey()) != null){
+            response.put("이미 존재하는 trKey" , "이미 존재하는 trKey");
+        }
 
         //누락된 항목 있을 경우
         if(response.size() > 0){
@@ -48,7 +58,11 @@ public class PostalCreationRequestController {
 
         response.put("전송 완료" , "전송 완료");
         masterSaveService.save(master_);
+
+
         return response;
+
+
     }
 
     //master 필수값 체크
@@ -56,9 +70,6 @@ public class PostalCreationRequestController {
 
         if(master.getApiKey() == null){
             response.put("apikey 누락" , "apikey 누락");
-        }
-        if(master.getPstFile() == null){
-            response.put("pstFile 누락" , "pstFile 누락");
         }
         if(master.getTrKey() == null){
             response.put("trKey 누락" , "trKey 누락");
@@ -95,6 +106,10 @@ public class PostalCreationRequestController {
                 if(detail.getPdfYn().equals("Y") && detail.getPdf() == null){
                     response.put("["+detail.getDmLinkKey()+"] pdf 누락" , "pdf 누락");
                 }
+                //pdfYn 이 Y 인데 pdf파일이 없을 경우
+                if(detail.getPdfYn().equals("N") && detail.getDocData() == null){
+                    response.put("["+detail.getDmLinkKey()+"] docData 누락" , "docData 누락");
+                }
             }
         }
     }
@@ -112,7 +127,7 @@ public class PostalCreationRequestController {
         return master;
     }
 
-    private List<Detail> mapToDetailList(List<Map> requests , Master master_){
+    private List<Detail> mapToDetailList(List<Map> requests , Master master_ , MultipartFile pdf){
         List<Map> details = requests;
 
         List<Detail> detailList = new ArrayList<>();
@@ -127,10 +142,13 @@ public class PostalCreationRequestController {
             d.setRetYn((String)detail.get("retYn"));
             d.setPdfYn((String)detail.get("pdfYn"));
             d.setDocData((String)detail.get("docData"));
-
-            //d.setPdf((String)detail.get("pdf"));
+            if(d.getPdfYn().equals("N")){
+                d.setDocDataStatus("접수완료");
+            }
+            d.setPdf(pdf);
             detailList.add(d);
         }
+
         return detailList;
     }
 

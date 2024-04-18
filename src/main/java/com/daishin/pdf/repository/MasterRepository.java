@@ -16,4 +16,9 @@ public class MasterRepository {
         return sql.insert("com.daishin.pdf.mapper.MasterMapper.save" , master);
     }
 
+    public Master findByTrKey(String trKey){
+
+        return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.findByTrKey" , trKey);
+    }
+
 }

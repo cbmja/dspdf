@@ -22,6 +22,6 @@ public class Detail {
     private String docData; //가변 데이터
     private MultipartFile pdf; //첨부 파일
     
-    private String docDataStatus = "접수완료"; // docData 처리상태 : 접수완료 / 처리중 / 처리완료 등
+    private String docDataStatus; // docData 처리상태 : 접수완료 / 처리중 / 처리완료 등
 
 }

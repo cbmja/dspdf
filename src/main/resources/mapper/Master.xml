@@ -23,5 +23,9 @@
         ,#{pstFile})
     </insert>
 
+    <select id = "findByTrKey" parameterType="String" resultType="Master">
+        SELECT * FROM dbo.MASTER WHERE TR_KEY = #{trKey}
+    </select>
+
 
 </mapper>
