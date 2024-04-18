@@ -1,6 +1,7 @@
 package com.daishin.pdf.dto;
 
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @Data
@@ -19,6 +20,8 @@ public class Detail {
     private String pdfPath; //pdf 저장 위치
 
     private String docData; //가변 데이터
-    private String pdf; //첨부 파일
+    private MultipartFile pdf; //첨부 파일
+    
+    private String docDataStatus = "접수완료"; // docData 처리상태 : 접수완료 / 처리중 / 처리완료 등
 
 }

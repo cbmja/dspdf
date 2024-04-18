@@ -7,6 +7,7 @@ import com.daishin.pdf.service.master.MasterSaveService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.*;
 
@@ -17,34 +18,24 @@ public class PostalCreationRequestController {
         private final MasterSaveService masterSaveService;
         private final DetailSaveService detailSaveService;
 
-    @PostMapping("/pcReq/form")
-    @ResponseBody
-    public Map<String, String> formRequest(Master master , Detail detail){
-
-        Map<String , String > response = new LinkedHashMap<>();
-        response.put("succ" , "성공");
-        System.out.println(master);
-        System.out.println("////////////");
-        System.out.println(detail);
-        masterSaveService.save(master);
-        return response;
-    }
-
-    @PostMapping("/pcReq/json")
+    @PostMapping("/pcReq/docData")
     @ResponseBody
     /*@RequestBody Master master , @RequestBody(required = false) Map test*/
-    public Map<String, String> jsonRequest(@RequestBody Map requests){
+    public Map<String, String> jsonRequest(@RequestPart(name="master" , required = false) Map master , @RequestPart(name="pdf", required = false) MultipartFile pdf
+                                            , @RequestPart(name="detail", required = false) List<Map> detail){
 
+        System.out.println(master);
+        for(Map m : detail){
+            System.out.println(m);
+        }
+        System.out.println("/////////////////");
         //결과 코드
         Map<String , String> response = new LinkedHashMap<>();
 
         //우편 제작 요청 데이터 map -> DTO
-        Master master = mapToMaster(requests);
-        List<Detail> detailList = mapToDetailList(requests);
+        Master master_ = mapToMaster(master);
 
-        //필수 항목 null 체크
-        masterNullCheck(master , response);
-        detailNullCheck(detailList , response);
+        List<Detail> detailList = mapToDetailList(detail , master_);
 
         //누락된 항목 있을 경우
         if(response.size() > 0){
@@ -56,7 +47,7 @@ public class PostalCreationRequestController {
         }
 
         response.put("전송 완료" , "전송 완료");
-        masterSaveService.save(master);
+        masterSaveService.save(master_);
         return response;
     }
 
@@ -121,12 +112,14 @@ public class PostalCreationRequestController {
         return master;
     }
 
-    private List<Detail> mapToDetailList(Map requests){
-        List<Map> details = (List<Map>) requests.get("details");
+    private List<Detail> mapToDetailList(List<Map> requests , Master master_){
+        List<Map> details = requests;
+
         List<Detail> detailList = new ArrayList<>();
+
         for (Map detail : details){
             Detail d = new Detail();
-            d.setTrKey((String)requests.get("trKey"));
+            d.setTrKey(master_.getTrKey());
             d.setRecvNum((String)detail.get("recvNum"));
             d.setDmLinkKey((String)detail.get("dmLinkKey"));
             d.setRegNo((String)detail.get("regNo"));
@@ -134,7 +127,8 @@ public class PostalCreationRequestController {
             d.setRetYn((String)detail.get("retYn"));
             d.setPdfYn((String)detail.get("pdfYn"));
             d.setDocData((String)detail.get("docData"));
-            d.setPdf((String)detail.get("pdf"));
+
+            //d.setPdf((String)detail.get("pdf"));
             detailList.add(d);
         }
         return detailList;

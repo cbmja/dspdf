@@ -16,7 +16,9 @@
         , DOC_DATA_NM
         , PDF_NM
         , PDF_PATH
-        , DOC_DATA_PATH)
+        , DOC_DATA_PATH
+        , DOC_DATA
+        , DOC_DATA_STATUS)
         VALUES
         (#{trKey}
         , #{recvNum}
@@ -28,7 +30,9 @@
         , #{docDataNm}
         , #{pdfNm}
         , #{pdfPath}
-        , #{docDataPath})
+        , #{docDataPath}
+        , #{docData}
+        , #{docDataStatus})
     </insert>
 
 
