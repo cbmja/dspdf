@@ -21,4 +21,8 @@ public class MasterRepository {
         return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.findByTrKey" , trKey);
     }
 
+    public int update(Master master){
+        return sql.update("com.daishin.pdf.mapper.MasterMapper.update" , master);
+    }
+
 }

@@ -27,5 +27,17 @@
         SELECT * FROM dbo.MASTER WHERE TR_KEY = #{trKey}
     </select>
 
+    <update id = "update" parameterType="Master">
+        UPDATE dbo.MASTER
+        SET
+        API_KEY = #{apiKey}
+        , DLV_STTUS_CD = #{dlvSttusCd}
+        , PAGE_CNT = #{pageCnt}
+        , PRINT_TYPE_NM = #{printTypeNm}
+        , TOTAL_SEND_CNT = #{totalSendCnt}
+        , PST_FILE = #{pstFile}
+        WHERE TR_KEY = #{trKey}
+    </update>
+
 
 </mapper>

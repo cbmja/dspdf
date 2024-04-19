@@ -16,4 +16,8 @@ public class MasterSaveService {
         masterRepository.save(master);
     }
 
+    public void update(Master master){
+        masterRepository.update(master);
+    }
+
 }

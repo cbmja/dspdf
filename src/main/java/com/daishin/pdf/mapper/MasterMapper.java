@@ -10,4 +10,6 @@ public interface MasterMapper {
     void save(Master master);
 
     Master findByTrKey(String trKey);
+
+    void update(Master master);
 }

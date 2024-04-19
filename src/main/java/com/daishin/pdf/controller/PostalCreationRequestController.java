@@ -27,27 +27,29 @@ public class PostalCreationRequestController {
     /*@RequestBody Master master , @RequestBody(required = false) Map test*/
     public Map<String, String> jsonRequest(@RequestPart(name="master" , required = false) Map master , @RequestPart(name="pdf", required = false) MultipartFile pdf
                                             , @RequestPart(name="detail", required = false) List<Map> detail){
-
-
-        //결과 코드
+/*
+        System.out.println(master);
+        System.out.println("//////////////");
+        System.out.println(pdf);
+        System.out.println("//////////////");
+        System.out.println(detail);
+*/
+        //결과 코드//
         Map<String , String> response = new LinkedHashMap<>();
 
-        //우편 제작 요청 데이터 map -> DTO
+        //우편 제작 요청 데이터 map -> DTO//
         Master master_ = mapToMaster(master);
         List<Detail> detailList = mapToDetailList(detail , master_ , pdf);
 
-        System.out.println(detailList.size()+"[[[[[[[");
-        System.out.println(detailList);
-        //nullcheck
+        //nullcheck//
         masterNullCheck(master_ , response);
         detailNullCheck(detailList , response);
 
-        //master중복체크
-        if(masterInfoService.findByTrKey(master_.getTrKey()) != null){
-            response.put("이미 존재하는 trKey" , "이미 존재하는 trKey");
-        }
 
-        //누락된 항목 있을 경우
+
+
+
+        //누락된 항목 있을 경우 저장하지않음//
         if(response.size() > 0){
             return response;
         }
@@ -57,7 +59,15 @@ public class PostalCreationRequestController {
         }
 
         response.put("전송 완료" , "전송 완료");
-        masterSaveService.save(master_);
+        //이미 존재하는 tr_key이면 수정
+        if(masterInfoService.findByTrKey(master_.getTrKey()) != null){
+            response.put("master 수정" , "master 수정");
+            masterSaveService.update(master_);
+        } else { //없으면 저장
+            masterSaveService.save(master_);
+        }
+
+
 
 
         return response;
@@ -106,7 +116,7 @@ public class PostalCreationRequestController {
                 if(detail.getPdfYn().equals("Y") && detail.getPdf() == null){
                     response.put("["+detail.getDmLinkKey()+"] pdf 누락" , "pdf 누락");
                 }
-                //pdfYn 이 Y 인데 pdf파일이 없을 경우
+                //pdfYn 이 N 인데 docdata파일이 없을 경우
                 if(detail.getPdfYn().equals("N") && detail.getDocData() == null){
                     response.put("["+detail.getDmLinkKey()+"] docData 누락" , "docData 누락");
                 }
@@ -115,37 +125,40 @@ public class PostalCreationRequestController {
     }
 
 
-    private Master mapToMaster(Map requests){
-        Master master = new Master();
-        master.setApiKey((String)requests.get("apiKey"));
-        master.setTrKey((String)requests.get("trKey"));
-        master.setTotalSendCnt((String)requests.get("totalSendCnt"));
-        master.setDlvSttusCd((String)requests.get("dlvSttusCd"));
-        master.setPrintTypeNm((String)requests.get("printTypeNm"));
-        master.setPageCnt((String)requests.get("pageCnt"));
-        master.setPstFile((String)requests.get("pstFile"));
-        return master;
+    private Master mapToMaster(Map master){
+        Master master_ = new Master();
+        master_.setApiKey((String)master.get("apiKey"));
+        master_.setTrKey((String)master.get("trKey"));
+        master_.setTotalSendCnt((String)master.get("totalSendCnt"));
+        master_.setDlvSttusCd((String)master.get("dlvSttusCd"));
+        master_.setPrintTypeNm((String)master.get("printTypeNm"));
+        master_.setPageCnt((String)master.get("pageCnt"));
+        master_.setPstFile((String)master.get("pstFile"));
+        return master_;
     }
 
-    private List<Detail> mapToDetailList(List<Map> requests , Master master_ , MultipartFile pdf){
-        List<Map> details = requests;
+    private List<Detail> mapToDetailList(List<Map> detail , Master master_ , MultipartFile pdf){
+        List<Map> details = detail;
 
         List<Detail> detailList = new ArrayList<>();
 
-        for (Map detail : details){
+        for (Map detail_ : details){
             Detail d = new Detail();
             d.setTrKey(master_.getTrKey());
-            d.setRecvNum((String)detail.get("recvNum"));
-            d.setDmLinkKey((String)detail.get("dmLinkKey"));
-            d.setRegNo((String)detail.get("regNo"));
-            d.setPostCode((String)detail.get("postCode"));
-            d.setRetYn((String)detail.get("retYn"));
-            d.setPdfYn((String)detail.get("pdfYn"));
-            d.setDocData((String)detail.get("docData"));
+            d.setRecvNum((String)detail_.get("recvNum"));
+            d.setDmLinkKey((String)detail_.get("dmLinkKey"));
+            d.setRegNo((String)detail_.get("regNo"));
+            d.setPostCode((String)detail_.get("postCode"));
+            d.setRetYn((String)detail_.get("retYn"));
+            d.setPdfYn((String)detail_.get("pdfYn"));
+            d.setDocData((String)detail_.get("docData"));
             if(d.getPdfYn().equals("N")){
                 d.setDocDataStatus("접수완료");
             }
-            d.setPdf(pdf);
+            if(d.getPdfYn().equals("Y")){
+                d.setPdf(pdf);
+            }
+
             detailList.add(d);
         }
 

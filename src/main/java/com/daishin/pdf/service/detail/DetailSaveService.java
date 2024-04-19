@@ -5,7 +5,7 @@ import com.daishin.pdf.repository.DetailRepository;
 import com.daishin.pdf.util.Common;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.web.multipart.MultipartFile;
 
 
 import java.io.File;
@@ -25,42 +25,43 @@ public class DetailSaveService {
 
         if(detail.getPdfYn().equals("Y")){
             //파일저장
-        //    savePdfFile(detail);
+            savePdfFile(detail);
         }
         detailRepository.save(detail);
     }
 
-/*
+
 
     //base64 인코딩된 파일 데이터를 디코딩하여 파일로 변환 후 저장
     //pdf 로 오는 경우 (pdfYn -> Y 인 경우)
     private void savePdfFile(Detail detail){
 
-        byte[] decodedBytes = Base64.getDecoder().decode(detail.getPdf());
-        String filePath = "C:\\DATA\\"+ Common.getCurrnetYYYYMM()+"\\"+detail.getTrKey()+"\\";
+        MultipartFile pdf = detail.getPdf();
+        
+        //저장될 pdf 파일명
         String fileName = detail.getDmLinkKey()+".pdf";
-
-    //파일 저장처리SSS
+        //파일 저장 경로
+        String path = "C:\\DATA\\"+Common.getCurrnetYYYYMM()+"\\"+detail.getTrKey()+"\\"+"pdf";
 
         //디렉토리 생성
-        String path = "C:\\DATA\\"+Common.getCurrnetYYYYMM()+"\\"+detail.getTrKey();
         File dir = new File(path);
         dir.mkdirs();
+        
 
-        Path outputPath = Paths.get(filePath+fileName);
+    //파일 저장처리SSS
+        Path pdfPath = Paths.get(path).resolve(fileName);
         try {
-            // 바이트 배열을 파일로 저장
-            Files.write(outputPath, decodedBytes);
-        } catch (IOException e) {
+            pdf.transferTo(pdfPath.toFile());
+        } catch (IllegalStateException | IOException e) {
             e.printStackTrace();
         }
     //파일 저장처리EEE
         detail.setPdfNm(fileName);
-        detail.setPdfPath(filePath+fileName);
+        detail.setPdfPath(path+"\\"+fileName);
 
     }
 
-*/
+
 
 
 
