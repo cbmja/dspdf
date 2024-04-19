@@ -24,48 +24,46 @@ public class PostalCreationRequestController {
 
     @PostMapping("/pcReq")
     @ResponseBody
-    /*@RequestBody Master master , @RequestBody(required = false) Map test*/
     public Map<String, String> jsonRequest(@RequestPart(name="master" , required = false) Map master , @RequestPart(name="pdf", required = false) MultipartFile pdf
                                             , @RequestPart(name="detail", required = false) List<Map> detail){
-/*
-        System.out.println(master);
-        System.out.println("//////////////");
-        System.out.println(pdf);
-        System.out.println("//////////////");
-        System.out.println(detail);
-*/
+
         //결과 코드//
         Map<String , String> response = new LinkedHashMap<>();
 
-        //우편 제작 요청 데이터 map -> DTO//
+        //request map -> DTO//
         Master master_ = mapToMaster(master);
         List<Detail> detailList = mapToDetailList(detail , master_ , pdf);
 
-        //nullcheck//
-        masterNullCheck(master_ , response);
-        detailNullCheck(detailList , response);
+        //master update
+        if(masterInfoService.findByTrKey(master_.getTrKey()) != null && detailList.size() == 0){
 
+            Master oMaster = masterInfoService.findByTrKey(master_.getTrKey());
+            Master yMaster = master_;
+            int cnt = 1;
 
+            if(!oMaster.getTotalSendCnt().equals(yMaster.getTotalSendCnt())){
+                response.put("[ "+oMaster.getTrKey()+" ] master 수정"+ cnt++ , "[ TOTAL_SEND_CNT ] : "+oMaster.getTotalSendCnt() +" -> "+yMaster.getTotalSendCnt());
+            }
+            if(!oMaster.getDlvSttusCd().equals(yMaster.getDlvSttusCd())){
+                response.put("[ "+oMaster.getTrKey()+" ] master 수정"+ cnt++ , "[ DLV_STTUS_CD ] : "+oMaster.getDlvSttusCd() +" -> "+yMaster.getDlvSttusCd());
+            }
+            if(!oMaster.getPrintTypeNm().equals(yMaster.getPrintTypeNm())){
+                response.put("[ "+oMaster.getTrKey()+" ] master 수정"+ cnt++ , "[ PRINT_TYPE_NM ] : "+oMaster.getPrintTypeNm() +" -> "+yMaster.getPrintTypeNm());
+            }
+            if(!oMaster.getPageCnt().equals(yMaster.getPageCnt())){
+                response.put("[ "+oMaster.getTrKey()+" ] master 수정"+ cnt++ , "[ PAGE_CNT ] : "+oMaster.getPageCnt() +" -> "+yMaster.getPageCnt());
+            }
+            if(!oMaster.getApiKey().equals(yMaster.getApiKey())){
+                response.put("[ "+oMaster.getTrKey()+" ] master 수정"+ cnt++ , "[ API_KEY ] : "+oMaster.getApiKey() +" -> "+yMaster.getApiKey());
+            }
+            if(!oMaster.getPstFile().equals(yMaster.getPstFile())){
+                response.put("[ "+oMaster.getTrKey()+" ] master 수정"+ cnt++ , "[ PST_FILE ] : "+oMaster.getPstFile() +" -> "+yMaster.getPstFile());
+            }
 
-
-
-        //누락된 항목 있을 경우 저장하지않음//
-        if(response.size() > 0){
+            masterSaveService.update(master_);
             return response;
         }
 
-        for(Detail d : detailList){
-            detailSaveService.save(d);
-        }
-
-        response.put("전송 완료" , "전송 완료");
-        //이미 존재하는 tr_key이면 수정
-        if(masterInfoService.findByTrKey(master_.getTrKey()) != null){
-            response.put("master 수정" , "master 수정");
-            masterSaveService.update(master_);
-        } else { //없으면 저장
-            masterSaveService.save(master_);
-        }
 
 
 
@@ -93,13 +91,8 @@ public class PostalCreationRequestController {
 
     }
     //detail 필수값 체크
-    private void detailNullCheck(List<Detail> detailList , Map response){
+    private void detailNullCheck(Detail detail , Map response){
 
-        if (detailList.size() <= 0){
-            response.put("detail이 없습니다" , "detail이 없습니다");
-        } else {
-        //dmlinkKey 누락된 사람은 어떻게 알려줘야함
-            for (Detail detail : detailList){
                 if(detail.getRecvNum() == null){
                     response.put("["+detail.getDmLinkKey()+"] recvNum 누락" , "recvNum 누락");
                 }
@@ -121,10 +114,8 @@ public class PostalCreationRequestController {
                     response.put("["+detail.getDmLinkKey()+"] docData 누락" , "docData 누락");
                 }
             }
-        }
-    }
 
-
+    //ok
     private Master mapToMaster(Map master){
         Master master_ = new Master();
         master_.setApiKey((String)master.get("apiKey"));
@@ -137,31 +128,32 @@ public class PostalCreationRequestController {
         return master_;
     }
 
+    //ok
     private List<Detail> mapToDetailList(List<Map> detail , Master master_ , MultipartFile pdf){
         List<Map> details = detail;
 
         List<Detail> detailList = new ArrayList<>();
-
-        for (Map detail_ : details){
-            Detail d = new Detail();
-            d.setTrKey(master_.getTrKey());
-            d.setRecvNum((String)detail_.get("recvNum"));
-            d.setDmLinkKey((String)detail_.get("dmLinkKey"));
-            d.setRegNo((String)detail_.get("regNo"));
-            d.setPostCode((String)detail_.get("postCode"));
-            d.setRetYn((String)detail_.get("retYn"));
-            d.setPdfYn((String)detail_.get("pdfYn"));
-            d.setDocData((String)detail_.get("docData"));
-            if(d.getPdfYn().equals("N")){
-                d.setDocDataStatus("접수완료");
+        if(details != null){
+            for (Map detail_ : details){
+                Detail d = new Detail();
+                d.setTrKey(master_.getTrKey());
+                d.setRecvNum((String)detail_.get("recvNum"));
+                d.setDmLinkKey((String)detail_.get("dmLinkKey"));
+                d.setRegNo((String)detail_.get("regNo"));
+                d.setPostCode((String)detail_.get("postCode"));
+                d.setRetYn((String)detail_.get("retYn"));
+                d.setPdfYn((String)detail_.get("pdfYn"));
+                d.setDocData((String)detail_.get("docData"));
+                if(d.getPdfYn().equals("N") && d.getDocData() != null){
+                    d.setDocDataStatus("접수완료");
+                }
+                if(d.getPdfYn().equals("Y")){
+                    d.setPdf(pdf);
+                }
+                detailList.add(d);
             }
-            if(d.getPdfYn().equals("Y")){
-                d.setPdf(pdf);
-            }
-
-            detailList.add(d);
         }
-
+        //detail null 인 경우 detailList size 가 0
         return detailList;
     }
 
