@@ -22,15 +22,17 @@ public class DetailSaveService {
     private final DetailRepository detailRepository;
 
     public void save(Detail detail){
-
+/*
         if(detail.getPdfYn().equals("Y")){
             //파일저장
             savePdfFile(detail);
         }
+        */
         detailRepository.save(detail);
     }
 
 
+/*
 
     //base64 인코딩된 파일 데이터를 디코딩하여 파일로 변환 후 저장
     //pdf 로 오는 경우 (pdfYn -> Y 인 경우)
@@ -61,6 +63,7 @@ public class DetailSaveService {
 
     }
 
+*/
 
 
 

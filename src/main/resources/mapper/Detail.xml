@@ -9,30 +9,20 @@
         (TR_KEY
         , RECV_NUM
         , DM_LINK_KEY
-        , REG_NO
-        , POST_CODE
-        , RET_YN
-        , PDF_YN
-        , DOC_DATA_NM
-        , PDF_NM
-        , PDF_PATH
-        , DOC_DATA_PATH
-        , DOC_DATA
-        , DOC_DATA_STATUS)
+        , DLV_CD
+        , RECV_NM
+        , RECV_POST_CD
+        , RECV_ADDR
+        , RECV_ADDR_DETAIL)
         VALUES
         (#{trKey}
         , #{recvNum}
         , #{dmLinkKey}
-        , #{regNo}
-        , #{postCode}
-        , #{retYn}
-        , #{pdfYn}
-        , #{docDataNm}
-        , #{pdfNm}
-        , #{pdfPath}
-        , #{docDataPath}
-        , #{docData}
-        , #{docDataStatus})
+        , #{dlvCd}
+        , #{recvNm}
+        , #{recvPostCd}
+        , #{recvAddr}
+        , #{recvAddrDetail})
     </insert>
 
 

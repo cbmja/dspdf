@@ -11,5 +11,5 @@ public interface MasterMapper {
 
     Master findByTrKey(String trKey);
 
-    void update(Master master);
+
 }
