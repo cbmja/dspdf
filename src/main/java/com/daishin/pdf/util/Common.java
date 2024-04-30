@@ -49,7 +49,7 @@ public final class Common {
         Master master = new Master();
         master.setTrKey((String)map.get("TR_KEY"));
         master.setTotalSendCnt((String)map.get("TOTAL_SEND_CNT"));
-        master.setDlvSttusCd((String)map.get("DLV_STTUS_CD"));
+        master.setDlvTypeCd((String)map.get("DLV_TYPE_CD"));
         master.setPrintTypeNm((String)map.get("PRINT_TYPE_NM"));
         master.setPageCnt((String)map.get("PAGE_CNT"));
         master.setRetYn((String)map.get("RET_YN"));

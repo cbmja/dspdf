@@ -35,8 +35,16 @@ public class PostalCreationRequestController {
         Map entity = Common.txtToEntity(pstFile);
 
         Master master = (Master)entity.get("master");
+        master.setApiKey(apiKey);
+
         List<Detail> detailList = (List<Detail>)entity.get("detailList");
 
+        masterSaveService.save(master);
+
+        for(Detail d : detailList){
+            d.setTrKey(master.getTrKey());
+            detailSaveService.save(d);
+        }
         
     }
 

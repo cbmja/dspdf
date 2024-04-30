@@ -8,7 +8,7 @@
         INSERT INTO dbo.MASTER
         (TR_KEY
         , TOTAL_SEND_CNT
-        , DLV_STTUS_CD
+        , DLV_TYPE_CD
         , PRINT_TYPE_NM
         , PAGE_CNT
         , API_KEY
@@ -17,7 +17,7 @@
         VALUES
         (#{trKey}
         , #{totalSendCnt}
-        , #{dlvSttusCd}
+        , #{dlvTypeCd}
         , #{printTypeNm}
         , #{pageCnt}
         , #{apiKey}
