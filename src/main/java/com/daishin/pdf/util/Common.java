@@ -4,9 +4,11 @@ import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.dto.Master;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
+import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -139,4 +141,7 @@ public final class Common {
     }
 
 //////////////////////파일 압축 해제 후 저장 EEEEEEEEEE //////////////////////
+
+
+
 }
