@@ -3,20 +3,34 @@ package com.daishin.pdf.util;
 import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.dto.Master;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 public final class Common {
 
+    /**
+     * 파일 저장 일시 포맷
+     * @return
+     */
     public static String getCurrnetYYYYMM() {
         SimpleDateFormat sdfyyyymm = new SimpleDateFormat("yyyyMM");
         Date now = new Date();
         return sdfyyyymm.format(now);
     }
 
+    /**
+     * multipartFile을 entity 객체로 변환
+     * @param pstFile
+     * @return Master , List<Detail> 들어있는 map
+     */
     public static Map txtToEntity(MultipartFile pstFile){
 
         // txt -> json 파싱
@@ -43,6 +57,7 @@ public final class Common {
 
        return null;
     }
+
 
     public static Master mapToMaster(Map map){
 
@@ -82,5 +97,46 @@ public final class Common {
         return detailList;
     }
 
+    //////////////////////파일 압축 해제 후 저장 SSSSSSSSSS //////////////////////
 
+    public static void unZipAndSave(MultipartFile file , String path){
+        // 임시 디렉토리 생성 및 파일 저장
+        try (ZipInputStream zipInputStream = new ZipInputStream(file.getInputStream())) {
+            ZipEntry zipEntry = zipInputStream.getNextEntry();
+            while (zipEntry != null) {
+                if (!zipEntry.isDirectory()) {
+                    // 파일이 있는 경로 추출
+                    File newFile = newFile(new File(path), zipEntry);
+                    // 디렉토리가 없으면 생성
+                    if (newFile.getParentFile() != null && !newFile.getParentFile().exists()) {
+                        newFile.getParentFile().mkdirs();
+                    }
+                    // 파일 쓰기
+                    try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                        IOUtils.copy(zipInputStream, fos);
+                    }
+                }
+                zipEntry = zipInputStream.getNextEntry();
+            }
+            return ;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
+        File destFile = new File(destinationDir, zipEntry.getName());
+
+        String destDirPath = destinationDir.getCanonicalPath();
+        String destFilePath = destFile.getCanonicalPath();
+
+        if (!destFilePath.startsWith(destDirPath + File.separator)) {
+            throw new IOException("Entry is outside of the target dir: " + zipEntry.getName());
+        }
+
+        return destFile;
+    }
+
+//////////////////////파일 압축 해제 후 저장 EEEEEEEEEE //////////////////////
 }

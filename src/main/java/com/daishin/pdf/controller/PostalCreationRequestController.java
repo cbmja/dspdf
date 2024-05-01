@@ -6,15 +6,18 @@ import com.daishin.pdf.service.detail.DetailSaveService;
 import com.daishin.pdf.service.master.MasterInfoService;
 import com.daishin.pdf.service.master.MasterSaveService;
 import com.daishin.pdf.util.Common;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 @Controller //우편 제작 요청 api
 @RequiredArgsConstructor
@@ -47,7 +50,19 @@ public class PostalCreationRequestController {
         }
         
     }
+    ///////////////
 
+    @PostMapping("/upload")
+    public void uploadAndUnzip(@RequestParam("file") MultipartFile file , @RequestParam(name="apiKey",required = false) String apiKey) {
+
+        //압축 해제 후 저장
+        Common.unZipAndSave(file , "C:\\DATA\\zip");
+
+    }
+
+
+
+/////////////////////////////
     /*
 
         {
