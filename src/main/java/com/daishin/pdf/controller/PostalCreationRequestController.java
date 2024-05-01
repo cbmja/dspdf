@@ -55,14 +55,13 @@ public class PostalCreationRequestController {
     ///////////////
 
     @PostMapping("/upload")
+    @ResponseBody
     public Map<String , String> uploadAndUnzip(@RequestParam("file") MultipartFile file , @RequestParam(name="apiKey",required = false) String apiKey) throws IOException {
 
         Map<String , String> response = new TreeMap<>();
 
         //압축 해제 후 저장
         Common.unZipAndSave(file , "C:\\DATA\\zip");
-
-        File jsonFile = new File("C:\\DATA\\zip\\json.json");
 
         Map entity = Common.txtToEntity("C:\\DATA\\zip\\json.json");
 
@@ -77,6 +76,7 @@ public class PostalCreationRequestController {
             d.setTrKey(master.getTrKey());
             detailSaveService.save(d);
         }
+
         response.put("결과" , "???");
         return response;
 
