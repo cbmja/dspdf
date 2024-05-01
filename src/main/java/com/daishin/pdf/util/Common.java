@@ -30,16 +30,16 @@ public final class Common {
 
     /**
      * multipartFile을 entity 객체로 변환
-     * @param pstFile
+     * @param jsonFilePath
      * @return Master , List<Detail> 들어있는 map
      */
-    public static Map txtToEntity(MultipartFile pstFile){
+    public static Map txtToEntity(String jsonFilePath){
 
         // txt -> json 파싱
         try {
             // MultipartFile을 읽어서 Map 객체로 변환
             ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> map = mapper.readValue(pstFile.getInputStream(), Map.class);
+            Map<String, Object> map = mapper.readValue(new File(jsonFilePath), Map.class);
 
             // json -> map
             List<Map> details = (List)map.get("detail");

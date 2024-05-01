@@ -6,6 +6,7 @@ import com.daishin.pdf.service.detail.DetailSaveService;
 import com.daishin.pdf.service.master.MasterInfoService;
 import com.daishin.pdf.service.master.MasterSaveService;
 import com.daishin.pdf.util.Common;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
@@ -28,14 +29,14 @@ public class PostalCreationRequestController {
 
         private final DetailSaveService detailSaveService;
 
-
+/*
     @PostMapping("/txt")
     @ResponseBody
     public void test(@RequestParam(name="apiKey",required = false) String apiKey , @RequestParam(name="pstFile",required = false) MultipartFile pstFile
                                                                    , @RequestParam(name="File",required = false) List<MultipartFile> File ) throws IOException {
 
         // txt 파일에 있는 json entity 객체로 변환
-        Map entity = Common.txtToEntity(pstFile);
+       // Map entity = Common.txtToEntity(pstFile);
 
         Master master = (Master)entity.get("master");
         master.setApiKey(apiKey);
@@ -50,13 +51,34 @@ public class PostalCreationRequestController {
         }
         
     }
+*/
     ///////////////
 
     @PostMapping("/upload")
-    public void uploadAndUnzip(@RequestParam("file") MultipartFile file , @RequestParam(name="apiKey",required = false) String apiKey) {
+    public Map<String , String> uploadAndUnzip(@RequestParam("file") MultipartFile file , @RequestParam(name="apiKey",required = false) String apiKey) throws IOException {
+
+        Map<String , String> response = new TreeMap<>();
 
         //압축 해제 후 저장
         Common.unZipAndSave(file , "C:\\DATA\\zip");
+
+        File jsonFile = new File("C:\\DATA\\zip\\json.json");
+
+        Map entity = Common.txtToEntity("C:\\DATA\\zip\\json.json");
+
+        Master master = (Master)entity.get("master");
+        master.setApiKey(apiKey);
+
+        List<Detail> detailList = (List<Detail>)entity.get("detailList");
+
+        masterSaveService.save(master);
+
+        for(Detail d : detailList){
+            d.setTrKey(master.getTrKey());
+            detailSaveService.save(d);
+        }
+        response.put("결과" , "???");
+        return response;
 
     }
 
@@ -80,7 +102,11 @@ public class PostalCreationRequestController {
         }
 
     */
-
+public Map<String, Object> parseJsonToMap(String jsonFilePath) throws IOException {
+    ObjectMapper mapper = new ObjectMapper();
+    Map<String, Object> map = mapper.readValue(new File(jsonFilePath), Map.class);
+    return map;
+}
 
 
 }
