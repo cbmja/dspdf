@@ -7,10 +7,7 @@ import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -30,7 +27,7 @@ public final class Common {
 
     /**
      * multipartFile을 entity 객체로 변환
-     * @param jsonFilePath
+     * @param jsonFilePath / json파일 경로
      * @return Master , List<Detail> 들어있는 map
      */
     public static Map txtToEntity(String jsonFilePath){
@@ -101,6 +98,11 @@ public final class Common {
 
     //////////////////////파일 압축 해제 후 저장 SSSSSSSSSS //////////////////////
 
+    /**
+     * 압축해제 후 저장
+     * @param file / 저장할 zip 파일
+     * @param path / 저장 경로
+     */
     public static void unZipAndSave(MultipartFile file , String path){
         // 임시 디렉토리 생성 및 파일 저장
         try (ZipInputStream zipInputStream = new ZipInputStream(file.getInputStream())) {
@@ -142,6 +144,62 @@ public final class Common {
 
 //////////////////////파일 압축 해제 후 저장 EEEEEEEEEE //////////////////////
 
+//////////////////////파일 압축 해제 후 저장한 파일명 찾기 SSSSSSSSSS //////////////////////
 
+    /**
+     * 
+     * @param directoryPath / 압축파일 저장 경로
+     */
+    public static List<String> findJsonFiles(String directoryPath) {
+        File directory = new File(directoryPath);
 
+        List<String> fileNames = new ArrayList<>();
+        // 파일 필터 정의
+        FilenameFilter filter = new FilenameFilter() {
+            @Override
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".json");
+            }
+        };
+
+        // 필터 사용하여 .json 파일만 찾기
+        String[] files = directory.list(filter);
+        if (files != null) {
+            for (String file : files) {
+                fileNames.add(file);
+            }
+        } else {
+            System.out.println("No .json files found or the directory is empty.");
+        }
+        return fileNames;
+    }
+
+//////////////////////파일 압축 해제 후 저장한 파일명 찾기 EEEEEEEEEE //////////////////////
+//////////////////////json파일 삭제 SSSSSSSSSS //////////////////////
+    /**
+     * jsonFile 삭제
+     * @param directoryPath
+     */
+    public static void deleteJsonFiles(String directoryPath) {
+        File directory = new File(directoryPath);
+
+        // 파일 필터를 사용하여 .json 확장자를 가진 파일만 찾기
+        FilenameFilter jsonFilter = new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.endsWith(".json");
+            }
+        };
+        File[] files = directory.listFiles(jsonFilter);
+        // 파일 필터 정의
+
+        if (files != null) {
+            for (File file : files) {
+                file.delete();
+            }
+        } else {
+            System.out.println("No .json files found or the directory is empty.");
+        }
+
+    }
+    //////////////////////json파일 삭제 EEEEEEEEEE //////////////////////
 }

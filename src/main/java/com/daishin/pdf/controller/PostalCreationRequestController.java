@@ -56,28 +56,40 @@ public class PostalCreationRequestController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public Map<String , String> uploadAndUnzip(@RequestParam("file") MultipartFile file , @RequestParam(name="apiKey",required = false) String apiKey) throws IOException {
+    public Map<String , String> uploadAndUnzip(@RequestParam("pstFile") MultipartFile pstFile , @RequestParam(name="apiKey",required = false) String apiKey) throws IOException {
 
-        Map<String , String> response = new TreeMap<>();
+        //결과
+        Map<String , String> response = new LinkedHashMap<>();
+
+        //압축 파일 저장 경로 (저장할 파일명에 변경이 필요 하다면 조금 복잡해 질듯. 일단 압축을 풀고 읽은 뒤에 trKey를 꺼내서 다시 저장 해줘야 하므로)
+        String path = "C:\\DATA\\zip";
 
         //압축 해제 후 저장
-        Common.unZipAndSave(file , "C:\\DATA\\zip");
+        Common.unZipAndSave(pstFile , path);
 
-        Map entity = Common.txtToEntity("C:\\DATA\\zip\\json.json");
+        //저장된 .json파일명
+        String jsonFileName = Common.findJsonFiles(path).get(0);
 
+        //압축 해제 후 json 파일을 Dto 객체로 파싱
+        Map entity = Common.txtToEntity(path+"\\"+jsonFileName);
+
+        //Dto객체 생성
         Master master = (Master)entity.get("master");
         master.setApiKey(apiKey);
-
         List<Detail> detailList = (List<Detail>)entity.get("detailList");
 
+        //DB저장
         masterSaveService.save(master);
 
         for(Detail d : detailList){
             d.setTrKey(master.getTrKey());
             detailSaveService.save(d);
         }
+        
+        //json파일 삭제
+        Common.deleteJsonFiles(path);
 
-        response.put("결과" , "???");
+        response.put("결과" , "수신 완료 등등");
         return response;
 
     }
@@ -102,11 +114,7 @@ public class PostalCreationRequestController {
         }
 
     */
-public Map<String, Object> parseJsonToMap(String jsonFilePath) throws IOException {
-    ObjectMapper mapper = new ObjectMapper();
-    Map<String, Object> map = mapper.readValue(new File(jsonFilePath), Map.class);
-    return map;
-}
+
 
 
 }
