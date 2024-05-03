@@ -62,7 +62,8 @@ public class PostalCreationRequestController {
         Map<String , String> response = new LinkedHashMap<>();
 
         //압축 파일 저장 경로 (저장할 파일명에 변경이 필요 하다면 조금 복잡해 질듯. 일단 압축을 풀고 읽은 뒤에 trKey를 꺼내서 다시 저장 해줘야 하므로)
-        String path = "C:\\DATA\\zip";
+        String path = "C:\\DATA\\zip"; //임시저장 압축해제 및 파싱
+        String path2 = "C:\\DATA\\save"; //실제 저장 경로
 
         //압축 해제 후 저장
         Common.unZipAndSave(pstFile , path);
@@ -72,6 +73,10 @@ public class PostalCreationRequestController {
 
         //압축 해제 후 json 파일을 Dto 객체로 파싱
         Map entity = Common.txtToEntity(path+"\\"+jsonFileName);
+        
+        //파일 이동 / 이동해서 저장할대 파일명 , 경로는 아직 미정
+        Common.moveFile(path , path2);
+        
 
         //Dto객체 생성
         Master master = (Master)entity.get("master");
@@ -86,8 +91,9 @@ public class PostalCreationRequestController {
             detailSaveService.save(d);
         }
         
-        //json파일 삭제
-        Common.deleteJsonFiles(path);
+        //path 경로에 있는 모든 파일 삭제 / 이동시켰으니 따로 삭제할 필요는 없을듯 
+        //json파일 삭제 (pdf도 삭제해야함)
+        //Common.deleteJsonFiles(path);
 
         response.put("결과" , "수신 완료 등등");
         return response;

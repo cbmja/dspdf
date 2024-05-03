@@ -8,6 +8,10 @@ import org.springframework.util.MimeTypeUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.zip.ZipEntry;
@@ -202,4 +206,47 @@ public final class Common {
 
     }
     //////////////////////json파일 삭제 EEEEEEEEEE //////////////////////
+    //////////////////////파일 이동 SSSSSSSSSS //////////////////////
+    /**
+     * path1 에 있는 파일들을 path2로 옮김
+     * @param path1
+     * @param path2
+     */
+    public static void moveFile(String path1 , String path2){
+        Path sourceDir = Paths.get(path1);
+        Path targetDir = Paths.get(path2);
+
+        try {
+            // 대상 디렉토리 존재 확인 및 생성
+            if (!Files.exists(targetDir)) {
+                Files.createDirectories(targetDir);
+                System.out.println("대상 디렉토리 생성: " + targetDir);
+            }
+
+            // 원본 디렉토리에서 모든 파일을 반복하여 처리
+            Files.list(sourceDir).forEach(sourcePath -> {
+                try {
+                    // 대상 디렉토리 경로 생성
+                    Path targetPath = targetDir.resolve(sourcePath.getFileName());
+
+                    // 파일 존재 확인
+                    if (Files.exists(sourcePath)) {
+                        // 파일 이동
+                        Files.move(sourcePath, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                        System.out.println("파일 이동: " + sourcePath + " -> " + targetPath);
+                    } else {
+                        System.out.println("이동할 파일이 존재하지 않습니다: " + sourcePath);
+                    }
+                } catch (IOException e) {
+                    System.err.println("파일 이동 중 에러 발생: " + sourcePath);
+                    e.printStackTrace();
+                }
+            });
+        } catch (IOException e) {
+            System.err.println("디렉토리 읽기 중 에러 발생");
+            e.printStackTrace();
+        }
+    }
+//////////////////////파일 이동 EEEEEEEEEE //////////////////////
+
 }
