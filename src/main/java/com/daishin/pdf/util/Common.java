@@ -71,6 +71,7 @@ public final class Common {
 //////////////////////파일 이동 EEEEEEEEEE //////////////////////
 
     ////+++++++++++++++++++++//////////////+++++++++++++++++++++///////////////////////////+++++++++++++++++++++////////////////////
+/*
 
     public static ReqParam mapToObj(Map req){
         ReqParam reqParam = new ReqParam();
@@ -91,8 +92,8 @@ public final class Common {
         reqParam.setRECV_ADDR_DETAIL((String)req.get("RECV_ADDR_DETAIL"));
 
         return reqParam;
-
     }
+*/
 
     ////+++++++++++++++++++++//////////////+++++++++++++++++++++///////////////////////////+++++++++++++++++++++////////////////////
 }
