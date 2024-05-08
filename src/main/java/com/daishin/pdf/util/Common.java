@@ -1,6 +1,7 @@
 package com.daishin.pdf.util;
 
 import com.daishin.pdf.dto.ReqParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -23,7 +24,14 @@ public final class Common {
     }
 
 
+public static void savePdf(MultipartFile file , ReqParam reqParam){
 
+    String dir = "C:\\DATA\\"+reqParam.getTR_KEY()+"\\"+getCurrnetYYYYMM()+"\\";
+
+
+
+
+}
 
 
 
