@@ -1,66 +1,42 @@
 package com.daishin.pdf.controller;
 
-import com.daishin.pdf.dto.Detail;
-import com.daishin.pdf.dto.Master;
+import com.daishin.pdf.service.ReqSaveService;
 import com.daishin.pdf.service.detail.DetailSaveService;
 import com.daishin.pdf.service.master.MasterInfoService;
 import com.daishin.pdf.service.master.MasterSaveService;
 import com.daishin.pdf.util.Common;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.tomcat.util.http.fileupload.IOUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.*;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipInputStream;
 
 @Controller //우편 제작 요청 api
 @RequiredArgsConstructor
 public class PostalCreationRequestController {
 
-        private final MasterSaveService masterSaveService;
-        private final MasterInfoService masterInfoService;
+        private final ReqSaveService reqSaveService;
 
-        private final DetailSaveService detailSaveService;
 
-/*
-    @PostMapping("/txt")
-    @ResponseBody
-    public void test(@RequestParam(name="apiKey",required = false) String apiKey , @RequestParam(name="pstFile",required = false) MultipartFile pstFile
-                                                                   , @RequestParam(name="File",required = false) List<MultipartFile> File ) throws IOException {
-
-        // txt 파일에 있는 json entity 객체로 변환
-       // Map entity = Common.txtToEntity(pstFile);
-
-        Master master = (Master)entity.get("master");
-        master.setApiKey(apiKey);
-
-        List<Detail> detailList = (List<Detail>)entity.get("detailList");
-
-        masterSaveService.save(master);
-
-        for(Detail d : detailList){
-            d.setTrKey(master.getTrKey());
-            detailSaveService.save(d);
-        }
-        
-    }
-*/
     ///////////////
 
     @PostMapping("/upload")
     @ResponseBody
-    public Map<String , String> uploadAndUnzip(@RequestParam("pstFile") MultipartFile pstFile , @RequestParam(name="apiKey",required = false) String apiKey) throws IOException {
+    public Map<String , String> uploadAndUnzip(@RequestParam(name = "File" , required = false) MultipartFile File , @RequestParam Map<String,String> req) throws IOException {
+
 
         //결과
         Map<String , String> response = new LinkedHashMap<>();
 
+        System.out.println(File+"+++++++++++++++++++++++");
+        System.out.println(req+"////////////////////////");
+        System.out.println(Common.mapToObj(req)+"---------------");
+
+        reqSaveService.save(Common.mapToObj(req));
+
+        /*
         //압축 파일 저장 경로 (저장할 파일명에 변경이 필요 하다면 조금 복잡해 질듯. 일단 압축을 풀고 읽은 뒤에 trKey를 꺼내서 다시 저장 해줘야 하므로)
         String path = "C:\\DATA\\zip"; //임시저장 압축해제 및 파싱
         String path2 = "C:\\DATA\\save"; //실제 저장 경로
@@ -94,6 +70,7 @@ public class PostalCreationRequestController {
         //path 경로에 있는 모든 파일 삭제 / 이동시켰으니 따로 삭제할 필요는 없을듯 
         //json파일 삭제 (pdf도 삭제해야함)
         //Common.deleteJsonFiles(path);
+        */
 
         response.put("결과" , "수신 완료 등등");
         return response;
