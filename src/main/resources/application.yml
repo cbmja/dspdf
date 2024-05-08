@@ -23,5 +23,5 @@ mybatis:
     map-underscore-to-camel-case: true
     
 storage:
-  path: C:\DATA
+  path: C:\\DATA\\
   
