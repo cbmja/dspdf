@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class ReqParam {
 
-    private String apiKey;
+
     private String TR_KEY;
     private String TOTAL_SEND_CNT;
     private String DLV_TYPE_CD;

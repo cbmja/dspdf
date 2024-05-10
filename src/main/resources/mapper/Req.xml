@@ -6,8 +6,7 @@
 
     <insert id = "save" parameterType="ReqParam">
         INSERT INTO dbo.REQ
-        (apiKey
-        ,TR_KEY
+        (TR_KEY
         ,TOTAL_SEND_CNT
         ,DLV_TYPE_CD
         ,PRINT_TYPE_NM
@@ -22,8 +21,7 @@
         ,RECV_ADDR
         ,RECV_ADDR_DETAIL)
         VALUES
-        (#{apiKey}
-        ,#{TR_KEY}
+        (#{TR_KEY}
         ,#{TOTAL_SEND_CNT}
         ,#{DLV_TYPE_CD}
         ,#{PRINT_TYPE_NM}

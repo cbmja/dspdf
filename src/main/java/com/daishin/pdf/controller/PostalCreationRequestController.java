@@ -24,10 +24,10 @@ public class PostalCreationRequestController {
         //결과
         Map<String , String> response = new LinkedHashMap<>();
 
-        //파일저장처리
-        Common.savePdf(File , req);
+        //파일 저장 (pdf , json)
+        Common.savePdf(File , req , response);
         
-        //db저장
+        //DB 저장
         reqSaveService.save(req);
 
         response.put("결과" , "수신 완료 등등");
