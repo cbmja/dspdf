@@ -65,11 +65,11 @@ public final class Common {
         ObjectMapper mapper = new ObjectMapper();
 
         //reqParam(발송정보 json으로 변환)
-        String jsonInString = mapper.writeValueAsString(reqParam);
+        String json = mapper.writeValueAsString(reqParam);
 
         try {
             FileWriter fileWriter = new FileWriter(path+fileName+".json");
-            fileWriter.write(jsonInString);
+            fileWriter.write(json);
             fileWriter.close();
         } catch (IOException e) {
             response.put("error" , "json 저장 실패");
