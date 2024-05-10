@@ -12,9 +12,9 @@ public class ReqSaveService {
     private final ReqRepository repository;
 
 
-    public void save (ReqParam reqParam){
+    public int save (ReqParam reqParam){
 
-        repository.save(reqParam);
+        return repository.save(reqParam);
     }
 
 }

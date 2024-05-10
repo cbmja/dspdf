@@ -28,9 +28,10 @@ public class PostalCreationRequestController {
         Common.savePdf(File , req , response);
         
         //DB 저장
-        reqSaveService.save(req);
-
-        response.put("결과" , "수신 완료 등등");
+        if(reqSaveService.save(req) <= 0){
+            response.put("error" , "DB 저장 실패");
+        }
+        
         return response;
 
     }
