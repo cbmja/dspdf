@@ -2,6 +2,8 @@ package com.daishin.pdf.dto;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class ReqParam {
 
@@ -21,6 +23,9 @@ public class ReqParam {
     private String RECV_ADDR;
     private String RECV_ADDR_DETAIL;
     private String PDF_PATH;
+    private LocalDateTime SAVE_DATE;
+    private String STATUS;
+
 
 
 }

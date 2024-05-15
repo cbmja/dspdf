@@ -20,7 +20,9 @@
         ,RECV_POST_CD
         ,RECV_ADDR
         ,RECV_ADDR_DETAIL
-        ,PDF_PATH)
+        ,PDF_PATH
+        ,SAVE_DATE
+        ,STATUS)
         VALUES
         (#{TR_KEY}
         ,#{TOTAL_SEND_CNT}
@@ -36,7 +38,9 @@
         ,#{RECV_POST_CD}
         ,#{RECV_ADDR}
         ,#{RECV_ADDR_DETAIL}
-        ,#{PDF_PATH})
+        ,#{PDF_PATH}
+        ,#{SAVE_DATE}
+        ,#{STATUS})
     </insert>
 
     <select id="countGroup" parameterType="ReqParam" resultType="Integer">
