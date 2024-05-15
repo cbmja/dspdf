@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.daishin.pdf.mapper.ReqMapper">
+
+    <insert id = "save" parameterType="ReqParam">
+        INSERT INTO dbo.REQ
+        (TR_KEY
+        ,TOTAL_SEND_CNT
+        ,DLV_TYPE_CD
+        ,PRINT_TYPE_NM
+        ,PAGE_CNT
+        ,RET_YN
+        ,RECV_NUM
+        ,DM_LINK_KEY
+        ,PDF_NM
+        ,DLV_CD
+        ,RECV_NM
+        ,RECV_POST_CD
+        ,RECV_ADDR
+        ,RECV_ADDR_DETAIL)
+        VALUES
+        (#{TR_KEY}
+        ,#{TOTAL_SEND_CNT}
+        ,#{DLV_TYPE_CD}
+        ,#{PRINT_TYPE_NM}
+        ,#{PAGE_CNT}
+        ,#{RET_YN}
+        ,#{RECV_NUM}
+        ,#{DM_LINK_KEY}
+        ,#{PDF_NM}
+        ,#{DLV_CD}
+        ,#{RECV_NM}
+        ,#{RECV_POST_CD}
+        ,#{RECV_ADDR}
+        ,#{RECV_ADDR_DETAIL})
+    </insert>
+
+
+</mapper>
