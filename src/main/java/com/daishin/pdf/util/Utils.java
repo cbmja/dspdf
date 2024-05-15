@@ -21,7 +21,7 @@ public class Utils {
      * @param file
      * @param reqParam
      */
-    public void saveFile(MultipartFile file , ReqParam reqParam , Map<String , String> response) throws IOException {
+    public void savePdf(MultipartFile file , ReqParam reqParam , Map<String , String> response){
 
         /////SSSpdf 저장SSS/////
         //저장될 pdf 파일명 (확장자 제외)
@@ -52,6 +52,24 @@ public class Utils {
         }
         /////EEEpdf 저장EEE/////
 
+        /////EEEjson 저장EEE/////
+        reqParam.setPDF_PATH(path+fileName+".pdf");
+
+    }
+
+    public void saveJson(MultipartFile file , ReqParam reqParam , Map<String , String> response) throws IOException {
+        String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
+    /*
+        //구분자
+        String cate = fileName.substring(0,1);
+
+        //파일 저장 경로
+        String path = "C:\\DATA\\"+cate+"\\";
+    */
+
+        //파일 저장 경로 (구분자로 나눠야 하면 위에 걸로)
+        String path = "C:\\DATA\\";
+
         /////SSSjson 저장SSS/////
 
         //단일
@@ -75,11 +93,6 @@ public class Utils {
 
 
         }
-
-
-        /////EEEjson 저장EEE/////
-        reqParam.setPDF_PATH(path+fileName+".pdf");
-
     }
 
 }

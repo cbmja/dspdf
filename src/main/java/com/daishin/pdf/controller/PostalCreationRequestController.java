@@ -28,8 +28,8 @@ public class PostalCreationRequestController {
         //결과
         Map<String , String> response = new LinkedHashMap<>();
 
-        //파일 저장 (pdf , json)
-        utils.saveFile(File , req , response);
+        //파일 저장 (pdf)
+        utils.savePdf(File , req , response);
         
         //DB 저장
         if(reqSaveService.save(req) <= 0){
@@ -37,6 +37,9 @@ public class PostalCreationRequestController {
         } else {
             response.put("result" , "success");
         }
+
+        //파일 저장 (json)
+        utils.saveJson(File , req ,response);
 
 
         System.out.println(reqInfoService.countGroup(req)+"ssssssssss/"+req.getTR_KEY());
