@@ -25,11 +25,13 @@ public class PostalCreationRequestController {
         Map<String , String> response = new LinkedHashMap<>();
 
         //파일 저장 (pdf , json)
-        Common.savePdf(File , req , response);
+        Common.saveFile(File , req , response);
         
         //DB 저장
         if(reqSaveService.save(req) <= 0){
             response.put("error" , "DB 저장 실패");
+        } else {
+            response.put("result" , "success");
         }
         
         return response;

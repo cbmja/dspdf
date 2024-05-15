@@ -30,7 +30,7 @@ public final class Common {
      * @param file
      * @param reqParam
      */
-    public static void savePdf(MultipartFile file , ReqParam reqParam , Map<String , String> response) throws IOException {
+    public static void saveFile(MultipartFile file , ReqParam reqParam , Map<String , String> response) throws IOException {
 
         /////SSSpdf 저장SSS/////
         //저장될 pdf 파일명 (확장자 제외)
