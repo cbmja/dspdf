@@ -10,6 +10,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -71,10 +73,10 @@ public class Utils {
         String path = "C:\\DATA\\";
 
         /////SSSjson 저장SSS/////
-
+        ObjectMapper mapper = new ObjectMapper();
         //단일
         if(reqParam.getTOTAL_SEND_CNT().equals("1")){
-            ObjectMapper mapper = new ObjectMapper();
+
 
             //reqParam(발송정보 json으로 변환)
             String json = mapper.writeValueAsString(reqParam);
@@ -84,14 +86,29 @@ public class Utils {
                 fileWriter.write(json);
                 fileWriter.close();
             } catch (IOException e) {
-                response.put("error" , "json 저장 실패");
+                response.put("error" , "json(단일) 저장 실패");
                 e.printStackTrace();
             }
         } else {
             //대량 tr_key 로 count 했을 때 갯수가 total_send_cnt 와 동일 하고
             //해당 tr_key 를 가진 것들 중 recv_num 이 total_send_cnt 와 동일한 로우가 있을 경우 모두 전송된 것으로 간주
+            List<ReqParam> jsonList = new ArrayList<>();
 
+            //tr_key로 select 해서 집어넣으면 댐
+            for(int i =0; i<5; i++){
+                ReqParam r = new ReqParam();
+                jsonList.add(r);
+            }
 
+            String jsonlist = mapper.writeValueAsString(jsonList);
+            try {
+                FileWriter fileWriter = new FileWriter(path+fileName+".json");
+                fileWriter.write(jsonlist);
+                fileWriter.close();
+            } catch (IOException e) {
+                response.put("error" , "json(대량) 저장 실패");
+                e.printStackTrace();
+            }
         }
     }
 
