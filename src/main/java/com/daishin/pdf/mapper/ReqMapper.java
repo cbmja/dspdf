@@ -7,4 +7,6 @@ import org.apache.ibatis.annotations.Mapper;
 public interface ReqMapper {
 
     void save(ReqParam reqParam);
+
+    void countGroup(ReqParam reqParam);
 }

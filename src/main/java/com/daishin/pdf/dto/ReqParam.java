@@ -14,13 +14,13 @@ public class ReqParam {
     private String RET_YN;
     private String RECV_NUM;
     private String DM_LINK_KEY;
-    private String PDF_NM;
+    private String CIFNO;
     private String DLV_CD;
     private String RECV_NM;
     private String RECV_POST_CD;
     private String RECV_ADDR;
     private String RECV_ADDR_DETAIL;
-
+    private String PDF_PATH;
 
 
 }

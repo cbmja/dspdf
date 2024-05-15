@@ -62,20 +62,33 @@ public final class Common {
         /////EEEpdf 저장EEE/////
 
         /////SSSjson 저장SSS/////
-        ObjectMapper mapper = new ObjectMapper();
 
-        //reqParam(발송정보 json으로 변환)
-        String json = mapper.writeValueAsString(reqParam);
+        //단일
+        if(reqParam.getTOTAL_SEND_CNT().equals("1")){
+            ObjectMapper mapper = new ObjectMapper();
 
-        try {
-            FileWriter fileWriter = new FileWriter(path+fileName+".json");
-            fileWriter.write(json);
-            fileWriter.close();
-        } catch (IOException e) {
-            response.put("error" , "json 저장 실패");
-            e.printStackTrace();
+            //reqParam(발송정보 json으로 변환)
+            String json = mapper.writeValueAsString(reqParam);
+
+            try {
+                FileWriter fileWriter = new FileWriter(path+fileName+".json");
+                fileWriter.write(json);
+                fileWriter.close();
+            } catch (IOException e) {
+                response.put("error" , "json 저장 실패");
+                e.printStackTrace();
+            }
+        } else {
+        //대량 tr_key 로 count 했을 때 갯수가 total_send_cnt 와 동일 하고 
+        //해당 tr_key 를 가진 것들 중 recv_num 이 total_send_cnt 와 동일한 로우가 있을 경우 모두 전송된 것으로 간주
+            
+
         }
+
+
         /////EEEjson 저장EEE/////
+        reqParam.setPDF_PATH(path+fileName+".pdf");
+
     }
 
 }

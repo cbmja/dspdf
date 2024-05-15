@@ -16,4 +16,9 @@ public class ReqRepository {
 
     }
 
+    public Integer countGroup(ReqParam reqParam){
+        return sql.selectOne("com.daishin.pdf.mapper.ReqMapper.countGroup" , reqParam);
+
+    }
+
 }

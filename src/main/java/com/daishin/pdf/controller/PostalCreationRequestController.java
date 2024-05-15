@@ -1,8 +1,10 @@
 package com.daishin.pdf.controller;
 
 import com.daishin.pdf.dto.ReqParam;
+import com.daishin.pdf.service.ReqInfoService;
 import com.daishin.pdf.service.ReqSaveService;
 import com.daishin.pdf.util.Common;
+import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -16,6 +18,8 @@ import java.util.*;
 public class PostalCreationRequestController {
 
         private final ReqSaveService reqSaveService;
+        private final ReqInfoService reqInfoService;
+        private final Utils utils;
 
 
     @PostMapping("/upload")
@@ -25,7 +29,7 @@ public class PostalCreationRequestController {
         Map<String , String> response = new LinkedHashMap<>();
 
         //파일 저장 (pdf , json)
-        Common.saveFile(File , req , response);
+        utils.saveFile(File , req , response);
         
         //DB 저장
         if(reqSaveService.save(req) <= 0){
@@ -33,6 +37,9 @@ public class PostalCreationRequestController {
         } else {
             response.put("result" , "success");
         }
+
+
+        System.out.println(reqInfoService.countGroup(req)+"ssssssssss/"+req.getTR_KEY());
         
         return response;
 

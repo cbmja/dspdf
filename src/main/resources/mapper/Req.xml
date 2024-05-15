@@ -14,12 +14,13 @@
         ,RET_YN
         ,RECV_NUM
         ,DM_LINK_KEY
-        ,PDF_NM
+        ,CIFNO
         ,DLV_CD
         ,RECV_NM
         ,RECV_POST_CD
         ,RECV_ADDR
-        ,RECV_ADDR_DETAIL)
+        ,RECV_ADDR_DETAIL
+        ,PDF_PATH)
         VALUES
         (#{TR_KEY}
         ,#{TOTAL_SEND_CNT}
@@ -29,13 +30,22 @@
         ,#{RET_YN}
         ,#{RECV_NUM}
         ,#{DM_LINK_KEY}
-        ,#{PDF_NM}
+        ,#{CIFNO}
         ,#{DLV_CD}
         ,#{RECV_NM}
         ,#{RECV_POST_CD}
         ,#{RECV_ADDR}
-        ,#{RECV_ADDR_DETAIL})
+        ,#{RECV_ADDR_DETAIL}
+        ,#{PDF_PATH})
     </insert>
+
+    <select id="countGroup" parameterType="ReqParam" resultType="Integer">
+        SELECT COUNT(*) FROM dbo.REQ WHERE TR_KEY = #{TR_KEY}
+    </select>
+
+    <select id="findLast" parameterType="ReqParam" resultType="Integer">
+        SELECT COUNT(*) FROM dbo.REQ WHERE TR_KEY = #{TR_KEY} and RECV_NUM = #{TOTAL_SEND_CNT}
+    </select>
 
 
 </mapper>
