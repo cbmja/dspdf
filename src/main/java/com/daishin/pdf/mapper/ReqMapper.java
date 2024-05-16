@@ -9,4 +9,6 @@ public interface ReqMapper {
     void save(ReqParam reqParam);
 
     void countGroup(ReqParam reqParam);
+
+    void getTrGroup(ReqParam reqParam);
 }

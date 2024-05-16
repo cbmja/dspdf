@@ -33,9 +33,17 @@ public class PostalCreationRequestController {
         
         //DB 저장
         if(reqSaveService.save(req) <= 0){
-            response.put("error" , "DB 저장 실패");
+            if(req.getTOTAL_SEND_CNT().equals("1")){
+                response.put("DB 저장 실패(단일)" , "DB 저장 실패(단일)");
+            }else {
+                response.put("DB 저장 실패(대량)" , "DB 저장 실패(대량)");
+            }
         } else {
-            response.put("result" , "success");
+            if(req.getTOTAL_SEND_CNT().equals("1")){
+                response.put("DB 저장 성공(단일)" , "DB 저장 성공(단일)");
+            }else {
+                response.put("DB 저장 성공(대량)" , "DB 저장 성공(대량)");
+            }
         }
 
         //파일 저장 (json)

@@ -43,13 +43,16 @@
         ,#{STATUS})
     </insert>
 
-    <select id="countGroup" parameterType="ReqParam" resultType="Integer">
+    <select id="countGroup" parameterType="ReqParam" resultType="int">
         SELECT COUNT(*) FROM dbo.REQ WHERE TR_KEY = #{TR_KEY}
     </select>
-
+<!--
     <select id="findLast" parameterType="ReqParam" resultType="Integer">
         SELECT COUNT(*) FROM dbo.REQ WHERE TR_KEY = #{TR_KEY} and RECV_NUM = #{TOTAL_SEND_CNT}
     </select>
-
+-->
+    <select id="getTrGroup" parameterType="ReqParam" resultType="hashmap">
+        SELECT * FROM dbo.REQ WHERE TR_KEY = #{TR_KEY}
+    </select>
 
 </mapper>

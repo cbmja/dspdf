@@ -1,7 +1,9 @@
 package com.daishin.pdf.util;
 
 import com.daishin.pdf.dto.ReqParam;
+import com.daishin.pdf.service.ReqInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,7 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class Utils {
+
+    private final ReqInfoService reqInfoService;
 
 
     /**
@@ -47,36 +52,36 @@ public class Utils {
         Path pdfPath = Paths.get(path).resolve(fileName+".pdf");
         try {
             file.transferTo(pdfPath.toFile());
-            //response.put("결과" , "pdf저장 성공");
+            if(reqParam.getTOTAL_SEND_CNT().equals("1")){
+                response.put("pdf 저장 완료(단일)" , "pdf 저장 완료(단일)");
+            } else {
+                response.put("pdf 저장 완료(대량)" , "pdf 저장 완료(대량)");
+            }
         } catch (IllegalStateException | IOException e) {
-            response.put("error" , "pdf 저장 실패");
+            if(reqParam.getTOTAL_SEND_CNT().equals("1")){
+                response.put("pdf 저장 실패(단일)" , "pdf 저장 실패(단일)");
+            } else {
+                response.put("pdf 저장 실패(대량)" , "pdf 저장 실패(대량)");
+            }
             e.printStackTrace();
         }
         /////EEEpdf 저장EEE/////
-
-        /////EEEjson 저장EEE/////
         reqParam.setPDF_PATH(path+fileName+".pdf");
 
     }
 
     public void saveJson(MultipartFile file , ReqParam reqParam , Map<String , String> response) throws IOException {
+
+        //확장자 제외 파일명
         String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
-    /*
-        //구분자
-        String cate = fileName.substring(0,1);
 
-        //파일 저장 경로
-        String path = "C:\\DATA\\"+cate+"\\";
-    */
-
-        //파일 저장 경로 (구분자로 나눠야 하면 위에 걸로)
+        //저장 경로
         String path = "C:\\DATA\\";
 
-        /////SSSjson 저장SSS/////
         ObjectMapper mapper = new ObjectMapper();
-        //단일
-        if(reqParam.getTOTAL_SEND_CNT().equals("1")){
 
+        //SSSSSSSSSSSSSSSS단일SSSSSSSSSSSSSSSS
+        if(reqParam.getTOTAL_SEND_CNT().equals("1")){
 
             //reqParam(발송정보 json으로 변환)
             String json = mapper.writeValueAsString(reqParam);
@@ -85,31 +90,44 @@ public class Utils {
                 FileWriter fileWriter = new FileWriter(path+fileName+".json");
                 fileWriter.write(json);
                 fileWriter.close();
+                response.put("json 저장 완료(단일)" , "json 저장 완료(단일)");
             } catch (IOException e) {
-                response.put("error" , "json(단일) 저장 실패");
-                e.printStackTrace();
-            }
-        } else {
-            //대량 tr_key 로 count 했을 때 갯수가 total_send_cnt 와 동일 하고
-            //해당 tr_key 를 가진 것들 중 recv_num 이 total_send_cnt 와 동일한 로우가 있을 경우 모두 전송된 것으로 간주
-            List<ReqParam> jsonList = new ArrayList<>();
-
-            //tr_key로 select 해서 집어넣으면 댐
-            for(int i =0; i<5; i++){
-                ReqParam r = new ReqParam();
-                jsonList.add(r);
-            }
-
-            String jsonlist = mapper.writeValueAsString(jsonList);
-            try {
-                FileWriter fileWriter = new FileWriter(path+fileName+".json");
-                fileWriter.write(jsonlist);
-                fileWriter.close();
-            } catch (IOException e) {
-                response.put("error" , "json(대량) 저장 실패");
+                response.put("json 저장 실패(단일)" , "json 저장 실패(단일)");
                 e.printStackTrace();
             }
         }
+        //EEEEEEEEEEEEEEEE단일EEEEEEEEEEEEEEEE
+        //SSSSSSSSSSSSSSSS대량SSSSSSSSSSSSSSSS
+        else {
+            /*대량일 경우 3가지 조건을 만족할 경우 json 저장
+             1- TOTAL_SEND_CNT != 1   //총 전송 건수가 1이 아닌 경우
+             2- RECV_NUM == TOTAL_SEND_CNT   //그룹 내 순번이 그룹 총 전송 건수와 같은 경우(마지막 전송건일 경우)
+             3- TR_KEY 로 select 했을 때 총 갯수가 TOTAL_SEND_CNT 와 동일할 경우
+             (select count(*) from dbo.REQ where TR_KEY = #{TR_KEY})
+            */
+            String totalTrGroup = reqParam.getTOTAL_SEND_CNT();
+
+            if(!totalTrGroup.equals("1") && reqParam.getRECV_NUM().equals(totalTrGroup)
+                    && reqInfoService.countGroup(reqParam)==Integer.parseInt(totalTrGroup)){
+
+                response.put("["+reqParam.getTR_KEY()+"] 그룹 전송 완료" , "["+reqParam.getTR_KEY()+"] 그룹 전송 완료");
+
+
+                List<ReqParam> jsonList = reqInfoService.getTrGroup(reqParam);
+
+                String jsonlist = mapper.writeValueAsString(jsonList);
+                try {
+                    FileWriter fileWriter = new FileWriter(path+reqParam.getTR_KEY()+".json");
+                    fileWriter.write(jsonlist);
+                    fileWriter.close();
+                    response.put("json 저장 완료(대량)" , "json 저장 완료(대량)");
+                } catch (IOException e) {
+                    response.put("json 저장 실패(대량)" , "json 저장 실패(대량)");
+                    e.printStackTrace();
+                }
+            }
+        }
+        //EEEEEEEEEEEEEEEE대량EEEEEEEEEEEEEEEE
     }
 
 }

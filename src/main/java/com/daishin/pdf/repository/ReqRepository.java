@@ -5,6 +5,8 @@ import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class ReqRepository {
@@ -13,12 +15,13 @@ public class ReqRepository {
 
     public int save(ReqParam reqParam){
         return sql.insert("com.daishin.pdf.mapper.ReqMapper.save" , reqParam);
-
     }
 
-    public Integer countGroup(ReqParam reqParam){
+    public int countGroup(ReqParam reqParam){
         return sql.selectOne("com.daishin.pdf.mapper.ReqMapper.countGroup" , reqParam);
-
     }
 
+    public List getTrGroup(ReqParam reqParam) {
+        return sql.selectList("com.daishin.pdf.mapper.ReqMapper.getTrGroup" , reqParam);
+    }
 }
