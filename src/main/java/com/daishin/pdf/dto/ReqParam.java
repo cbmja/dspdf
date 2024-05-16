@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 @Data
 public class ReqParam {
 
+    @JsonProperty("PK")
+    private String PK;
     @JsonProperty("TR_KEY")
     private String TR_KEY;
     @JsonProperty("TOTAL_SEND_CNT")

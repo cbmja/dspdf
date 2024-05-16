@@ -11,4 +11,6 @@ public interface ReqMapper {
     void countGroup(ReqParam reqParam);
 
     void getTrGroup(ReqParam reqParam);
+
+    void findReq(ReqParam reqParam);
 }

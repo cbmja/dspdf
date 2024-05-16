@@ -24,4 +24,8 @@ public class ReqRepository {
     public List getTrGroup(ReqParam reqParam) {
         return sql.selectList("com.daishin.pdf.mapper.ReqMapper.getTrGroup" , reqParam);
     }
+
+    public ReqParam findReq(ReqParam reqParam){
+        return sql.selectOne("com.daishin.pdf.mapper.ReqMapper.findReq" , reqParam);
+    }
 }

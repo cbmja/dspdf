@@ -12,7 +12,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +39,9 @@ public class Utils {
         //파일 저장 경로
         String path = "C:\\DATA\\"+cate+"\\";
     */
-
+        String path = reqParam.getTOTAL_SEND_CNT().equals("1") ? "C:\\DATA\\" : "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
         //파일 저장 경로 (구분자로 나눠야 하면 위에 걸로)
-        String path = "C:\\DATA\\";
+        //String path = "C:\\DATA\\";
 
         //디렉토리 생성
         File dir = new File(path);
@@ -76,7 +75,8 @@ public class Utils {
         String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
 
         //저장 경로
-        String path = "C:\\DATA\\";
+        //String path = "C:\\DATA\\";
+        String path = reqParam.getTOTAL_SEND_CNT().equals("1") ? "C:\\DATA\\" : "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
 
         ObjectMapper mapper = new ObjectMapper();
 

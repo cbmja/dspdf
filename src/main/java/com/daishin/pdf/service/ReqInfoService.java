@@ -23,4 +23,9 @@ public class ReqInfoService {
         return repository.getTrGroup(reqParam);
     }
 
+    public ReqParam findReq(ReqParam reqParam){
+        return repository.findReq(reqParam);
+    }
+
+
 }

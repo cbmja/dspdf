@@ -6,7 +6,8 @@
 
     <insert id = "save" parameterType="ReqParam">
         INSERT INTO dbo.REQ
-        (TR_KEY
+        (PK
+        ,TR_KEY
         ,TOTAL_SEND_CNT
         ,DLV_TYPE_CD
         ,PRINT_TYPE_NM
@@ -24,7 +25,8 @@
         ,SAVE_DATE
         ,STATUS)
         VALUES
-        (#{TR_KEY}
+        (#{PK}
+        ,#{TR_KEY}
         ,#{TOTAL_SEND_CNT}
         ,#{DLV_TYPE_CD}
         ,#{PRINT_TYPE_NM}
@@ -53,6 +55,10 @@
 -->
     <select id="getTrGroup" parameterType="ReqParam" resultType="hashmap">
         SELECT * FROM dbo.REQ WHERE TR_KEY = #{TR_KEY}
+    </select>
+
+    <select id="findReq" parameterType="ReqParam" resultType="ReqParam">
+        SELECT * FROM dbo.REQ WHERE PK = #{PK}
     </select>
 
 </mapper>

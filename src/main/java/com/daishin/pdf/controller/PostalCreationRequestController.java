@@ -28,9 +28,21 @@ public class PostalCreationRequestController {
         //결과
         Map<String , String> response = new LinkedHashMap<>();
 
+        //중복체크
+        req.setPK(req.getTR_KEY()+"_"+req.getRECV_NUM());
+        if(reqInfoService.findReq(req) != null){
+            response.put("중복된 정보 ["+req.getTR_KEY()+"] 그룹의 ["+req.getRECV_NUM()+"] 번은 이미 저장 되었습니다."
+                    , "중복된 정보 ["+req.getTR_KEY()+"] 그룹의 ["+req.getRECV_NUM()+"] 번은 이미 저장 되었습니다.");
+            return response;
+        }
+
+
         //파일 저장 (pdf)
         utils.savePdf(File , req , response);
-        
+
+
+
+
         //DB 저장
         if(reqSaveService.save(req) <= 0){
             if(req.getTOTAL_SEND_CNT().equals("1")){
