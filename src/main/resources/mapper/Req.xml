@@ -23,7 +23,8 @@
         ,RECV_ADDR_DETAIL
         ,PDF_PATH
         ,SAVE_DATE
-        ,STATUS)
+        ,STATUS
+        ,PDF_NM)
         VALUES
         (#{PK}
         ,#{TR_KEY}
@@ -42,7 +43,8 @@
         ,#{RECV_ADDR_DETAIL}
         ,#{PDF_PATH}
         ,#{SAVE_DATE}
-        ,#{STATUS})
+        ,#{STATUS}
+        ,#{PDF_NM})
     </insert>
 
     <select id="countGroup" parameterType="ReqParam" resultType="int">

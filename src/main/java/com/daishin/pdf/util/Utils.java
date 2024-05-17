@@ -30,32 +30,22 @@ public class Utils {
     public void savePdf(MultipartFile file , ReqParam reqParam , Map<String , String> response){
 
         /////SSSpdf 저장SSS/////
-        //저장될 pdf 파일명 (확장자 제외)
-        String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
-    /*
-        //구분자
-        String cate = fileName.substring(0,1);
 
-        //파일 저장 경로
-        String path = "C:\\DATA\\"+cate+"\\";
-    */
+        //String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
+        String fileName = file.getOriginalFilename();
+        
+        //저장경로 (대량이면 dir 하나 더 생성)
         String path = reqParam.getTOTAL_SEND_CNT().equals("1") ? "C:\\DATA\\" : "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
-        //파일 저장 경로 (구분자로 나눠야 하면 위에 걸로)
-        //String path = "C:\\DATA\\";
 
         //디렉토리 생성
         File dir = new File(path);
         dir.mkdirs();
 
         //파일 저장처리SSS
-        Path pdfPath = Paths.get(path).resolve(fileName+".pdf");
+        Path pdfPath = Paths.get(path).resolve(fileName);
         try {
             file.transferTo(pdfPath.toFile());
-            if(reqParam.getTOTAL_SEND_CNT().equals("1")){
-                response.put("pdf 저장 완료(단일)" , "pdf 저장 완료(단일)");
-            } else {
-                response.put("pdf 저장 완료(대량)" , "pdf 저장 완료(대량)");
-            }
+
         } catch (IllegalStateException | IOException e) {
             if(reqParam.getTOTAL_SEND_CNT().equals("1")){
                 response.put("pdf 저장 실패(단일)" , "pdf 저장 실패(단일)");
@@ -66,7 +56,6 @@ public class Utils {
         }
         /////EEEpdf 저장EEE/////
         reqParam.setPDF_PATH(path+fileName+".pdf");
-
     }
 
     public void saveJson(MultipartFile file , ReqParam reqParam , Map<String , String> response) throws IOException {
@@ -75,7 +64,6 @@ public class Utils {
         String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
 
         //저장 경로
-        //String path = "C:\\DATA\\";
         String path = reqParam.getTOTAL_SEND_CNT().equals("1") ? "C:\\DATA\\" : "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
 
         ObjectMapper mapper = new ObjectMapper();
@@ -90,7 +78,6 @@ public class Utils {
                 FileWriter fileWriter = new FileWriter(path+fileName+".json");
                 fileWriter.write(json);
                 fileWriter.close();
-                response.put("json 저장 완료(단일)" , "json 저장 완료(단일)");
             } catch (IOException e) {
                 response.put("json 저장 실패(단일)" , "json 저장 실패(단일)");
                 e.printStackTrace();
@@ -112,7 +99,6 @@ public class Utils {
 
                 response.put("["+reqParam.getTR_KEY()+"] 그룹 전송 완료" , "["+reqParam.getTR_KEY()+"] 그룹 전송 완료");
 
-
                 List<ReqParam> jsonList = reqInfoService.getTrGroup(reqParam);
 
                 String jsonlist = mapper.writeValueAsString(jsonList);
@@ -120,7 +106,6 @@ public class Utils {
                     FileWriter fileWriter = new FileWriter(path+reqParam.getTR_KEY()+".json");
                     fileWriter.write(jsonlist);
                     fileWriter.close();
-                    response.put("json 저장 완료(대량)" , "json 저장 완료(대량)");
                 } catch (IOException e) {
                     response.put("json 저장 실패(대량)" , "json 저장 실패(대량)");
                     e.printStackTrace();

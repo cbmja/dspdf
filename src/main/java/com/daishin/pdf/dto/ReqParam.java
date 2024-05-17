@@ -44,6 +44,8 @@ public class ReqParam {
     private String SAVE_DATE;
     @JsonProperty("STATUS")
     private String STATUS;
+    @JsonProperty("PDF_NM")
+    private String PDF_NM;
 
 
 

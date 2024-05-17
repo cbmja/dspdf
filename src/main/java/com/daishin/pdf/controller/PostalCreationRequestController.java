@@ -3,7 +3,6 @@ package com.daishin.pdf.controller;
 import com.daishin.pdf.dto.ReqParam;
 import com.daishin.pdf.service.ReqInfoService;
 import com.daishin.pdf.service.ReqSaveService;
-import com.daishin.pdf.util.Common;
 import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -36,12 +35,8 @@ public class PostalCreationRequestController {
             return response;
         }
 
-
         //파일 저장 (pdf)
         utils.savePdf(File , req , response);
-
-
-
 
         //DB 저장
         if(reqSaveService.save(req) <= 0){
@@ -50,20 +45,11 @@ public class PostalCreationRequestController {
             }else {
                 response.put("DB 저장 실패(대량)" , "DB 저장 실패(대량)");
             }
-        } else {
-            if(req.getTOTAL_SEND_CNT().equals("1")){
-                response.put("DB 저장 성공(단일)" , "DB 저장 성공(단일)");
-            }else {
-                response.put("DB 저장 성공(대량)" , "DB 저장 성공(대량)");
-            }
         }
 
         //파일 저장 (json)
         utils.saveJson(File , req ,response);
 
-
-        System.out.println(reqInfoService.countGroup(req)+"ssssssssss/"+req.getTR_KEY());
-        
         return response;
 
     }
