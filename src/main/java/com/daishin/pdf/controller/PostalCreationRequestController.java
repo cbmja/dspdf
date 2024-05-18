@@ -5,6 +5,8 @@ import com.daishin.pdf.service.ReqInfoService;
 import com.daishin.pdf.service.ReqSaveService;
 import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -20,19 +22,24 @@ public class PostalCreationRequestController {
         private final ReqInfoService reqInfoService;
         private final Utils utils;
 
+        private final Logger logger = LoggerFactory.getLogger("daishin");
+
 
     @PostMapping("/upload")
     @ResponseBody
     public Map<String , String> uploadAndUnzip(@RequestParam(name = "File" , required = false) MultipartFile File , @ModelAttribute ReqParam req) throws IOException {
-
-        System.out.println("request body : " + req);
-        System.out.println("pdf file name : " + File.getOriginalFilename());
+        
+        //요청 정보 수신
+        logger.info("request body : " +req);
+        logger.info("pdf file name : "+File.getOriginalFilename());
+        
         //결과
         Map<String , String> response = new LinkedHashMap<>();
 
         //중복체크
         req.setPK(req.getTR_KEY()+"_"+req.getRECV_NUM());
         if(reqInfoService.findReq(req) != null){
+            logger.error("중복된 요청 : [ "+req.getTR_KEY()+" ]그룹의 [ "+req.getRECV_NUM()+" ]번 은 이미 저장되었습니다.");
             response.put("중복된 정보 ["+req.getTR_KEY()+"] 그룹의 ["+req.getRECV_NUM()+"] 번은 이미 저장 되었습니다."
                     , "중복된 정보 ["+req.getTR_KEY()+"] 그룹의 ["+req.getRECV_NUM()+"] 번은 이미 저장 되었습니다.");
             return response;

@@ -4,6 +4,8 @@ import com.daishin.pdf.dto.ReqParam;
 import com.daishin.pdf.service.ReqInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,7 +22,7 @@ import java.util.Map;
 public class Utils {
 
     private final ReqInfoService reqInfoService;
-
+    private final Logger logger = LoggerFactory.getLogger("daishin");
 
     /**
      * pdf 저장
@@ -52,6 +54,7 @@ public class Utils {
             } else {
                 response.put("pdf 저장 실패(대량)" , "pdf 저장 실패(대량)");
             }
+            logger.error("pdf저장 실패 : " +file.getOriginalFilename());
             e.printStackTrace();
         }
         /////EEEpdf 저장EEE/////
