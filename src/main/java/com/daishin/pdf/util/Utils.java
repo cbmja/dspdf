@@ -22,14 +22,14 @@ import java.util.Map;
 public class Utils {
 
     private final ReqInfoService reqInfoService;
-    private final Logger logger = LoggerFactory.getLogger("daishin");
+
 
     /**
      * pdf 저장
      * @param file
      * @param reqParam
      */
-    public void savePdf(MultipartFile file , ReqParam reqParam , Map<String , String> response){
+    public void savePdf(MultipartFile file , ReqParam reqParam , Map<String , String> response , Logger logger){
 
         /////SSSpdf 저장SSS/////
 
@@ -47,21 +47,15 @@ public class Utils {
         Path pdfPath = Paths.get(path).resolve(fileName);
         try {
             file.transferTo(pdfPath.toFile());
-
         } catch (IllegalStateException | IOException e) {
-            if(reqParam.getTOTAL_SEND_CNT().equals("1")){
-                response.put("pdf 저장 실패(단일)" , "pdf 저장 실패(단일)");
-            } else {
-                response.put("pdf 저장 실패(대량)" , "pdf 저장 실패(대량)");
-            }
-            logger.error("pdf저장 실패 : " +file.getOriginalFilename());
+            logger.error("pdf 저장 실패 : "+file.getOriginalFilename()+" / "+reqParam);
             e.printStackTrace();
         }
         /////EEEpdf 저장EEE/////
         reqParam.setPDF_PATH(path+fileName+".pdf");
     }
 
-    public void saveJson(MultipartFile file , ReqParam reqParam , Map<String , String> response) throws IOException {
+    public void saveJson(MultipartFile file , ReqParam reqParam , Map<String , String> response , Logger logger) throws IOException {
 
         //확장자 제외 파일명
         String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
@@ -82,7 +76,8 @@ public class Utils {
                 fileWriter.write(json);
                 fileWriter.close();
             } catch (IOException e) {
-                response.put("json 저장 실패(단일)" , "json 저장 실패(단일)");
+                logger.error("json 저장 실패 : "+reqParam);
+                response.put("json 저장 실패" , "json 저장 실패");
                 e.printStackTrace();
             }
         }
@@ -109,7 +104,8 @@ public class Utils {
                     fileWriter.write(jsonlist);
                     fileWriter.close();
                 } catch (IOException e) {
-                    response.put("json 저장 실패(대량)" , "json 저장 실패(대량)");
+                    logger.error("json 저장 실패 : "+reqParam);
+                    response.put("json 저장 실패" , "json 저장 실패");
                     e.printStackTrace();
                 }
             }
