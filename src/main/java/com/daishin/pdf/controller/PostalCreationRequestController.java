@@ -24,6 +24,9 @@ public class PostalCreationRequestController {
     @PostMapping("/upload")
     @ResponseBody
     public Map<String , String> uploadAndUnzip(@RequestParam(name = "File" , required = false) MultipartFile File , @ModelAttribute ReqParam req) throws IOException {
+
+        System.out.println("request body : " + req);
+        System.out.println("pdf file name : " + File.getOriginalFilename());
         //결과
         Map<String , String> response = new LinkedHashMap<>();
 
