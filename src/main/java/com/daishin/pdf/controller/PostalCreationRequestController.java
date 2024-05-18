@@ -34,7 +34,9 @@ public class PostalCreationRequestController {
 
         //요청 정보 수신
         logger.info("request body : " +req);
-        logger.info("pdf file name : "+File.getOriginalFilename());
+        if(File != null){
+            logger.info("pdf file name : "+File.getOriginalFilename());
+        }
 
         //null check
         if(reqCheck(req , logger)){
