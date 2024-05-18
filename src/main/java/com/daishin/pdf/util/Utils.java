@@ -92,6 +92,7 @@ public class Utils {
             */
             String totalTrGroup = reqParam.getTOTAL_SEND_CNT();
 
+            //순서대로 전송되는지 여부 마지막 순번(recv_num)이 마지막에 전송되어야 하단 조건 통과함
             if(reqParam.getRECV_NUM().equals(totalTrGroup) && reqInfoService.countGroup(reqParam)==Integer.parseInt(totalTrGroup)){
 
                 response.put("["+reqParam.getTR_KEY()+"] 그룹 전송 완료" , "["+reqParam.getTR_KEY()+"] 그룹 전송 완료");
