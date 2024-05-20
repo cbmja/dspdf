@@ -11,4 +11,6 @@ public interface MasterMapper {
 
     void findMaster(Master master);
 
+    void updateSendCnt(Master master);
+
 }

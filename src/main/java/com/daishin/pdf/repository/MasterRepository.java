@@ -20,4 +20,8 @@ public class MasterRepository {
         return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.findMaster",master);
     }
 
+    public int updateSendCnt(Master master){
+        return sql.update("com.daishin.pdf.mapper.MasterMapper.updateSendCnt",master);
+    }
+
 }

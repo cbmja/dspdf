@@ -73,17 +73,21 @@ public class PostalCreationRequestController {
         }
 
         Master master = new Master();
-        master.setMASTER_KEY(req.getMASTER());
-        
+        master.setMasterKey(req.getMASTER());
+
         if(masterInfoService.findMaster(master) == null){
             if(!req.getTOTAL_SEND_CNT().equals("1")){
-                master.setTOTAL_SEND_CNT(req.getTOTAL_SEND_CNT());
+                master.setTotalSendCnt(req.getTOTAL_SEND_CNT());
             }else{
-                master.setTOTAL_SEND_CNT("실시간");
+                master.setTotalSendCnt("실시간");
             }
-            master.setSEND_CNT("몰라");
-            master.setSTATUS("일단 기둘");
+            master.setSendCnt(1);
+            master.setStatus("수신중");
             masterSaveService.save(master);
+        }else{
+            Master _master = masterInfoService.findMaster(master);
+            _master.setSendCnt(_master.getSendCnt()+1);
+            masterSaveService.updateSendCnt(_master);
         }
 
         //파일 저장 (json)
