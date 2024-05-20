@@ -49,7 +49,7 @@ public class Utils {
             // 기준 시간 설정
             LocalTime comparisonTime = LocalTime.of(14, 0);
 
-            // 시간 비교 및 결과 출력
+            //당일 전송건도 시간에 따라 TR_KEY가 동일하게 전송된다면 아래 수정 필요
             if (currentTime.isBefore(comparisonTime)) {
                 path = "C:\\DATA\\"+ LocalDate.now()+"\\";
             } else {
@@ -94,7 +94,7 @@ public class Utils {
             // 기준 시간 설정
             LocalTime comparisonTime = LocalTime.of(14, 0);
 
-            // 시간 비교 및 결과 출력
+            //당일 전송건도 시간에 따라 TR_KEY가 동일하게 전송된다면 아래 수정 필요
             if (currentTime.isBefore(comparisonTime)) {
                 path = "C:\\DATA\\"+ LocalDate.now()+"\\";
             } else {
