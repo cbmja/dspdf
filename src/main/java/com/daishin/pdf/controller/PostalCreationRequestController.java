@@ -1,6 +1,9 @@
 package com.daishin.pdf.controller;
 
+import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.ReqParam;
+import com.daishin.pdf.service.MasterInfoService;
+import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.ReqInfoService;
 import com.daishin.pdf.service.ReqSaveService;
 import com.daishin.pdf.util.Utils;
@@ -21,6 +24,8 @@ public class PostalCreationRequestController {
         private final ReqSaveService reqSaveService;
         private final ReqInfoService reqInfoService;
         private final Utils utils;
+        private final MasterInfoService masterInfoService;
+        private final MasterSaveService masterSaveService;
 
         private final Logger logger = LoggerFactory.getLogger("daishin");
 
@@ -65,6 +70,20 @@ public class PostalCreationRequestController {
         //DB 저장
         if(reqSaveService.save(req) <= 0){
             logger.error("DB 저장 실패 : "+req);
+        }
+
+        Master master = new Master();
+        master.setMASTER_KEY(req.getMASTER());
+        
+        if(masterInfoService.findMaster(master) == null){
+            if(!req.getTOTAL_SEND_CNT().equals("1")){
+                master.setTOTAL_SEND_CNT(req.getTOTAL_SEND_CNT());
+            }else{
+                master.setTOTAL_SEND_CNT("실시간");
+            }
+            master.setSEND_CNT("몰라");
+            master.setSTATUS("일단 기둘");
+            masterSaveService.save(master);
         }
 
         //파일 저장 (json)
