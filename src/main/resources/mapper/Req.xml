@@ -23,7 +23,7 @@
         ,RECV_ADDR_DETAIL
         ,PDF_PATH
         ,SAVE_DATE
-        ,STATUS
+        ,MASTER
         ,PDF_NM)
         VALUES
         (#{PK}
@@ -43,7 +43,7 @@
         ,#{RECV_ADDR_DETAIL}
         ,#{PDF_PATH}
         ,#{SAVE_DATE}
-        ,#{STATUS}
+        ,#{MASTER}
         ,#{PDF_NM})
     </insert>
 

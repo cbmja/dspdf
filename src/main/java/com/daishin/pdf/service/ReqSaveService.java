@@ -15,11 +15,9 @@ public class ReqSaveService {
 
 
     public int save (ReqParam reqParam){
-        //reqParam.setPK(reqParam.getTR_KEY()+"_"+reqParam.getRECV_NUM());
-
 
         reqParam.setSAVE_DATE(LocalDateTime.now()+"");
-        reqParam.setSTATUS("대기중");
+        reqParam.setMASTER("대기중");
         return repository.save(reqParam);
     }
 

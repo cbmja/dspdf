@@ -42,8 +42,8 @@ public class ReqParam {
     private String PDF_PATH;
     @JsonProperty("SAVE_DATE")
     private String SAVE_DATE;
-    @JsonProperty("STATUS")
-    private String STATUS;
+    @JsonProperty("MASTER")
+    private String MASTER;
     @JsonProperty("PDF_NM")
     private String PDF_NM;
 
