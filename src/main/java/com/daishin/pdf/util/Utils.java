@@ -131,13 +131,13 @@ public class Utils {
         else {
             /*대량일 경우 3가지 조건을 만족할 경우 json 저장
              1- TOTAL_SEND_CNT != 1   //총 전송 건수가 1이 아닌 경우(위의 if 문에서 체크)
-             2- RECV_NUM == TOTAL_SEND_CNT   //그룹 내 순번이 그룹 총 전송 건수와 같은 경우(마지막 전송건일 경우)
+             X 2- RECV_NUM == TOTAL_SEND_CNT   //그룹 내 순번이 그룹 총 전송 건수와 같은 경우(마지막 전송건일 경우)
              3- TR_KEY 로 select 했을 때 총 갯수가 TOTAL_SEND_CNT 와 동일할 경우
              (select count(*) from dbo.REQ where TR_KEY = #{TR_KEY})
             */
             String totalTrGroup = reqParam.getTOTAL_SEND_CNT();
             //순서대로 전송되는지 여부 마지막 순번(recv_num)이 마지막에 전송되어야 하단 조건 통과함
-            if(reqParam.getRECV_NUM().equals(totalTrGroup) && reqInfoService.countGroup(reqParam)==Integer.parseInt(totalTrGroup)){
+            if(reqInfoService.countGroup(reqParam)==Integer.parseInt(totalTrGroup)){
 
                 response.put("["+reqParam.getTR_KEY()+"] 그룹 전송 완료" , "["+reqParam.getTR_KEY()+"] 그룹 전송 완료");
 

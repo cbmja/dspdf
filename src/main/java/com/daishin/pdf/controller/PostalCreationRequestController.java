@@ -91,8 +91,7 @@ public class PostalCreationRequestController {
         }
 
         //대량 전송 완료시 status 갱신 : 수신중 -> 수신완료
-        if(!req.getTOTAL_SEND_CNT().equals("1") && req.getRECV_NUM().equals(req.getTOTAL_SEND_CNT())
-                && reqInfoService.countGroup(req)==Integer.parseInt(req.getTOTAL_SEND_CNT())){
+        if(!req.getTOTAL_SEND_CNT().equals("1") && reqInfoService.countGroup(req)==Integer.parseInt(req.getTOTAL_SEND_CNT())){
             master.setStatus("수신완료");
             masterSaveService.updateStatus(master);
         }
