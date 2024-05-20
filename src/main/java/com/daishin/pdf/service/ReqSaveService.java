@@ -17,7 +17,13 @@ public class ReqSaveService {
     public int save (ReqParam reqParam){
 
         reqParam.setSAVE_DATE(LocalDateTime.now()+"");
-        reqParam.setMASTER("대기중");
+
+        String filePath = reqParam.getPDF_PATH();
+        int firstIndex = filePath.indexOf('\\');
+        int secondIndex = filePath.indexOf('\\', firstIndex + 1);
+        int thirdIndex = filePath.indexOf('\\', secondIndex + 1);
+        String master =filePath.substring(secondIndex + 1, thirdIndex);
+        reqParam.setMASTER(master);
         return repository.save(reqParam);
     }
 

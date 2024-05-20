@@ -14,6 +14,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.Map;
 
@@ -37,7 +39,28 @@ public class Utils {
         String fileName = file.getOriginalFilename();
         
         //저장경로 (대량이면 dir 하나 더 생성)
-        String path = reqParam.getTOTAL_SEND_CNT().equals("1") ? "C:\\DATA\\" : "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
+        String path = "";
+
+        //단일
+        if(reqParam.getTOTAL_SEND_CNT().equals("1")){
+
+            LocalTime currentTime = LocalTime.now();
+
+            // 기준 시간 설정
+            LocalTime comparisonTime = LocalTime.of(14, 0);
+
+            // 시간 비교 및 결과 출력
+            if (currentTime.isBefore(comparisonTime)) {
+                path = "C:\\DATA\\"+ LocalDate.now()+"\\";
+            } else {
+                path = "C:\\DATA\\"+LocalDate.now().plusDays(1L)+"\\";
+            }
+        }
+
+        //대량
+        if(!reqParam.getTOTAL_SEND_CNT().equals("1")){
+            path = "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
+        }
 
         //디렉토리 생성
         File dir = new File(path);
@@ -60,8 +83,30 @@ public class Utils {
         //확장자 제외 파일명
         String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
 
-        //저장 경로
-        String path = reqParam.getTOTAL_SEND_CNT().equals("1") ? "C:\\DATA\\" : "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
+        //저장경로 (대량이면 dir 하나 더 생성)
+        String path = "";
+
+        //단일
+        if(reqParam.getTOTAL_SEND_CNT().equals("1")){
+
+            LocalTime currentTime = LocalTime.now();
+
+            // 기준 시간 설정
+            LocalTime comparisonTime = LocalTime.of(14, 0);
+
+            // 시간 비교 및 결과 출력
+            if (currentTime.isBefore(comparisonTime)) {
+                path = "C:\\DATA\\"+ LocalDate.now()+"\\";
+            } else {
+                path = "C:\\DATA\\"+LocalDate.now().plusDays(1L)+"\\";
+            }
+        }
+
+        //대량
+        if(!reqParam.getTOTAL_SEND_CNT().equals("1")){
+            path = "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
+        }
+
 
         ObjectMapper mapper = new ObjectMapper();
 
