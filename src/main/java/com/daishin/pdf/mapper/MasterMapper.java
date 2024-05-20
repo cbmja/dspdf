@@ -13,4 +13,6 @@ public interface MasterMapper {
 
     void updateSendCnt(Master master);
 
+    void updateStatus(Master master);
+
 }

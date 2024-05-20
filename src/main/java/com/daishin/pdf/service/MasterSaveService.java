@@ -20,4 +20,8 @@ public class MasterSaveService {
         return masterRepository.updateSendCnt(master);
     }
 
+    public int updateStatus(Master master){
+        return masterRepository.updateStatus(master);
+    }
+
 }

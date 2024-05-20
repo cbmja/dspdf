@@ -24,4 +24,8 @@ public class MasterRepository {
         return sql.update("com.daishin.pdf.mapper.MasterMapper.updateSendCnt",master);
     }
 
+    public int updateStatus(Master master){
+        return sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatus",master);
+    }
+
 }

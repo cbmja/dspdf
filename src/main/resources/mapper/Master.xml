@@ -24,4 +24,8 @@
     <update id="updateSendCnt" parameterType="Master">
         UPDATE dbo.MASTER SET SEND_CNT = #{sendCnt} WHERE MASTER_KEY = #{masterKey}
     </update>
+
+    <update id="updateStatus" parameterType="Master">
+        UPDATE dbo.MASTER SET STATUS = #{status} WHERE MASTER_KEY = #{masterKey}
+    </update>
 </mapper>
