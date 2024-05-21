@@ -28,4 +28,8 @@ public class ReqRepository {
     public ReqParam findReq(ReqParam reqParam){
         return sql.selectOne("com.daishin.pdf.mapper.ReqMapper.findReq" , reqParam);
     }
+
+    public List getMasterGroup(String MASTER) {
+        return sql.selectList("com.daishin.pdf.mapper.ReqMapper.getMasterGroup" , MASTER);
+    }
 }

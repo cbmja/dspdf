@@ -27,5 +27,8 @@ public class ReqInfoService {
         return repository.findReq(reqParam);
     }
 
+    public List<ReqParam> getMasterGroup(String MASTER){
+        return repository.getMasterGroup(MASTER);
+    }
 
 }

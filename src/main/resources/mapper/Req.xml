@@ -59,6 +59,10 @@
         SELECT * FROM dbo.REQ WHERE TR_KEY = #{TR_KEY}
     </select>
 
+    <select id="getMasterGroup" parameterType="String" resultType="hashmap">
+        SELECT * FROM dbo.REQ WHERE MASTER = #{MASTER}
+    </select>
+
     <select id="findReq" parameterType="ReqParam" resultType="ReqParam">
         SELECT * FROM dbo.REQ WHERE PK = #{PK}
     </select>

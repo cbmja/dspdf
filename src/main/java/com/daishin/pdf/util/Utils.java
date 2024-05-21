@@ -75,9 +75,41 @@ public class Utils {
             e.printStackTrace();
         }
         /////EEEpdf 저장EEE/////
-        reqParam.setPDF_PATH(path+fileName+".pdf");
+        reqParam.setPDF_PATH(path+fileName);
     }
 
+    ///////////////////////
+
+    //대량 (배치) json 저장
+    public void saveJson(ReqParam reqParam , Map<String , String> response , Logger logger) throws IOException {
+
+        //저장경로 
+        String path = "C:\\DATA\\"+reqParam.getMASTER()+"\\";
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        //response.put("["+reqParam.getTR_KEY()+"] 전송 완료" , "["+reqParam.getTR_KEY()+"] 전송 완료");
+
+        List<ReqParam> jsonList = reqInfoService.getMasterGroup(reqParam.getMASTER());
+
+        String jsonlist = mapper.writeValueAsString(jsonList);
+        try {
+            FileWriter fileWriter = new FileWriter(path+reqParam.getMASTER()+".json");
+            fileWriter.write(jsonlist);
+            fileWriter.close();
+        } catch (IOException e) {
+            logger.error("json 저장 실패 : "+reqParam);
+            response.put("json 저장 실패" , "json 저장 실패");
+            e.printStackTrace();
+        }
+
+        }
+
+
+
+
+////////////////////////////////////////////////////////
+/*
     public void saveJson(MultipartFile file , ReqParam reqParam , Map<String , String> response , Logger logger) throws IOException {
 
         //확장자 제외 파일명
@@ -129,12 +161,12 @@ public class Utils {
         //EEEEEEEEEEEEEEEE단일EEEEEEEEEEEEEEEE
         //SSSSSSSSSSSSSSSS대량SSSSSSSSSSSSSSSS
         else {
-            /*대량일 경우 3가지 조건을 만족할 경우 json 저장
-             1- TOTAL_SEND_CNT != 1   //총 전송 건수가 1이 아닌 경우(위의 if 문에서 체크)
-             X 2- RECV_NUM == TOTAL_SEND_CNT   //그룹 내 순번이 그룹 총 전송 건수와 같은 경우(마지막 전송건일 경우)
-             3- TR_KEY 로 select 했을 때 총 갯수가 TOTAL_SEND_CNT 와 동일할 경우
-             (select count(*) from dbo.REQ where TR_KEY = #{TR_KEY})
-            */
+             // 대량일 경우 3가지 조건을 만족할 경우 json 저장
+             // 1- TOTAL_SEND_CNT != 1   //총 전송 건수가 1이 아닌 경우(위의 if 문에서 체크)
+             // X 2- RECV_NUM == TOTAL_SEND_CNT   //그룹 내 순번이 그룹 총 전송 건수와 같은 경우(마지막 전송건일 경우)
+             // 3- TR_KEY 로 select 했을 때 총 갯수가 TOTAL_SEND_CNT 와 동일할 경우
+             // (select count(*) from dbo.REQ where TR_KEY = #{TR_KEY})
+
             String totalTrGroup = reqParam.getTOTAL_SEND_CNT();
             //순서대로 전송되는지 여부 마지막 순번(recv_num)이 마지막에 전송되어야 하단 조건 통과함
             if(reqInfoService.countGroup(reqParam)==Integer.parseInt(totalTrGroup)){
@@ -157,39 +189,7 @@ public class Utils {
         }
         //EEEEEEEEEEEEEEEE대량EEEEEEEEEEEEEEEE
     }
-
-    ///////////////////////
-
-    //대량 (배치) json 저장
-    public void saveJson_1(MultipartFile file , ReqParam reqParam , Map<String , String> response , Logger logger) throws IOException {
-
-        //확장자 제외 파일명
-        String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
-
-        //저장경로 
-        String path = "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
-
-        ObjectMapper mapper = new ObjectMapper();
-
-        String totalTrGroup = reqParam.getTOTAL_SEND_CNT();
- 
-        response.put("["+reqParam.getTR_KEY()+"] 그룹 전송 완료" , "["+reqParam.getTR_KEY()+"] 그룹 전송 완료");
-
-        List<ReqParam> jsonList = reqInfoService.getTrGroup(reqParam);
-
-        String jsonlist = mapper.writeValueAsString(jsonList);
-        try {
-            FileWriter fileWriter = new FileWriter(path+reqParam.getTR_KEY()+".json");
-            fileWriter.write(jsonlist);
-            fileWriter.close();
-        } catch (IOException e) {
-            logger.error("json 저장 실패 : "+reqParam);
-            response.put("json 저장 실패" , "json 저장 실패");
-            e.printStackTrace();
-        }
-
-        }
-        
-    }
+*/
+}
 
 

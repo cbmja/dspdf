@@ -13,4 +13,6 @@ public interface ReqMapper {
     void getTrGroup(ReqParam reqParam);
 
     void findReq(ReqParam reqParam);
+
+    void getMasterGroup(String MASTER);
 }

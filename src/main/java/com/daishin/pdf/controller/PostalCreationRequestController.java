@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.*;
 
 @Controller //우편 제작 요청 api
@@ -96,7 +97,16 @@ public class PostalCreationRequestController {
             master.setSTATUS("2(수신완료)");
             masterSaveService.updateStatus(master);
             //JSON 파일 생성 및 저장
-            utils.saveJson_1(File , req , response , logger);
+            utils.saveJson(req , response , logger);
+        }
+
+        // 테스트용임 원래는 스케줄러로 14:00시에 실행되도록
+        if(req.getTOTAL_SEND_CNT().equals("1") && (LocalDate.now()+"").equals("2024-05-21")){
+            //스케줄러에서 실행되어야 하는 동작
+            ReqParam r = new ReqParam();
+            r.setMASTER(LocalDate.now().plusDays(1L)+"");
+            utils.saveJson(r , response , logger);
+            //+master 상태 바꾸기
         }
 
 
