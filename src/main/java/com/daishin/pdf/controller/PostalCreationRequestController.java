@@ -72,10 +72,9 @@ public class PostalCreationRequestController {
             logger.error("DB 저장 실패 : "+req);
         }
 
-        //master 최초 저장 , 전송 건수 갱신
+        //master 최초 저장
         Master master = new Master();
         master.setMaster_Key(req.getMASTER());
-
         if(masterInfoService.findMaster(master) == null){
             if(!req.getTOTAL_SEND_CNT().equals("1")){
                 master.setTOTAL_SEND_CNT(req.getTOTAL_SEND_CNT());
@@ -83,24 +82,29 @@ public class PostalCreationRequestController {
                 master.setTOTAL_SEND_CNT("실시간");
             }
             master.setSEND_CNT(1);
-            master.setSTATUS("수신중");
+            master.setSTATUS("1(수신중)");
             masterSaveService.save(master);
         }else{
+        //전송 건수 갱신
             Master _master = masterInfoService.findMaster(master);
             _master.setSEND_CNT(_master.getSEND_CNT()+1);
             masterSaveService.updateSendCnt(_master);
         }
 
-        //대량 전송 완료시 status 갱신 : 수신중 -> 수신완료
+        //대량 전송 완료시 처리 / status 갱신 : 수신중 -> 수신완료 , JSON 파일저장
         if(!req.getTOTAL_SEND_CNT().equals("1") && reqInfoService.countGroup(req)==Integer.parseInt(req.getTOTAL_SEND_CNT())){
-            master.setSTATUS("수신완료");
+            master.setSTATUS("2(수신완료)");
             masterSaveService.updateStatus(master);
+            //JSON 파일 생성 및 저장
+            utils.saveJson_1(File , req , response , logger);
         }
 
 
+/*
 
         //파일 저장 (json)
         utils.saveJson(File , req ,response ,logger);
+*/
 
         return response;
 

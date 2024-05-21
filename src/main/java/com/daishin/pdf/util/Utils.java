@@ -158,4 +158,38 @@ public class Utils {
         //EEEEEEEEEEEEEEEE대량EEEEEEEEEEEEEEEE
     }
 
-}
+    ///////////////////////
+
+    //대량 (배치) json 저장
+    public void saveJson_1(MultipartFile file , ReqParam reqParam , Map<String , String> response , Logger logger) throws IOException {
+
+        //확장자 제외 파일명
+        String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
+
+        //저장경로 
+        String path = "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        String totalTrGroup = reqParam.getTOTAL_SEND_CNT();
+ 
+        response.put("["+reqParam.getTR_KEY()+"] 그룹 전송 완료" , "["+reqParam.getTR_KEY()+"] 그룹 전송 완료");
+
+        List<ReqParam> jsonList = reqInfoService.getTrGroup(reqParam);
+
+        String jsonlist = mapper.writeValueAsString(jsonList);
+        try {
+            FileWriter fileWriter = new FileWriter(path+reqParam.getTR_KEY()+".json");
+            fileWriter.write(jsonlist);
+            fileWriter.close();
+        } catch (IOException e) {
+            logger.error("json 저장 실패 : "+reqParam);
+            response.put("json 저장 실패" , "json 저장 실패");
+            e.printStackTrace();
+        }
+
+        }
+        
+    }
+
+
