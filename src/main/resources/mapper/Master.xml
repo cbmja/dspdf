@@ -11,21 +11,21 @@
         ,STATUS
         ,SEND_CNT)
         VALUES
-        (#{masterKey}
-        ,#{totalSendCnt}
-        ,#{status}
-        ,#{sendCnt})
+        (#{Master_Key}
+        ,#{TOTAL_SEND_CNT}
+        ,#{STATUS}
+        ,#{SEND_CNT})
     </insert>
 
     <select id="findMaster" parameterType="Master" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE MASTER_KEY = #{masterKey}
+        SELECT * FROM dbo.MASTER WHERE MASTER_KEY = #{Master_Key}
     </select>
 
     <update id="updateSendCnt" parameterType="Master">
-        UPDATE dbo.MASTER SET SEND_CNT = #{sendCnt} WHERE MASTER_KEY = #{masterKey}
+        UPDATE dbo.MASTER SET SEND_CNT = #{SEND_CNT} WHERE MASTER_KEY = #{Master_Key}
     </update>
 
     <update id="updateStatus" parameterType="Master">
-        UPDATE dbo.MASTER SET STATUS = #{status} WHERE MASTER_KEY = #{masterKey}
+        UPDATE dbo.MASTER SET STATUS = #{STATUS} WHERE MASTER_KEY = #{Master_Key}
     </update>
 </mapper>

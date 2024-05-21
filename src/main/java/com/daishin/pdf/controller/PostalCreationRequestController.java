@@ -56,6 +56,7 @@ public class PostalCreationRequestController {
 
         //중복체크
         req.setPK(req.getTR_KEY()+"_"+req.getRECV_NUM());
+
         if(reqInfoService.findReq(req) != null){
             logger.error("중복된 요청 : "+req);
             response.put("중복된 요청 : "+req , "중복된 요청 : "+req);
@@ -73,26 +74,26 @@ public class PostalCreationRequestController {
 
         //master 최초 저장 , 전송 건수 갱신
         Master master = new Master();
-        master.setMasterKey(req.getMASTER());
+        master.setMaster_Key(req.getMASTER());
 
         if(masterInfoService.findMaster(master) == null){
             if(!req.getTOTAL_SEND_CNT().equals("1")){
-                master.setTotalSendCnt(req.getTOTAL_SEND_CNT());
+                master.setTOTAL_SEND_CNT(req.getTOTAL_SEND_CNT());
             }else{
-                master.setTotalSendCnt("실시간");
+                master.setTOTAL_SEND_CNT("실시간");
             }
-            master.setSendCnt(1);
-            master.setStatus("수신중");
+            master.setSEND_CNT(1);
+            master.setSTATUS("수신중");
             masterSaveService.save(master);
         }else{
             Master _master = masterInfoService.findMaster(master);
-            _master.setSendCnt(_master.getSendCnt()+1);
+            _master.setSEND_CNT(_master.getSEND_CNT()+1);
             masterSaveService.updateSendCnt(_master);
         }
 
         //대량 전송 완료시 status 갱신 : 수신중 -> 수신완료
         if(!req.getTOTAL_SEND_CNT().equals("1") && reqInfoService.countGroup(req)==Integer.parseInt(req.getTOTAL_SEND_CNT())){
-            master.setStatus("수신완료");
+            master.setSTATUS("수신완료");
             masterSaveService.updateStatus(master);
         }
 

@@ -19,8 +19,8 @@ spring:
 mybatis:
   mapper-locations: mapper/*.xml
   type-aliases-package: com.daishin.pdf.dto
-  configuration:
-    map-underscore-to-camel-case: true
+#  configuration:
+#    map-underscore-to-camel-case: true
     
 storage:
   path: C:\\DATA\\
