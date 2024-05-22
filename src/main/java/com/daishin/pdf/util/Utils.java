@@ -39,7 +39,7 @@ public class Utils {
         String fileName = file.getOriginalFilename();
         
         //저장경로 (대량이면 dir 하나 더 생성)
-        String path = "";
+        String path ;
 
         //단일
         if(reqParam.getTOTAL_SEND_CNT().equals("1")){
@@ -49,18 +49,18 @@ public class Utils {
             // 기준 시간 설정
             LocalTime comparisonTime = LocalTime.of(14, 0);
 
-            //당일 전송건도 시간에 따라 TR_KEY가 동일하게 전송된다면 아래 수정 필요
+            //14 이전이면 년도-월-오늘날짜
             if (currentTime.isBefore(comparisonTime)) {
                 path = "C:\\DATA\\"+ LocalDate.now()+"\\";
             } else {
+            //14 이후이면 년도-월-내일날짜    
                 path = "C:\\DATA\\"+LocalDate.now().plusDays(1L)+"\\";
             }
-        }
-
+        } else {
         //대량
-        if(!reqParam.getTOTAL_SEND_CNT().equals("1")){
             path = "C:\\DATA\\"+reqParam.getTR_KEY()+"\\";
         }
+
 
         //디렉토리 생성
         File dir = new File(path);
@@ -81,25 +81,25 @@ public class Utils {
     ///////////////////////
 
     //대량 (배치) json 저장
-    public void saveJson(ReqParam reqParam , Map<String , String> response , Logger logger) throws IOException {
+    public void saveJson(String master ,  Logger logger) throws IOException {
 
         //저장경로 
-        String path = "C:\\DATA\\"+reqParam.getMASTER()+"\\";
+        String path = "C:\\DATA\\"+master+"\\";
 
         ObjectMapper mapper = new ObjectMapper();
 
         //response.put("["+reqParam.getTR_KEY()+"] 전송 완료" , "["+reqParam.getTR_KEY()+"] 전송 완료");
 
-        List<ReqParam> jsonList = reqInfoService.getMasterGroup(reqParam.getMASTER());
+        List<ReqParam> jsonList = reqInfoService.getMasterGroup(master);
 
         String jsonlist = mapper.writeValueAsString(jsonList);
         try {
-            FileWriter fileWriter = new FileWriter(path+reqParam.getMASTER()+".json");
+            FileWriter fileWriter = new FileWriter(path+master+".json");
             fileWriter.write(jsonlist);
             fileWriter.close();
         } catch (IOException e) {
-            logger.error("json 저장 실패 : "+reqParam);
-            response.put("json 저장 실패" , "json 저장 실패");
+            logger.error("json 저장 실패 master : ["+master+" ]");
+
             e.printStackTrace();
         }
 
