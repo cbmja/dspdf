@@ -5,6 +5,8 @@ import com.daishin.pdf.repository.MasterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class MasterSaveService {
@@ -12,7 +14,7 @@ public class MasterSaveService {
     private final MasterRepository masterRepository;
 
     public int save (Master master){
-
+        master.setRECEIVED_TIME(LocalDateTime.now()+"");
         return masterRepository.save(master);
     }
 

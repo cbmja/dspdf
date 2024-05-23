@@ -9,12 +9,14 @@
         (MASTER_KEY
         ,TOTAL_SEND_CNT
         ,STATUS
-        ,SEND_CNT)
+        ,SEND_CNT
+        ,RECEIVED_TIME)
         VALUES
         (#{Master_Key}
         ,#{TOTAL_SEND_CNT}
         ,#{STATUS}
-        ,#{SEND_CNT})
+        ,#{SEND_CNT}
+        ,#{RECEIVED_TIME})
     </insert>
 
     <select id="findMaster" parameterType="Master" resultType="Master">
@@ -22,7 +24,7 @@
     </select>
 
     <update id="updateSendCnt" parameterType="Master">
-        UPDATE dbo.MASTER SET SEND_CNT = #{SEND_CNT} WHERE MASTER_KEY = #{Master_Key}
+        UPDATE dbo.MASTER SET SEND_CNT = #{SEND_CNT} , RECEIVED_TIME = #{RECEIVED_TIME} WHERE MASTER_KEY = #{Master_Key}
     </update>
 
     <update id="updateStatus" parameterType="Master">

@@ -35,6 +35,7 @@ public class PostalCreationRequestController {
     @PostMapping("/upload")
     @ResponseBody
     public Map<String , String> uploadAndUnzip(@RequestParam(name = "File" , required = false) MultipartFile File , @ModelAttribute ReqParam req) throws IOException {
+        long startTime = System.nanoTime();
 
         //결과
         Map<String , String> response = new LinkedHashMap<>();
@@ -90,6 +91,7 @@ public class PostalCreationRequestController {
         }else{
         //전송 건수 갱신
             Master _master = masterInfoService.findMaster(master);
+            _master.setRECEIVED_TIME(req.getSAVE_DATE());
             _master.setSEND_CNT(_master.getSEND_CNT()+1);
             masterSaveService.updateSendCnt(_master);
         }
@@ -101,7 +103,8 @@ public class PostalCreationRequestController {
             //JSON 파일 생성 및 저장
             utils.saveJson(req.getMASTER()  , logger);
         }
-
+        long endTime = System.nanoTime();
+        logger.info("처리 시간 (nano seconds): "+(endTime - startTime));
         return response;
 
     }
