@@ -1,7 +1,6 @@
 package com.daishin.pdf.SchedulerConfig;
 
 import com.daishin.pdf.dto.Master;
-import com.daishin.pdf.dto.ReqParam;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
@@ -11,11 +10,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 
-import javax.imageio.IIOException;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Map;
 
 @Configuration
 @RequiredArgsConstructor

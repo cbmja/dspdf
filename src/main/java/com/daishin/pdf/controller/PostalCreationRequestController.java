@@ -1,6 +1,5 @@
 package com.daishin.pdf.controller;
 
-import com.daishin.pdf.SchedulerConfig.SchedulerConfiguration;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.ReqParam;
 import com.daishin.pdf.service.MasterInfoService;
