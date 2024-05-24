@@ -32,7 +32,7 @@ public class SchedulerConfiguration {
             utils.saveJson(LocalDate.now()+"" , logger);
 
             Master master = new Master();
-            master.setMaster_Key(LocalDate.now()+"");
+            master.setMASTER_KEY(LocalDate.now()+"");
             master.setSTATUS("2(수신완료)");
             //master 작업 상태 업데이트
             masterSaveService.updateStatus(master);

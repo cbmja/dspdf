@@ -12,7 +12,7 @@
         ,SEND_CNT
         ,RECEIVED_TIME)
         VALUES
-        (#{Master_Key}
+        (#{MASTER_KEY}
         ,#{TOTAL_SEND_CNT}
         ,#{STATUS}
         ,#{SEND_CNT}
@@ -20,18 +20,18 @@
     </insert>
 
     <select id="findMaster" parameterType="Master" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE MASTER_KEY = #{Master_Key}
+        SELECT * FROM dbo.MASTER WHERE MASTER_KEY = #{MASTER_KEY}
     </select>
 
     <update id="updateSendCnt" parameterType="Master">
-        UPDATE dbo.MASTER SET SEND_CNT = #{SEND_CNT} , RECEIVED_TIME = #{RECEIVED_TIME} WHERE MASTER_KEY = #{Master_Key}
+        UPDATE dbo.MASTER SET SEND_CNT = #{SEND_CNT} , RECEIVED_TIME = #{RECEIVED_TIME} WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 
     <update id="updateStatus" parameterType="Master">
-        UPDATE dbo.MASTER SET STATUS = #{STATUS} WHERE MASTER_KEY = #{Master_Key}
+        UPDATE dbo.MASTER SET STATUS = #{STATUS} WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 
-    <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="hashmap">
+    <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="Master">
         SELECT * FROM dbo.MASTER ORDER BY received_time ASC OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
     </select>
 

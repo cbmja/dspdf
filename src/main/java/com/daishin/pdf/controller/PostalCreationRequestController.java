@@ -76,7 +76,7 @@ public class PostalCreationRequestController {
 
         //master 최초 저장
         Master master = new Master();
-        master.setMaster_Key(req.getMASTER());
+        master.setMASTER_KEY(req.getMASTER());
         if(masterInfoService.findMaster(master) == null){
             if(!req.getTOTAL_SEND_CNT().equals("1")){
                 master.setTOTAL_SEND_CNT(req.getTOTAL_SEND_CNT());

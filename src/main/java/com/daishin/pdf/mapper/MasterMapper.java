@@ -5,6 +5,8 @@ import com.daishin.pdf.dto.ReqParam;
 import com.daishin.pdf.page.Page;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 @Mapper
 public interface MasterMapper {
 
@@ -18,6 +20,6 @@ public interface MasterMapper {
 
     void selectAll();
 
-    void selectMastersByPage(Page page);
+    List<Master> selectMastersByPage(Page page);
 
 }
