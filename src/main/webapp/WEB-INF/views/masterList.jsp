@@ -44,14 +44,9 @@
 
     </table>
 <hr>
+
+    <hr>
     <table>
-        <tr>
-        <th>
-            <% for(int i = p.getStartPage(); i<=p.getStartPage()+(p.getEndPage()-p.getStartPage()); i++){ %>
-                <a href="/mList?page=${i}"><%= i %></a>
-            <% } %>
-        </th>
-        </tr>
         <tr>
         <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
                     <a href="/mList?page=${i}">${i}</a>
