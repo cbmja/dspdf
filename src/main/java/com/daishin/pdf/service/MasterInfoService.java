@@ -1,9 +1,12 @@
 package com.daishin.pdf.service;
 
 import com.daishin.pdf.dto.Master;
+import com.daishin.pdf.page.Page;
 import com.daishin.pdf.repository.MasterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -15,5 +18,12 @@ public class MasterInfoService {
         return masterRepository.findMaster(master);
     }
 
+    public List<Master> selectAll(){
+        return masterRepository.selectAll();
+    }
+
+    public List<Master> selectMastersByPage(Page page){
+        return masterRepository.selectMastersByPage(page);
+    }
 
 }

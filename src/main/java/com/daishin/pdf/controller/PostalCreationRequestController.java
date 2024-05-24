@@ -28,7 +28,6 @@ public class PostalCreationRequestController {
         private final MasterInfoService masterInfoService;
         private final MasterSaveService masterSaveService;
 
-
         private final Logger logger = LoggerFactory.getLogger("daishin");
 
     @PostMapping("/upload")
