@@ -42,7 +42,7 @@
         ,#{RECV_ADDR}
         ,#{RECV_ADDR_DETAIL}
         ,#{PDF_PATH}
-        ,#{SAVE_DATE}
+        ,GETDATE()
         ,#{MASTER}
         ,#{PDF_NM})
     </insert>

@@ -77,6 +77,7 @@ public class PostalCreationRequestController {
         //master 최초 저장
         Master master = new Master();
         master.setMASTER_KEY(req.getMASTER());
+        master.setRECEIVED_TIME(reqInfoService.findReq(req).getSAVE_DATE());
         if(masterInfoService.findMaster(master) == null){
             if(!req.getTOTAL_SEND_CNT().equals("1")){
                 master.setTOTAL_SEND_CNT(req.getTOTAL_SEND_CNT());
@@ -89,7 +90,8 @@ public class PostalCreationRequestController {
         }else{
         //전송 건수 갱신
             Master _master = masterInfoService.findMaster(master);
-            _master.setRECEIVED_TIME(req.getSAVE_DATE());
+
+            _master.setRECEIVED_TIME(reqInfoService.findReq(req).getSAVE_DATE());
             _master.setSEND_CNT(_master.getSEND_CNT()+1);
             masterSaveService.updateSendCnt(_master);
         }
@@ -103,6 +105,9 @@ public class PostalCreationRequestController {
         }
         long endTime = System.nanoTime();
         logger.info("처리 시간 (nano seconds): "+(endTime - startTime));
+
+        response.put("결과","OK");
+        response.put("비고","SUCCESS");
         return response;
 
     }

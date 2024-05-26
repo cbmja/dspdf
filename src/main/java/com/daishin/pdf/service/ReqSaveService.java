@@ -16,7 +16,7 @@ public class ReqSaveService {
 
     public int save (ReqParam reqParam){
 
-        reqParam.setSAVE_DATE(LocalDateTime.now()+"");
+        //reqParam.setSAVE_DATE(LocalDateTime.now()+"");
 
         String filePath = reqParam.getPDF_PATH();
         int firstIndex = filePath.indexOf('\\');

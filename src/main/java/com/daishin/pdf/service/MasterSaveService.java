@@ -14,7 +14,7 @@ public class MasterSaveService {
     private final MasterRepository masterRepository;
 
     public int save (Master master){
-        master.setRECEIVED_TIME(LocalDateTime.now()+"");
+        //master.setRECEIVED_TIME(LocalDateTime.now()+"");
         return masterRepository.save(master);
     }
 

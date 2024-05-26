@@ -3,6 +3,7 @@ package com.daishin.pdf.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
+import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Data
@@ -41,7 +42,7 @@ public class ReqParam {
     @JsonProperty("PDF_PATH")
     private String PDF_PATH;
     @JsonProperty("SAVE_DATE")
-    private String SAVE_DATE;
+    private Date SAVE_DATE;
     @JsonProperty("MASTER")
     private String MASTER;
     @JsonProperty("PDF_NM")
