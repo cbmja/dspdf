@@ -32,6 +32,7 @@ public class ViewController {
         Page page = new Page(search.getPage() , total);
         page.setSearch(search.getSearch());
 
+        model.addAttribute("total" , total);
         model.addAttribute("p" , page);
 
         List<Master> masterList = masterInfoService.selectMastersByPage(page);

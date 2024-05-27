@@ -35,10 +35,11 @@
 
 <hr>
     <form action="/mList">
-    <input type="text" name="search" value="${search.getSearch()}">
-    <input type="submit">
-
+        <input type="text" name="search" value="${search.getSearch()}">
+        <input type="submit" value="검색">
     </form>
+    <p>총 검색 건수 : ${total}</p>
+
 
     <table border="1" >
         <tr>
