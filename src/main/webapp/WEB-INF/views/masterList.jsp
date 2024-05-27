@@ -32,9 +32,10 @@
 
         Page p = (Page)(request.getAttribute("p"));
 
+
     %>
 
-
+${p}
 <hr>
 
     <table border="1" >
@@ -62,11 +63,17 @@
 
     <table>
         <tr>
-        <th><a>이전</a></th>
+        <a href="/mList?page=1"> <<제일 앞으로<< </a>
+        .
+        <a href="/mList?page=${p.getPrev_()}"> <이전< </a>
+        .
         <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
-                    <th><a href="/mList?page=${i}">${i}</a><th>
+                    <a href="/mList?page=${i}">${i}</a>
+                    .
         </c:forEach>
-        <th><a>다음</a></th>
+        <a href="/mList?page=${p.getNext_()}"> >다음> </a>
+        .
+        <a href="/mList?page=${p.getTotalPage()}"> >>제일 뒤로>> </a>
         </tr>
     </table>
 

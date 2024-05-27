@@ -20,10 +20,13 @@ public class Page {
     private int startNum;//첫 게시물 번호 ok
     private int endNum;//마지막 게시물 번호 ok
 
-    private int currentPageBlock;//현재 보이는 페이지 블럭 수
+    //private int currentPageBlock;//현재 보이는 페이지 블럭 수
 
-    private boolean isNext;//다음페이지 존재 여부
-    private boolean isPrev;//이전페이지 존재 여부
+    private boolean next;//다음페이지 존재 여부
+    private boolean prev;//이전페이지 존재 여부
+
+    private int prev_;
+    private int next_;
 
     /**
      * 현재페이지 , 총 게시물 수
@@ -54,8 +57,25 @@ public class Page {
 
             }
 
-
         }
+
+        if(this.startPage == 1){
+            this.prev = false;
+        }else{
+            this.prev = true;
+        }
+
+        if(this.endPage == this.totalPage){
+            this.next = false;
+        }else{
+            this.next = true;
+        }
+
+        if(this.prev){ this.prev_ = this.startPage -1;
+        }else{this.prev_ =1;}
+
+        if(this.next){this.next_ = this.endPage+1;
+        }else{this.next_ = this.totalPage;}
 
     }
 
