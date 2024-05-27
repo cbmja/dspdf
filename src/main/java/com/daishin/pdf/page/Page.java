@@ -7,8 +7,8 @@ public class Page {
 
     private int total;//총 게시물 수 ok
     
-    private int pageElement = 2;//한 페이지에 보여줄 게시물 수 ok
-    private int pageSize = 2;//보여줄 페이지 블럭 수 ok
+    private int pageElement = 10;//한 페이지에 보여줄 게시물 수 ok
+    private int pageSize = 5;//보여줄 페이지 블럭 수 ok
 
     private int startPage;//보여지는 블럭의 시작번호
     private int endPage;//보여지는 블럭의 마지막 번호
