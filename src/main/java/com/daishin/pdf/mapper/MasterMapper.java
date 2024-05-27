@@ -12,7 +12,7 @@ public interface MasterMapper {
 
     void save(Master Master);
 
-    void findMaster(Master master);
+    void findMaster(String MASTER_KEY);
 
     void updateSendCnt(Master master);
 

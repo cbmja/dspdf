@@ -28,14 +28,14 @@ public class SchedulerConfiguration {
     public void run() throws IOException {
         if(checkTime()){
 
-            //json 파일 생성
-            utils.saveJson(LocalDate.now()+"" , logger);
-
             Master master = new Master();
             master.setMASTER_KEY(LocalDate.now()+"");
             master.setSTATUS("2(수신완료)");
             //master 작업 상태 업데이트
             masterSaveService.updateStatus(master);
+            //json 파일 생성
+            utils.saveJson(LocalDate.now()+"" , logger);
+
         }
     }
 

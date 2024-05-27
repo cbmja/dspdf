@@ -14,8 +14,8 @@ public class MasterInfoService {
 
     private final MasterRepository masterRepository;
 
-    public Master findMaster(Master master){
-        return masterRepository.findMaster(master);
+    public Master findMaster(String MASTER_KEY){
+        return masterRepository.findMaster(MASTER_KEY);
     }
 
     public List<Master> selectAll(){

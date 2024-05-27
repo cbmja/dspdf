@@ -1,8 +1,11 @@
 package com.daishin.pdf.util;
 
+import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.ReqParam;
+import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.ReqInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +19,8 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +29,7 @@ import java.util.Map;
 public class Utils {
 
     private final ReqInfoService reqInfoService;
+    private final MasterInfoService masterInfoService;
 
 
     /**
@@ -87,10 +93,16 @@ public class Utils {
         String path = "C:\\DATA\\"+master+"\\";
 
         ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(new JavaTimeModule());
 
         //response.put("["+reqParam.getTR_KEY()+"] 전송 완료" , "["+reqParam.getTR_KEY()+"] 전송 완료");
 
-        List<ReqParam> jsonList = reqInfoService.getMasterGroup(master);
+        Map<String , List> jsonList = new HashMap<>();
+
+        List<Master> masterList = new ArrayList<>();
+        masterList.add(masterInfoService.findMaster(master));
+        jsonList.put("master" , masterList);
+        jsonList.put("detail" , reqInfoService.getMasterGroup(master));
 
         String jsonlist = mapper.writeValueAsString(jsonList);
         try {

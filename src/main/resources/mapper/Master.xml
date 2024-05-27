@@ -19,7 +19,7 @@
         ,#{RECEIVED_TIME})
     </insert>
 
-    <select id="findMaster" parameterType="Master" resultType="Master">
+    <select id="findMaster" parameterType="String" resultType="Master">
         SELECT * FROM dbo.MASTER WHERE MASTER_KEY = #{MASTER_KEY}
     </select>
 

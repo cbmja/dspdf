@@ -75,10 +75,11 @@ public class PostalCreationRequestController {
         }
 
         //master 최초 저장
+        String MASTER_KEY = req.getMASTER();
         Master master = new Master();
-        master.setMASTER_KEY(req.getMASTER());
+        master.setMASTER_KEY(MASTER_KEY);
         master.setRECEIVED_TIME(reqInfoService.findReq(req).getSAVE_DATE());
-        if(masterInfoService.findMaster(master) == null){
+        if(masterInfoService.findMaster(MASTER_KEY) == null){
             if(!req.getTOTAL_SEND_CNT().equals("1")){
                 master.setTOTAL_SEND_CNT(req.getTOTAL_SEND_CNT());
             }else{
@@ -89,7 +90,7 @@ public class PostalCreationRequestController {
             masterSaveService.save(master);
         }else{
         //전송 건수 갱신
-            Master _master = masterInfoService.findMaster(master);
+            Master _master = masterInfoService.findMaster(MASTER_KEY);
 
             _master.setRECEIVED_TIME(reqInfoService.findReq(req).getSAVE_DATE());
             _master.setSEND_CNT(_master.getSEND_CNT()+1);

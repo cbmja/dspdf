@@ -19,8 +19,8 @@ public class MasterRepository {
         return sql.insert("com.daishin.pdf.mapper.MasterMapper.save" , master);
     }
 
-    public Master findMaster(Master master){
-        return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.findMaster",master);
+    public Master findMaster(String MASTER_KEY){
+        return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.findMaster",MASTER_KEY);
     }
 
     public int updateSendCnt(Master master){
