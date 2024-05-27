@@ -41,26 +41,39 @@
     <p>총 검색 건수 : ${total}</p>
 
 
+    <form action="/changeStatus" method="post">
     <table border="1" >
         <tr>
-            <th> 그룹명(TR_KEY) </th>
-            <th> 총 건수(TOTAL_SEND_CNT) </th>
-            <th> 현재 수신 건수(SEND_CNT) </th>
-            <th> 상태(STATUS) </th>
-            <th> 마지막 건수 수신 시각(RECEIVED_TIME) </th>
+            <th> 그룹명<br>(TR_KEY) </th>
+            <th> 현재 수신 건수 / 총 건수
+                <br>
+                (SEND_CNT) / (TOTAL_SEND_CNT)
+            </th>
+            <th> 현재 상태<br>(STATUS) </th>
+            <th> 마지막 건수 수신 시각<br>(RECEIVED_TIME) </th>
+            <th> 상태 변화</th>
         </tr>
         <% for(Master master : list){ %>
         <tr>
             <td><%= master.getMASTER_KEY() %></td>
-            <td><%= master.getTOTAL_SEND_CNT() %></td>
-            <td><%= master.getSEND_CNT() %></td>
+            <td><%= master.getSEND_CNT() %> / <%= master.getTOTAL_SEND_CNT() %></td>
             <td><%= master.getSTATUS() %></td>
             <td><%= master.getRECEIVED_TIME() %></td>
+            <td>
+              <select name="${master.getMASTER_KEY()}">
+                <option value="1">1(수신중)</option>
+                <option value="2">2(수신완료)</option>
+                <option value="3">3(출력중)</option>
+              </select>
+            </td>
         </tr>
         <% } %>
-
-
+        <tr>
+            <td colspan="4"></td>
+            <td><input type="submit" value="상태 저장"></td>
+        </tr>
     </table>
+    </form>
 
 <hr>
 
