@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class Page {
 
+    private String search;
+
     private int total;//총 게시물 수 ok
     
     private int pageElement = 10;//한 페이지에 보여줄 게시물 수 ok

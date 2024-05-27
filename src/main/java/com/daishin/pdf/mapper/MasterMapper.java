@@ -24,4 +24,6 @@ public interface MasterMapper {
 
     List<Master> selectMastersByPage(Page page);
 
+    void countSearch(String search);
+
 }

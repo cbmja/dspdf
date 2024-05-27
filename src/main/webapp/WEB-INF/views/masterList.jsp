@@ -34,6 +34,11 @@
 
 
 <hr>
+    <form action="/mList">
+    <input type="text" name="search" value="${search.getSearch()}">
+    <input type="submit">
+
+    </form>
 
     <table border="1" >
         <tr>
@@ -60,17 +65,17 @@
 
     <table>
         <tr>
-        <a href="/mList?page=1"> <<제일 앞으로<< </a>
+        <a href="/mList?page=1&search=${p.getSearch()}"> <<제일 앞으로<< </a>
         .
-        <a href="/mList?page=${p.getPrev_()}"> <이전< </a>
+        <a href="/mList?page=${p.getPrev_()}&search=${p.getSearch()}"> <이전< </a>
         .
         <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
-                    <a href="/mList?page=${i}">${i}</a>
+                    <a href="/mList?page=${i}&search=${p.getSearch()}">${i}</a>
                     .
         </c:forEach>
-        <a href="/mList?page=${p.getNext_()}"> >다음> </a>
+        <a href="/mList?page=${p.getNext_()}&search=${p.getSearch()}"> >다음> </a>
         .
-        <a href="/mList?page=${p.getTotalPage()}"> >>제일 뒤로>> </a>
+        <a href="/mList?page=${p.getTotalPage()}&search=${p.getSearch()}"> >>제일 뒤로>> </a>
         </tr>
     </table>
 

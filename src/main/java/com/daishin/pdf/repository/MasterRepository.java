@@ -43,4 +43,8 @@ public class MasterRepository {
         return sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectMastersByPage",page);
     }
 
+    public int countSearch(String search){
+        return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.countSearch" , search);
+    }
+
 }

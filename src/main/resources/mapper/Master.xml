@@ -34,12 +34,21 @@
     <update id="updateStatusAndTotalCnt" parameterType="Master">
         UPDATE dbo.MASTER SET STATUS = #{STATUS} , TOTAL_SEND_CNT = #{TOTAL_SEND_CNT} WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
-
+<!--
     <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="Master">
         SELECT * FROM dbo.MASTER ORDER BY received_time ASC OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
+    </select>
+-->
+
+    <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="Master">
+        SELECT * FROM dbo.MASTER WHERE MASTER_KEY LIKE CONCAT('%',#{search},'%') ORDER BY received_time ASC OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
     </select>
 
     <select id="selectAll" resultType="hashmap">
         SELECT * FROM dbo.MASTER
+    </select>
+
+    <select id="countSearch" resultType="int" parameterType="String">
+        SELECT COUNT(*) FROM dbo.MASTER WHERE MASTER_KEY LIKE CONCAT('%',#{search},'%')
     </select>
 </mapper>

@@ -2,12 +2,14 @@ package com.daishin.pdf.controller;
 
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.page.Page;
+import com.daishin.pdf.page.Search;
 import com.daishin.pdf.service.MasterInfoService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
@@ -23,11 +25,12 @@ public class ViewController {
 
 
     @GetMapping("/mList")
-    public String masterList(@RequestParam(value = "page" , required = false) int p , Model model){
+    public String masterList(@ModelAttribute Search search, Model model){
 
-        List<Master> total = masterInfoService.selectAll();
+        int total = masterInfoService.countSearch(search.getSearch());
 
-        Page page = new Page(p , total.size());
+        Page page = new Page(search.getPage() , total);
+        page.setSearch(search.getSearch());
 
         model.addAttribute("p" , page);
 

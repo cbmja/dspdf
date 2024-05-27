@@ -26,4 +26,7 @@ public class MasterInfoService {
         return masterRepository.selectMastersByPage(page);
     }
 
+    public int countSearch(String search){
+        return masterRepository.countSearch(search);
+    }
 }
