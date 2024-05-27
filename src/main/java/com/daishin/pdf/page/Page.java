@@ -9,6 +9,7 @@ public class Page {
     
     private int pageElement = 2;//한 페이지에 보여줄 게시물 수 ok
     private int pageSize = 2;//보여줄 페이지 블럭 수 ok
+
     private int startPage;//보여지는 블럭의 시작번호
     private int endPage;//보여지는 블럭의 마지막 번호
 
@@ -20,6 +21,9 @@ public class Page {
     private int endNum;//마지막 게시물 번호 ok
 
     private int currentPageBlock;//현재 보이는 페이지 블럭 수
+
+    private boolean isNext;//다음페이지 존재 여부
+    private boolean isPrev;//이전페이지 존재 여부
 
     /**
      * 현재페이지 , 총 게시물 수

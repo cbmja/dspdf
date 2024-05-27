@@ -62,9 +62,11 @@
 
     <table>
         <tr>
+        <th><a>이전</a></th>
         <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
-                    <a href="/mList?page=${i}">${i}</a>
+                    <th><a href="/mList?page=${i}">${i}</a><th>
         </c:forEach>
+        <th><a>다음</a></th>
         </tr>
     </table>
 
