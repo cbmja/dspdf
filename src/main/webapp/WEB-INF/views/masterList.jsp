@@ -29,13 +29,10 @@
 <body>
     <%
         List<Master> list = (List<Master>)request.getAttribute("masterList");
-
         Page p = (Page)(request.getAttribute("p"));
-
-
     %>
 
-${p}
+
 <hr>
 
     <table border="1" >
