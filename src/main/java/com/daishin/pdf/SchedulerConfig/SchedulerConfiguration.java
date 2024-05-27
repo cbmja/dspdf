@@ -1,7 +1,9 @@
 package com.daishin.pdf.SchedulerConfig;
 
 import com.daishin.pdf.dto.Master;
+import com.daishin.pdf.dto.ReqParam;
 import com.daishin.pdf.service.MasterSaveService;
+import com.daishin.pdf.service.ReqInfoService;
 import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,18 +23,23 @@ public class SchedulerConfiguration {
 
     private final Utils utils;
     private final MasterSaveService masterSaveService;
+    private final ReqInfoService reqInfoService;
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //14시 05분에 실행
-    @Scheduled(cron = "00 10 14 * * *")
+    @Scheduled(cron = "00 58 12 * * *")
     public void run() throws IOException {
         if(checkTime()){
 
             Master master = new Master();
             master.setMASTER_KEY(LocalDate.now()+"");
             master.setSTATUS("2(수신완료)");
+
+            int total = reqInfoService.countMaster(master.getMASTER_KEY());
+            master.setTOTAL_SEND_CNT(total+"");
+
             //master 작업 상태 업데이트
-            masterSaveService.updateStatus(master);
+            masterSaveService.updateStatusAndTotalCnt(master);
             //json 파일 생성
             utils.saveJson(LocalDate.now()+"" , logger);
 
@@ -41,7 +48,7 @@ public class SchedulerConfiguration {
 
     //현재 시각이 14:00 이후인지 체크하는 메서드
     private boolean checkTime(){
-        return LocalTime.now().isAfter(LocalTime.of(14 , 0));
+        return LocalTime.now().isAfter(LocalTime.of(12 , 52));
     }
 
 

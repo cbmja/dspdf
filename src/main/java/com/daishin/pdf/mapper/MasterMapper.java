@@ -18,6 +18,8 @@ public interface MasterMapper {
 
     void updateStatus(Master master);
 
+    void updateStatusAndTotalCnt(Master master);
+
     void selectAll();
 
     List<Master> selectMastersByPage(Page page);

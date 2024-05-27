@@ -31,6 +31,10 @@ public class MasterRepository {
         return sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatus",master);
     }
 
+    public int updateStatusAndTotalCnt(Master master){
+        return sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatusAndTotalCnt",master);
+    }
+
     public List<Master> selectAll(){
         return sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectAll");
     }

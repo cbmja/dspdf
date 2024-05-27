@@ -31,4 +31,8 @@ public class ReqInfoService {
         return repository.getMasterGroup(MASTER);
     }
 
+    public int countMaster(String MASTER){
+        return repository.countMaster(MASTER);
+    }
+
 }

@@ -32,4 +32,8 @@ public class ReqRepository {
     public List getMasterGroup(String MASTER) {
         return sql.selectList("com.daishin.pdf.mapper.ReqMapper.getMasterGroup" , MASTER);
     }
+
+    public int countMaster(String MASTER){
+        return sql.selectOne("com.daishin.pdf.mapper.ReqMapper.countMaster" , MASTER);
+    }
 }

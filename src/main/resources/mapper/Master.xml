@@ -31,6 +31,10 @@
         UPDATE dbo.MASTER SET STATUS = #{STATUS} WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 
+    <update id="updateStatusAndTotalCnt" parameterType="Master">
+        UPDATE dbo.MASTER SET STATUS = #{STATUS} , TOTAL_SEND_CNT = #{TOTAL_SEND_CNT} WHERE MASTER_KEY = #{MASTER_KEY}
+    </update>
+
     <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="Master">
         SELECT * FROM dbo.MASTER ORDER BY received_time ASC OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
     </select>

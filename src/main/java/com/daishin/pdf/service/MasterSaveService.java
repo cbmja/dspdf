@@ -26,4 +26,6 @@ public class MasterSaveService {
         return masterRepository.updateStatus(master);
     }
 
+    public int updateStatusAndTotalCnt(Master master){return masterRepository.updateStatusAndTotalCnt(master);}
+
 }

@@ -15,4 +15,6 @@ public interface ReqMapper {
     void findReq(ReqParam reqParam);
 
     void getMasterGroup(String MASTER);
+
+    void countMaster(String MASTER);
 }

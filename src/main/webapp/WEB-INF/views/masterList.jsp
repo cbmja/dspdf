@@ -11,6 +11,20 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
+    <style>
+    table{
+    	margin-left : auto;
+    	margin-right : auto;
+    	margin-top : 50px;
+    	margin-bottom : 50px;
+        width : 80%;
+    }
+
+    body{
+            text-align: center;
+        }
+    </style>
+
 </head>
 <body>
     <%
@@ -19,11 +33,11 @@
         Page p = (Page)(request.getAttribute("p"));
 
     %>
-<h1>hi</h1>
+
 
 <hr>
 
-    <table border="1">
+    <table border="1" >
         <tr>
             <th> 그룹명(TR_KEY) </th>
             <th> 총 건수(TOTAL_SEND_CNT) </th>
@@ -43,9 +57,9 @@
 
 
     </table>
+
 <hr>
 
-    <hr>
     <table>
         <tr>
         <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
