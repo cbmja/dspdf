@@ -16,7 +16,7 @@
         ,#{TOTAL_SEND_CNT}
         ,#{STATUS}
         ,#{SEND_CNT}
-        ,GETDATE())
+        ,#{RECEIVED_TIME})
     </insert>
 
     <select id="findMaster" parameterType="Master" resultType="Master">
