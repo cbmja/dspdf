@@ -2,6 +2,7 @@ package com.daishin.pdf.SchedulerConfig;
 
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.ReqParam;
+import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.ReqInfoService;
 import com.daishin.pdf.util.Utils;
@@ -14,7 +15,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.List;
 
 @Configuration
 @RequiredArgsConstructor
@@ -23,10 +26,11 @@ public class SchedulerConfiguration {
 
     private final Utils utils;
     private final MasterSaveService masterSaveService;
+    private final MasterInfoService masterInfoService;
     private final ReqInfoService reqInfoService;
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
-    //14시 05분에 실행
+    //실시간(단일) json 생성 및 상태 변화 1 -> 2
     @Scheduled(cron = "00 05 14 * * *")
     public void run() throws IOException {
         if(checkTime()){
@@ -45,6 +49,24 @@ public class SchedulerConfiguration {
 
         }
     }
+    // 5분마다 체크
+    // 상태 변화 된 지 2시간이 지났으면 다음 상태로 (1(수신중)일때는 해당 안됨)
+    @Scheduled(fixedRate = 60000)
+    public void changeStatus(){
+
+        List<Master> masterList = masterInfoService.selectExcept1();
+
+        for(Master master : masterList){
+            if(master.getSTATUS_TIME().plusHours(2L).isBefore(LocalDateTime.now())){
+                master.setSTATUS(master.getSTATUS()+1);
+                masterSaveService.updateStatus(master);
+            }
+        }
+
+
+
+    }
+
 
     //현재 시각이 14:00 이후인지 체크하는 메서드
     private boolean checkTime(){

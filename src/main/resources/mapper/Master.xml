@@ -54,4 +54,8 @@
         SELECT COUNT(*) FROM dbo.MASTER WHERE MASTER_KEY LIKE CONCAT('%',#{search},'%')
     </select>
 
+    <select id="selectExcept1" resultType="Master">
+        SELECT * FROM dbo.MASTER WHERE STATUS != 1
+    </select>
+
 </mapper>

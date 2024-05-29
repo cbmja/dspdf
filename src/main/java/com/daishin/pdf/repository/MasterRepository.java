@@ -47,4 +47,6 @@ public class MasterRepository {
         return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.countSearch" , search);
     }
 
+    public List<Master> selectExcept1(){return sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectExcept1");}
+
 }

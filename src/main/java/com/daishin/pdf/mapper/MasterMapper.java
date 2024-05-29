@@ -26,4 +26,6 @@ public interface MasterMapper {
 
     void countSearch(String search);
 
+    List<Master> selectExcept1();
+
 }

@@ -29,4 +29,6 @@ public class MasterInfoService {
     public int countSearch(String search){
         return masterRepository.countSearch(search);
     }
+
+    public List<Master> selectExcept1(){return masterRepository.selectExcept1();}
 }

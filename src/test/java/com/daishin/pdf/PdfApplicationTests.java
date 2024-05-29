@@ -20,7 +20,14 @@ class PdfApplicationTests {
 		for (int i = 0; i < 118; i++) {
 			Master master = new Master();
 			master.setMASTER_KEY(i + "");
-			master.setRECEIVED_TIME(LocalDateTime.now().plusDays(i));
+			if(i%3 ==0){
+				master.setSTATUS(1);
+			}else if(i%3 ==1){
+				master.setSTATUS(2);
+			}else {
+				master.setSTATUS(3);
+			}
+			master.setSTATUS_TIME(LocalDateTime.now().minusHours(2L));
 			masterSaveService.save(master);
 		}
 
