@@ -81,9 +81,11 @@ public class PostalCreationRequestController {
         master.setRECEIVED_TIME(reqInfoService.findReq(req).getSAVE_DATE());
         if(masterInfoService.findMaster(MASTER_KEY) == null){
             if(!req.getTOTAL_SEND_CNT().equals("1")){
+                master.setTYPE("ARRANGEMENT");
                 master.setTOTAL_SEND_CNT(req.getTOTAL_SEND_CNT());
             }else{
-                master.setTOTAL_SEND_CNT("실시간");
+                master.setTOTAL_SEND_CNT("수신중");
+                master.setTYPE("REAL_TIME");
             }
             master.setSEND_CNT(1);
             master.setSTATUS(1);

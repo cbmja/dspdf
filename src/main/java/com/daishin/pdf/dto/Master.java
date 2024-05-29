@@ -15,4 +15,5 @@ public class Master {
     private int STATUS; //상태 : 대기중 , 출력중 , 발송중 등등
     private LocalDateTime RECEIVED_TIME; //마지막 건수 저장시간
     private LocalDateTime STATUS_TIME; //현재 상태 시작 시간
+    private String TYPE; //배치 : AR / 실시간 : RT
 }

@@ -60,7 +60,11 @@ public class ViewController {
             Master master = masterInfoService.findMaster(master_key);
             //master.setMASTER_KEY(master_key);
             master.setSTATUS(Integer.parseInt(statusMap.get(master_key)));
-            if(master.getTOTAL_SEND_CNT().equals("실시간")){
+
+            if(statusMap.get(master_key).equals("1") && !master.getTOTAL_SEND_CNT().equals("수신중") && master.getTYPE().equals("REAL_TIME")){
+                master.setTOTAL_SEND_CNT("수신중");
+                masterSaveService.updateStatusAndTotalCnt(master);
+            }else if(!statusMap.get(master_key).equals("1") && master.getTOTAL_SEND_CNT().equals("수신중")){
                 int total = reqInfoService.countMaster(master.getMASTER_KEY());
                 master.setTOTAL_SEND_CNT(total+"");
                 masterSaveService.updateStatusAndTotalCnt(master);

@@ -11,14 +11,16 @@
         ,STATUS
         ,SEND_CNT
         ,RECEIVED_TIME
-        ,STATUS_TIME)
+        ,STATUS_TIME
+        ,TYPE)
         VALUES
         (#{MASTER_KEY}
         ,#{TOTAL_SEND_CNT}
         ,#{STATUS}
         ,#{SEND_CNT}
         ,#{RECEIVED_TIME}
-        ,GETDATE())
+        ,GETDATE()
+        ,#{TYPE})
     </insert>
 
     <select id="findMaster" parameterType="String" resultType="Master">
