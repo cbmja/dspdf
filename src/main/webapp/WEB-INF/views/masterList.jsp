@@ -61,6 +61,7 @@
             <td><%= master.getRECEIVED_TIME() %></td>
             <td>
               <select name="${master.getMASTER_KEY()}" onchange="updateStatus('<%= master.getMASTER_KEY() %>', this.value)">
+                <option value="0" disabled selected>선택</option>
                 <option value="1">1(수신중)</option>
                 <option value="2">2(수신완료)</option>
                 <option value="3">3(출력중)</option>
@@ -111,7 +112,6 @@ now<%= p.getPage() %>
     function prepareData() {
             const statusData = Object.fromEntries(statusMap);
             document.getElementById('statusData').value = JSON.stringify(statusData);
-            console.log(statusData);
         }
 </script>
 

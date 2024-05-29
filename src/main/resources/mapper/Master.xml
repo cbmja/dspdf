@@ -28,7 +28,7 @@
     </update>
 
     <update id="updateStatus" parameterType="Master">
-        UPDATE dbo.MASTER SET STATUS = #{STATUS} WHERE MASTER_KEY = #{MASTER_KEY}
+        UPDATE dbo.MASTER SET STATUS = #{STATUS} , STATUS_TIME = GETDATE() WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 
     <update id="updateStatusAndTotalCnt" parameterType="Master">
@@ -51,4 +51,5 @@
     <select id="countSearch" resultType="int" parameterType="String">
         SELECT COUNT(*) FROM dbo.MASTER WHERE MASTER_KEY LIKE CONCAT('%',#{search},'%')
     </select>
+
 </mapper>

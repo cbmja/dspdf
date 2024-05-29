@@ -4,6 +4,7 @@ import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.page.Page;
 import com.daishin.pdf.page.Search;
 import com.daishin.pdf.service.MasterInfoService;
+import com.daishin.pdf.service.MasterSaveService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,7 +27,7 @@ import java.util.Map;
 public class ViewController {
 
     private final MasterInfoService masterInfoService;
-    private final HttpServletRequest request;
+    private final MasterSaveService masterSaveService;
 
 
     @GetMapping("/mList")
@@ -53,7 +54,13 @@ public class ViewController {
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> statusMap = objectMapper.readValue(statusData, new TypeReference<Map<String, String>>() {});
 
-        System.out.println(statusMap+"/////////");
+        for(String master_key : statusMap.keySet()){
+            Master master = new Master();
+            master.setMASTER_KEY(master_key);
+            master.setSTATUS(statusMap.get(master_key));
+            masterSaveService.updateStatus(master);
+        }
+
 
         return "redirect:/mList";
     }
