@@ -51,7 +51,7 @@ public class SchedulerConfiguration {
     }
     // 5분마다 체크
     // 상태 변화 된 지 2시간이 지났으면 다음 상태로 (1(수신중)일때는 해당 안됨)
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 300000)
     public void changeStatus(){
 
         List<Master> masterList = masterInfoService.selectExcept1();
