@@ -34,7 +34,7 @@
     </update>
 
     <update id="updateStatusAndTotalCnt" parameterType="Master">
-        UPDATE dbo.MASTER SET STATUS = #{STATUS} , TOTAL_SEND_CNT = #{TOTAL_SEND_CNT} WHERE MASTER_KEY = #{MASTER_KEY}
+        UPDATE dbo.MASTER SET STATUS = #{STATUS} , TOTAL_SEND_CNT = #{TOTAL_SEND_CNT} , STATUS_TIME = GETDATE() WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 <!--
     <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="Master">

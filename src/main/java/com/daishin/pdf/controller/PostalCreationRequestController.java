@@ -86,7 +86,7 @@ public class PostalCreationRequestController {
                 master.setTOTAL_SEND_CNT("실시간");
             }
             master.setSEND_CNT(1);
-            master.setSTATUS("1(수신중)");
+            master.setSTATUS(1);
             masterSaveService.save(master);
         }else{
         //전송 건수 갱신
@@ -99,7 +99,7 @@ public class PostalCreationRequestController {
 
         //대량 전송 완료시 처리 / status 갱신 : 수신중 -> 수신완료 , JSON 파일저장
         if(!req.getTOTAL_SEND_CNT().equals("1") && reqInfoService.countGroup(req)==Integer.parseInt(req.getTOTAL_SEND_CNT())){
-            master.setSTATUS("2(수신완료)");
+            master.setSTATUS(2);
             masterSaveService.updateStatus(master);
             //JSON 파일 생성 및 저장
             utils.saveJson(req.getMASTER()  , logger);

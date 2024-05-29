@@ -27,13 +27,13 @@ public class SchedulerConfiguration {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //14시 05분에 실행
-    @Scheduled(cron = "00 47 12 * * *")
+    @Scheduled(cron = "00 05 14 * * *")
     public void run() throws IOException {
         if(checkTime()){
 
             Master master = new Master();
             master.setMASTER_KEY(LocalDate.now()+"");
-            master.setSTATUS("2(수신완료)");
+            master.setSTATUS(2);
 
             int total = reqInfoService.countMaster(master.getMASTER_KEY());
             master.setTOTAL_SEND_CNT(total+"");
@@ -48,7 +48,7 @@ public class SchedulerConfiguration {
 
     //현재 시각이 14:00 이후인지 체크하는 메서드
     private boolean checkTime(){
-        return LocalTime.now().isAfter(LocalTime.of(12 , 47));
+        return LocalTime.now().isAfter(LocalTime.of(14 , 0));
     }
 
 

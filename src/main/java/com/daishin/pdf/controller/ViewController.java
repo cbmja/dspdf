@@ -57,7 +57,7 @@ public class ViewController {
         for(String master_key : statusMap.keySet()){
             Master master = new Master();
             master.setMASTER_KEY(master_key);
-            master.setSTATUS(statusMap.get(master_key));
+            master.setSTATUS(Integer.parseInt(statusMap.get(master_key)));
             masterSaveService.updateStatus(master);
         }
 
