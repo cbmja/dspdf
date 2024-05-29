@@ -27,7 +27,7 @@ public class SchedulerConfiguration {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //14시 05분에 실행
-    @Scheduled(cron = "00 00 14 * * *")
+    @Scheduled(cron = "00 05 14 * * *")
     public void run() throws IOException {
         if(checkTime()){
 
