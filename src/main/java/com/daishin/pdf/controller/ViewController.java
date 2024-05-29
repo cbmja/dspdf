@@ -5,6 +5,7 @@ import com.daishin.pdf.page.Page;
 import com.daishin.pdf.page.Search;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
+import com.daishin.pdf.service.ReqInfoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,6 +29,7 @@ public class ViewController {
 
     private final MasterInfoService masterInfoService;
     private final MasterSaveService masterSaveService;
+    private final ReqInfoService reqInfoService;
 
 
     @GetMapping("/mList")
@@ -55,10 +57,17 @@ public class ViewController {
         Map<String, String> statusMap = objectMapper.readValue(statusData, new TypeReference<Map<String, String>>() {});
 
         for(String master_key : statusMap.keySet()){
-            Master master = new Master();
-            master.setMASTER_KEY(master_key);
+            Master master = masterInfoService.findMaster(master_key);
+            //master.setMASTER_KEY(master_key);
             master.setSTATUS(Integer.parseInt(statusMap.get(master_key)));
-            masterSaveService.updateStatus(master);
+            if(master.getTOTAL_SEND_CNT().equals("실시간")){
+                int total = reqInfoService.countMaster(master.getMASTER_KEY());
+                master.setTOTAL_SEND_CNT(total+"");
+                masterSaveService.updateStatusAndTotalCnt(master);
+            }else{
+                masterSaveService.updateStatus(master);
+            }
+
         }
 
 

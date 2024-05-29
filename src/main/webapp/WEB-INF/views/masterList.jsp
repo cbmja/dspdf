@@ -50,6 +50,7 @@
                 (SEND_CNT) / (TOTAL_SEND_CNT)
             </th>
             <th> 현재 상태<br>(STATUS) </th>
+            <th> 현재 상태 시작 시각</th>
             <th> 마지막 건수 수신 시각<br>(RECEIVED_TIME) </th>
             <th> 상태 변화</th>
         </tr>
@@ -58,6 +59,7 @@
             <td><%= master.getMASTER_KEY() %></td>
             <td><%= master.getSEND_CNT() %> / <%= master.getTOTAL_SEND_CNT() %></td>
             <td><%= master.getSTATUS() %></td>
+            <td><%= master.getSTATUS_TIME() %></td>
             <td><%= master.getRECEIVED_TIME() %></td>
             <td>
               <select name="${master.getMASTER_KEY()}" onchange="updateStatus('<%= master.getMASTER_KEY() %>', this.value)">
@@ -70,7 +72,7 @@
         </tr>
         <% } %>
         <tr>
-            <td colspan="4"><input type="hidden" id="statusData" name="statusData"></td>
+            <td colspan="5"><input type="hidden" id="statusData" name="statusData"></td>
             <td><input type="submit" value="상태 저장" onclick="prepareData()"></td>
         </tr>
     </table>
