@@ -60,7 +60,7 @@
             <td><%= master.getSTATUS() %></td>
             <td><%= master.getRECEIVED_TIME() %></td>
             <td>
-              <select name="${master.getMASTER_KEY()}">
+              <select name="${master.getMASTER_KEY()}" onchange="updateStatus('<%= master.getMASTER_KEY() %>', this.value)">
                 <option value="1">1(수신중)</option>
                 <option value="2">2(수신완료)</option>
                 <option value="3">3(출력중)</option>
@@ -69,8 +69,8 @@
         </tr>
         <% } %>
         <tr>
-            <td colspan="4"></td>
-            <td><input type="submit" value="상태 저장"></td>
+            <td colspan="4"><input type="hidden" id="statusData" name="statusData"></td>
+            <td><input type="submit" value="상태 저장" onclick="prepareData()"></td>
         </tr>
     </table>
     </form>
@@ -97,6 +97,23 @@
 start<%= p.getStartPage() %>
 end<%= p.getEndPage() %>
 now<%= p.getPage() %>
+
+<script>
+
+    const statusMap = new Map();
+
+    function updateStatus(key, value) {
+        statusMap.set(key, value);
+        console.log(`Updated ${key} to ${value}`);
+        console.log(statusMap);
+    }
+
+    function prepareData() {
+            const statusData = Object.fromEntries(statusMap);
+            document.getElementById('statusData').value = JSON.stringify(statusData);
+            console.log(statusData);
+        }
+</script>
 
 
 </body>

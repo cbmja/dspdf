@@ -4,6 +4,9 @@ import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.page.Page;
 import com.daishin.pdf.page.Search;
 import com.daishin.pdf.service.MasterInfoService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -16,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -44,10 +48,12 @@ public class ViewController {
     }
 
     @PostMapping("/changeStatus")
-    public String changeStatus(){
+    public String changeStatus(@RequestParam("statusData") String statusData) throws JsonProcessingException {
 
+        ObjectMapper objectMapper = new ObjectMapper();
+        Map<String, String> statusMap = objectMapper.readValue(statusData, new TypeReference<Map<String, String>>() {});
 
-
+        System.out.println(statusMap+"/////////");
 
         return "redirect:/mList";
     }
