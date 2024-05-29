@@ -54,9 +54,11 @@ public class SchedulerConfiguration {
     @Scheduled(fixedRate = 300000)
     public void changeStatus(){
 
+        //현재상태가 1(수신중)이 아닌 master만 select
         List<Master> masterList = masterInfoService.selectExcept1();
 
         for(Master master : masterList){
+            //현재 상태에서 2시간이 지난 master만 상태값 +1
             if(master.getSTATUS_TIME().plusHours(2L).isBefore(LocalDateTime.now())){
                 master.setSTATUS(master.getSTATUS()+1);
                 masterSaveService.updateStatus(master);
