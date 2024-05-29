@@ -27,7 +27,7 @@ public class SchedulerConfiguration {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //14시 05분에 실행
-    @Scheduled(cron = "00 05 14 * * *")
+    @Scheduled(cron = "00 47 12 * * *")
     public void run() throws IOException {
         if(checkTime()){
 
@@ -48,7 +48,7 @@ public class SchedulerConfiguration {
 
     //현재 시각이 14:00 이후인지 체크하는 메서드
     private boolean checkTime(){
-        return LocalTime.now().isAfter(LocalTime.of(14 , 0));
+        return LocalTime.now().isAfter(LocalTime.of(12 , 47));
     }
 
 
