@@ -33,10 +33,12 @@ public class ViewController {
     @GetMapping("/mList")
     public String masterList(@ModelAttribute Search search, Model model){
 
-        int total = masterInfoService.countSearch(search.getSearch());
+        int total = masterInfoService.countSearch(search);
 
         Page page = new Page(search.getPage() , total);
         page.setSearch(search.getSearch());
+        page.setCate(search.getCate());
+        page.setSort(search.getSort());
 
         model.addAttribute("total" , total);
         model.addAttribute("p" , page);
@@ -71,10 +73,12 @@ public class ViewController {
             }
 
         }
-        int total = masterInfoService.countSearch(search.getSearch());
+        int total = masterInfoService.countSearch(search);
 
         Page page = new Page(search.getPage() , total);
         page.setSearch(search.getSearch());
+        page.setCate(search.getCate());
+        page.setSort(search.getSort());
 
         model.addAttribute("total" , total);
         model.addAttribute("p" , page);

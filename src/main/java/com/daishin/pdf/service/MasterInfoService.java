@@ -2,6 +2,7 @@ package com.daishin.pdf.service;
 
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.page.Page;
+import com.daishin.pdf.page.Search;
 import com.daishin.pdf.repository.MasterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class MasterInfoService {
         return masterRepository.selectMastersByPage(page);
     }
 
-    public int countSearch(String search){
+    public int countSearch(Search search){
         return masterRepository.countSearch(search);
     }
 

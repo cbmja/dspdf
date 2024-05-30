@@ -3,6 +3,7 @@ package com.daishin.pdf.repository;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.ReqParam;
 import com.daishin.pdf.page.Page;
+import com.daishin.pdf.page.Search;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.stereotype.Repository;
@@ -43,7 +44,7 @@ public class MasterRepository {
         return sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectMastersByPage",page);
     }
 
-    public int countSearch(String search){
+    public int countSearch(Search search){
         return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.countSearch" , search);
     }
 

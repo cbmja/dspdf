@@ -6,6 +6,8 @@ import lombok.Data;
 public class Page {
 
     private String search;
+    private String sort;
+    private String cate;
 
     private int total;//총 게시물 수 ok
     
