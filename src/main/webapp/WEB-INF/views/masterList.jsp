@@ -35,6 +35,13 @@
 
 <hr>
     <form action="/mList">
+        <select name="cate">
+            <option value="0" disabled selected>검색 조건</option>
+            <option value="MASTER_KEY">MASTER_KEY</option>
+            <option value="RECEIVED_TIME">RECEIVED_TIME</option>
+            <option value="STATUS">STATUS</option>
+            <option value="TYPE">TYPE</option>
+        </select>
         <input type="text" name="search" value="${search.getSearch()}">
         <input type="submit" value="검색">
     </form>
@@ -72,7 +79,11 @@
         </tr>
         <% } %>
         <tr>
-            <td colspan="5"><input type="hidden" id="statusData" name="statusData"></td>
+            <td colspan="5">
+                <input type="hidden" id="statusData" name="statusData">
+                <input type="hidden" name="search" value="${p.getSearch()}">
+                <input type="hidden" name="page" value="${p.getPage()}">
+            </td>
             <td><input type="submit" value="상태 저장" onclick="prepareData()"></td>
         </tr>
     </table>

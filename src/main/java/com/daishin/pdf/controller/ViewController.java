@@ -51,7 +51,7 @@ public class ViewController {
     }
 
     @PostMapping("/changeStatus")
-    public String changeStatus(@RequestParam("statusData") String statusData) throws JsonProcessingException {
+    public String changeStatus(@RequestParam("statusData") String statusData , @ModelAttribute Search search , Model model) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> statusMap = objectMapper.readValue(statusData, new TypeReference<Map<String, String>>() {});
@@ -73,9 +73,19 @@ public class ViewController {
             }
 
         }
+        int total = masterInfoService.countSearch(search.getSearch());
 
+        Page page = new Page(search.getPage() , total);
+        page.setSearch(search.getSearch());
 
-        return "redirect:/mList";
+        model.addAttribute("total" , total);
+        model.addAttribute("p" , page);
+
+        List<Master> masterList = masterInfoService.selectMastersByPage(page);
+
+        model.addAttribute("masterList" , masterList);
+
+        return "masterList";
     }
 
 }

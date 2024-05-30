@@ -17,17 +17,27 @@ class PdfApplicationTests {
 	@Test
 	void contextLoads() {
 
-		for (int i = 0; i < 118; i++) {
+		for (int i = 0; i < 10; i++) {
 			Master master = new Master();
 			master.setMASTER_KEY(i + "");
-			if(i%3 ==0){
-				master.setSTATUS(1);
-			}else if(i%3 ==1){
-				master.setSTATUS(2);
-			}else {
-				master.setSTATUS(3);
-			}
-			master.setSTATUS_TIME(LocalDateTime.now().minusHours(2L));
+			master.setTOTAL_SEND_CNT(10+"");
+			master.setSEND_CNT(10);
+			//master.setRECEIVED_TIME(LocalDateTime.now().minusHours(2L));
+			//master.setSTATUS_TIME(LocalDateTime.now().minusHours(2L));
+			master.setSTATUS(2);
+			master.setTYPE("ARRANGEMENT");
+			masterSaveService.save(master);
+		}
+
+		for (int i = 10; i < 20; i++) {
+			Master master = new Master();
+			master.setMASTER_KEY(i + "");
+			master.setTOTAL_SEND_CNT(10+"");
+			master.setSEND_CNT(10);
+			//master.setRECEIVED_TIME(LocalDateTime.now().minusHours(2L));
+			//master.setSTATUS_TIME(LocalDateTime.now().minusHours(2L));
+			master.setSTATUS(2);
+			master.setTYPE("REAL_TIME");
 			masterSaveService.save(master);
 		}
 
