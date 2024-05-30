@@ -1,9 +1,14 @@
 package com.daishin.pdf.page;
 
+import com.daishin.pdf.service.MasterInfoService;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 public class Page {
+
+
 
     private String search;
     private String sort;
@@ -37,10 +42,20 @@ public class Page {
      * @param page
      * @param total
      */
-    public Page(int page , int total){
-        this.page = page;
+    public Page(int page , int total , Search search){
+
+        this.search = search.getSearch().trim();
+        this.cate = search.getCate();
+        this.sort = search.getSort();
+
         this.total = total;
         this.totalPage = total % this.pageElement > 0 ? total / this.pageElement + 1 : total / this.pageElement;
+
+        this.page = page <= 0 ? 1 : page;
+        if(this.page > this.totalPage){
+            this.page = this.totalPage;
+        }
+
 
         this.startNum = (this.page-1)*this.pageElement;
         this.endNum = this.page == this.totalPage ? this.total : startNum + this.pageElement - 1;

@@ -35,10 +35,7 @@ public class ViewController {
 
         int total = masterInfoService.countSearch(search);
 
-        Page page = new Page(search.getPage() , total);
-        page.setSearch(search.getSearch());
-        page.setCate(search.getCate());
-        page.setSort(search.getSort());
+        Page page = new Page(search.getPage() , total , search);
 
         model.addAttribute("total" , total);
         model.addAttribute("p" , page);
@@ -75,10 +72,7 @@ public class ViewController {
         }
         int total = masterInfoService.countSearch(search);
 
-        Page page = new Page(search.getPage() , total);
-        page.setSearch(search.getSearch());
-        page.setCate(search.getCate());
-        page.setSort(search.getSort());
+        Page page = new Page(search.getPage() , total , search);
 
         model.addAttribute("total" , total);
         model.addAttribute("p" , page);

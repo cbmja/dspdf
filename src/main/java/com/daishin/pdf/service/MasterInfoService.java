@@ -28,6 +28,7 @@ public class MasterInfoService {
     }
 
     public int countSearch(Search search){
+        search.setSearch(search.getSearch().trim());
         return masterRepository.countSearch(search);
     }
 
