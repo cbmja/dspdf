@@ -27,23 +27,19 @@ public class ViewController {
 
     private final MasterInfoService masterInfoService;
     private final MasterSaveService masterSaveService;
+
     private final ReqInfoService reqInfoService;
 
 
     @GetMapping("/mList")
     public String masterList(@ModelAttribute Search search, Model model){
 
-        int total = masterInfoService.countSearch(search);
-
-        Page page = new Page(search.getPage() , total , search);
-
-        model.addAttribute("total" , total);
+        //페이징 처리
+        Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search);
         model.addAttribute("p" , page);
-
         List<Master> masterList = masterInfoService.selectMastersByPage(page);
-
         model.addAttribute("masterList" , masterList);
-
+        //페이징 처리
         return "masterList";
     }
 
@@ -58,29 +54,31 @@ public class ViewController {
             //master.setMASTER_KEY(master_key);
             master.setSTATUS(Integer.parseInt(statusMap.get(master_key)));
 
+            //실시간 건에 대하여 상태를 1(수신중)으로 바꾸려는 경우
+            //total_send_cnt 를 다시 "수신중"으로 바꿔줌
             if(statusMap.get(master_key).equals("1") && !master.getTOTAL_SEND_CNT().equals("수신중") && master.getTYPE().equals("REAL_TIME")){
                 master.setTOTAL_SEND_CNT("수신중");
                 masterSaveService.updateStatusAndTotalCnt(master);
             }else if(!statusMap.get(master_key).equals("1") && master.getTOTAL_SEND_CNT().equals("수신중")){
+            //현재 상태가 1(수신중)인 실시간 건수에 대해서 다른 상태로 바꾸는 경우 (total_send_cnt 가 "수신중"이면 현재 상태가 1인 실시간 건임)
+            //total_send_cnt 를 현재 수신 건수로 바꿔줌    
                 int total = reqInfoService.countMaster(master.getMASTER_KEY());
                 master.setTOTAL_SEND_CNT(total+"");
                 masterSaveService.updateStatusAndTotalCnt(master);
             }else{
+            //이외의 경우에는 상태만 업데이트
                 masterSaveService.updateStatus(master);
             }
 
         }
-        int total = masterInfoService.countSearch(search);
-
-        Page page = new Page(search.getPage() , total , search);
-
-        model.addAttribute("total" , total);
+        
+        //수정 이후에도 이후 작업을 동일한 페이지에서 이어서 할 수 있도록 redirect 하지 않고 여기서 페이징 처리
+        //페이징 처리
+        Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search);
         model.addAttribute("p" , page);
-
         List<Master> masterList = masterInfoService.selectMastersByPage(page);
-
         model.addAttribute("masterList" , masterList);
-
+        //페이징 처리
         return "masterList";
     }
 

@@ -73,7 +73,7 @@
         <input type="text" name="search" value="${search.getSearch()}">
         <input type="submit" value="검색">
     </form>
-    <p>총 검색 건수 : ${total}</p>
+    <p>총 검색 건수 : ${p.getTotal()}</p>
 
 
     <form action="/changeStatus" method="post">

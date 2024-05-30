@@ -86,14 +86,12 @@ public class Utils {
 
     ///////////////////////
 
-    //대량 (배치) json 저장
-    public void saveJson(String master ,  Logger logger) throws IOException {
+    //json 저장
+    public void saveJson(String master ,  Logger logger) {
 
         //저장경로 
         String path = "C:\\DATA\\"+master+"\\";
 
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(new JavaTimeModule());
 
         //response.put("["+reqParam.getTR_KEY()+"] 전송 완료" , "["+reqParam.getTR_KEY()+"] 전송 완료");
 
@@ -104,13 +102,15 @@ public class Utils {
         jsonList.put("master" , masterList);
         jsonList.put("detail" , reqInfoService.getMasterGroup(master));
 
-        String jsonlist = mapper.writeValueAsString(jsonList);
         try {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(new JavaTimeModule());
+            String jsonlist = mapper.writeValueAsString(jsonList);
             FileWriter fileWriter = new FileWriter(path+master+".json");
             fileWriter.write(jsonlist);
             fileWriter.close();
         } catch (IOException e) {
-            logger.error("json 저장 실패 master : ["+master+" ]");
+            logger.error("json 저장 실패 master : ["+master+"]");
 
             e.printStackTrace();
         }

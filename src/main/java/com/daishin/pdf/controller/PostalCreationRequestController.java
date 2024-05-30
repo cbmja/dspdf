@@ -14,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 
 import java.util.*;
 
@@ -24,7 +23,9 @@ public class PostalCreationRequestController {
 
         private final ReqSaveService reqSaveService;
         private final ReqInfoService reqInfoService;
+
         private final Utils utils;
+
         private final MasterInfoService masterInfoService;
         private final MasterSaveService masterSaveService;
 
@@ -32,19 +33,20 @@ public class PostalCreationRequestController {
 
     @PostMapping("/upload")
     @ResponseBody
-    public Map<String , String> uploadAndUnzip(@RequestParam(name = "File" , required = false) MultipartFile File , @ModelAttribute ReqParam req) throws IOException {
+    public Map<String , String> uploadAndUnzip(@RequestParam(name = "File" , required = false) MultipartFile File , @ModelAttribute ReqParam req){
         long startTime = System.nanoTime();
 
-        //결과
+        //결과값
         Map<String , String> response = new LinkedHashMap<>();
 
-        //요청 정보 수신
+        //요청 정보 log
         logger.info("request body : " +req);
         if(File != null){
             logger.info("pdf file name : "+File.getOriginalFilename());
         }
+        //요청 정보 log
 
-        //null check
+        //필수 항목 누락 체크
         if(reqCheck(req , logger)){
             response.put("필수값 누락" , "필수값 누락");
         }
@@ -54,9 +56,9 @@ public class PostalCreationRequestController {
         if(!response.isEmpty()){
             return response;
         }
-        //null check
+        //필수 항목 누락 체크
 
-        //중복체크
+        //중복 체크
         req.setPK(req.getTR_KEY()+"_"+req.getRECV_NUM());
 
         if(reqInfoService.findReq(req) != null){
@@ -64,28 +66,32 @@ public class PostalCreationRequestController {
             response.put("중복된 요청 : "+req , "중복된 요청 : "+req);
             return response;
         }
-        //중복체크
+        //중복 체크
 
         //파일 저장 (pdf)
         utils.savePdf(File , req , response , logger);
 
-        //DB 저장
+        //DB 저장(detail)
+        //master_key 값 세팅
         if(reqSaveService.save(req) <= 0){
             logger.error("DB 저장 실패 : "+req);
         }
 
-        //master 최초 저장
+        //master 값 세팅
         String MASTER_KEY = req.getMASTER();
-        Master master = new Master();
+        Master master = new Master(); //배치(대량)은 tr_key / 실시간(단일)은 날짜
         master.setMASTER_KEY(MASTER_KEY);
         master.setRECEIVED_TIME(reqInfoService.findReq(req).getSAVE_DATE());
+        //master 값 세팅
+
+        //master 최초 저장
         if(masterInfoService.findMaster(MASTER_KEY) == null){
             if(!req.getTOTAL_SEND_CNT().equals("1")){
-                master.setTYPE("ARRANGEMENT");
+                master.setTYPE("ARRANGEMENT"); //배치(대량)
                 master.setTOTAL_SEND_CNT(req.getTOTAL_SEND_CNT());
             }else{
                 master.setTOTAL_SEND_CNT("수신중");
-                master.setTYPE("REAL_TIME");
+                master.setTYPE("REAL_TIME"); //실시간(단일)
             }
             master.setSEND_CNT(1);
             master.setSTATUS(1);
@@ -99,15 +105,16 @@ public class PostalCreationRequestController {
             masterSaveService.updateSendCnt(_master);
         }
 
-        //대량 전송 완료시 처리 / status 갱신 : 수신중 -> 수신완료 , JSON 파일저장
+        //배치(대량)그룹 전송 완료시 처리 / status 갱신 : 1(수신중) -> 2(수신완료) , JSON 파일저장
         if(!req.getTOTAL_SEND_CNT().equals("1") && reqInfoService.countGroup(req)==Integer.parseInt(req.getTOTAL_SEND_CNT())){
             master.setSTATUS(2);
             masterSaveService.updateStatus(master);
             //JSON 파일 생성 및 저장
             utils.saveJson(req.getMASTER()  , logger);
         }
+        
         long endTime = System.nanoTime();
-        logger.info("처리 시간 (nano seconds): "+(endTime - startTime));
+        logger.info("처리 시간 : "+(endTime - startTime));
 
         response.put("결과","OK");
         response.put("비고","SUCCESS");
@@ -145,7 +152,7 @@ public class PostalCreationRequestController {
             errMsg += "RECV_ADDR , ";
         }
 
-        if(errMsg.length()>=1){
+        if(!errMsg.isEmpty()){
             errMsg = errMsg.substring(0, errMsg.length() - 2);
             logger.error(errMsg+"누락");
             return true;
