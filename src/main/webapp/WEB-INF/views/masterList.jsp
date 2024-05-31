@@ -176,8 +176,6 @@ start<%= p.getStartPage() %>
 end<%= p.getEndPage() %>
 now<%= p.getPage() %>
 
-<%= p %>
-
 <script>
 
     const statusMap = new Map();
