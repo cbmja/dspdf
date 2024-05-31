@@ -45,7 +45,7 @@
 -->
 
     <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE ${cate} LIKE CONCAT('%',#{search},'%') ORDER BY ${cate} ${sort} OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
+        SELECT * FROM dbo.MASTER WHERE ${cate} LIKE CONCAT('%',#{search},'%') ORDER BY ${sortCate} ${sort} OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
     </select>
 
     <select id="selectAll" resultType="hashmap">

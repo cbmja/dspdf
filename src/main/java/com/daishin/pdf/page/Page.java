@@ -13,6 +13,7 @@ public class Page {
     private String search;
     private String sort;
     private String cate;
+    private String sortCate;
 
     private int total;//총 게시물 수 ok
     
@@ -47,6 +48,7 @@ public class Page {
         this.search = search.getSearch().trim();
         this.cate = search.getCate();
         this.sort = search.getSort();
+        this.sortCate = search.getSortCate();
 
         this.total = total;
         this.totalPage = total % this.pageElement > 0 ? total / this.pageElement + 1 : total / this.pageElement;

@@ -35,20 +35,8 @@
 
 <hr>
     <form action="/mList" method="get">
-        <select name="sort">
-        <%
-            if ( p.getSort().equals("ASC") ){
-        %>
-            <option value="ASC" selected>오름 차순</option>
-            <option value="DESC">내림 차순</option>
-        <%
-            } else {
-        %>
-            <option value="ASC">오름 차순</option>
-            <option value="DESC" selected>내림 차순</option>
-        <% } %>
-
-        </select>
+        <input type="hidden" name="sort" value="${p.getSort()}">
+        <input type="hidden" name="sortCate" value="${p.getSortCate()}">
         <select name="cate">
             <%
                 if ( p.getCate().equals("MASTER_KEY") ){
@@ -113,27 +101,73 @@
                 <input type="hidden" name="page" value="${p.getPage()}">
                 <input type="hidden" name="cate" value="${p.getCate()}">
                 <input type="hidden" name="sort" value="${p.getSort()}">
+                <input type="hidden" name="sortCate" value="${p.getSortCate()}">
             </td>
             <td><input type="submit" value="상태 저장" onclick="prepareData()"></td>
         </tr>
     </table>
     </form>
 
+    <form action="/mList" method="get">
+        <input type="hidden" name="search" value="${p.getSearch()}">
+        <input type="hidden" name="page" value="${p.getPage()}">
+        <input type="hidden" name="cate" value="${p.getCate()}">
+
+        <select name="sortCate">
+        <% if( p.getSortCate().equals("MASTER_KEY") ){ %>
+            <option value="MASTER_KEY" selected>MASTER_KEY</option>
+            <option value="STATUS">STATUS</option>
+            <option value="RECEIVED_TIME">RECEIVED_TIME</option>
+            <option value="STATUS_TIME">STATUS_TIME</option>
+        <% } else if( p.getSortCate().equals("STATUS") ){ %>
+        <option value="MASTER_KEY" selected>MASTER_KEY</option>
+            <option value="MASTER_KEY" >MASTER_KEY</option>
+            <option value="STATUS" selected>STATUS</option>
+            <option value="RECEIVED_TIME">RECEIVED_TIME</option>
+            <option value="STATUS_TIME">STATUS_TIME</option>
+        <% } else if( p.getSortCate().equals("RECEIVED_TIME") ) { %>
+            <option value="MASTER_KEY" >MASTER_KEY</option>
+            <option value="STATUS" >STATUS</option>
+            <option value="RECEIVED_TIME" selected>RECEIVED_TIME</option>
+            <option value="STATUS_TIME">STATUS_TIME</option>
+        <% } else { %>
+            <option value="MASTER_KEY" >MASTER_KEY</option>
+            <option value="STATUS" >STATUS</option>
+            <option value="RECEIVED_TIME" >RECEIVED_TIME</option>
+            <option value="STATUS_TIME" selected>STATUS_TIME</option>
+        <% } %>
+        </select>
+
+        <select name="sort">
+        <%
+        if ( p.getSort().equals("ASC") ){
+        %>
+        <option value="ASC" selected>오름 차순</option>
+        <option value="DESC">내림 차순</option>
+        <%
+        } else {
+        %>
+        <option value="ASC">오름 차순</option>
+        <option value="DESC" selected>내림 차순</option>
+        <% } %>
+        </select>
+        <input type="submit" value="정렬">
+    </form>
 <hr>
 
     <table>
         <tr>
-        <a href="/mList?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}"> <<제일 앞으로<< </a>
+        <a href="/mList?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> <<제일 앞으로<< </a>
         .
-        <a href="/mList?page=${p.getPage()-1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}"> <이전 페이지< </a>
+        <a href="/mList?page=${p.getPage()-1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> <이전 페이지< </a>
         .
         <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
-                    <a href="/mList?page=${i}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}">${i}</a>
+                    <a href="/mList?page=${i}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}">${i}</a>
                     .
         </c:forEach>
-        <a href="/mList?page=${p.getPage()+1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}"> >다음 페이지> </a>
+        <a href="/mList?page=${p.getPage()+1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> >다음 페이지> </a>
         .
-        <a href="/mList?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}"> >>제일 뒤로>> </a>
+        <a href="/mList?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> >>제일 뒤로>> </a>
         </tr>
     </table>
 
