@@ -42,7 +42,7 @@ public class ViewController {
         List<Master> masterList = masterInfoService.selectMastersByPage(page);
         model.addAttribute("masterList" , masterList);
 
-
+        //selectOption
         model.addAttribute("cateList" , SelectOption.getCateList());
         model.addAttribute("statusList" , SelectOption.getStatusList());
         model.addAttribute("sortCateList" , SelectOption.getSortCateList());
@@ -86,6 +86,8 @@ public class ViewController {
         model.addAttribute("p" , page);
         List<Master> masterList = masterInfoService.selectMastersByPage(page);
         model.addAttribute("masterList" , masterList);
+
+        //selectOption
         model.addAttribute("cateList" , SelectOption.getCateList());
         model.addAttribute("statusList" , SelectOption.getStatusList());
         model.addAttribute("sortCateList" , SelectOption.getSortCateList());
