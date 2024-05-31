@@ -3,6 +3,7 @@ package com.daishin.pdf.controller;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.page.Page;
 import com.daishin.pdf.page.Search;
+import com.daishin.pdf.page.SelectOption;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.ReqInfoService;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +41,12 @@ public class ViewController {
         model.addAttribute("p" , page);
         List<Master> masterList = masterInfoService.selectMastersByPage(page);
         model.addAttribute("masterList" , masterList);
+
+
+        model.addAttribute("cateList" , SelectOption.getCateList());
+        model.addAttribute("statusList" , SelectOption.getStatusList());
+        model.addAttribute("sortCateList" , SelectOption.getSortCateList());
+        model.addAttribute("sortList" , SelectOption.getSortList());
         //페이징 처리
         return "masterList";
     }
@@ -78,6 +86,10 @@ public class ViewController {
         model.addAttribute("p" , page);
         List<Master> masterList = masterInfoService.selectMastersByPage(page);
         model.addAttribute("masterList" , masterList);
+        model.addAttribute("cateList" , SelectOption.getCateList());
+        model.addAttribute("statusList" , SelectOption.getStatusList());
+        model.addAttribute("sortCateList" , SelectOption.getSortCateList());
+        model.addAttribute("sortList" , SelectOption.getSortList());
         //페이징 처리
         return "masterList";
     }

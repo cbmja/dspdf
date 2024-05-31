@@ -4,31 +4,35 @@
 <%@page import="java.util.ArrayList"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@taglib prefix ="c" uri="http://java.sun.com/jsp/jstl/core" %>
+
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <style>
-    table{
-    	margin-left : auto;
-    	margin-right : auto;
-    	margin-top : 50px;
-    	margin-bottom : 50px;
-        width : 80%;
-    }
-
-    body{
-            text-align: center;
+        <style>
+        table{
+            margin-left : auto;
+            margin-right : auto;
+            margin-top : 50px;
+            margin-bottom : 50px;
+            width : 80%;
         }
-    </style>
+
+        body{
+                text-align: center;
+            }
+        </style>
 
 </head>
 <body>
     <%
         List<Master> list = (List<Master>)request.getAttribute("masterList");
+        List<String> cateList = (List<String>)request.getAttribute("cateList");
+        List<String> statusList = (List<String>)request.getAttribute("statusList");
+        List<String> sortCateList = (List<String>)request.getAttribute("sortCateList");
+        List<String> sortList = (List<String>)request.getAttribute("sortList");
         Page p = (Page)(request.getAttribute("p"));
     %>
 
@@ -38,25 +42,9 @@
         <input type="hidden" name="sort" value="${p.getSort()}">
         <input type="hidden" name="sortCate" value="${p.getSortCate()}">
         <select name="cate">
-            <%
-                if ( p.getCate().equals("MASTER_KEY") ){
-            %>
-                <option value="MASTER_KEY" selected >MASTER_KEY</option>
-                <option value="STATUS">STATUS(1,2,3)</option>
-                <option value="TYPE">배치(AR) / 실시간(RE)</option>
-            <%
-                } else if( p.getCate().equals("STATUS") ) {
-            %>
-                <option value="MASTER_KEY">MASTER_KEY</option>
-                <option value="STATUS" selected >STATUS(1,2,3)</option>
-                <option value="TYPE">배치(AR) / 실시간(RE)</option>
-            <%
-            } else {
-            %>
-                <option value="MASTER_KEY">MASTER_KEY</option>
-                <option value="STATUS">STATUS(1,2,3)</option>
-                <option value="TYPE" selected >배치(AR) / 실시간(RE)</option>
-            <% } %>
+            <c:forEach var="cate" items="${cateList}">
+                <option value="${cate}" <c:if test="${p.getCate() eq cate}">selected</c:if> >${cate}</option>
+            </c:forEach>
         </select>
         <input type="text" name="search" value="${search.getSearch()}">
         <input type="submit" value="검색">
@@ -87,9 +75,9 @@
             <td>
               <select name="${master.getMASTER_KEY()}" onchange="updateStatus('<%= master.getMASTER_KEY() %>', this.value)">
                 <option value="0" disabled selected>선택</option>
-                <option value="1">1(수신중)</option>
-                <option value="2">2(수신완료)</option>
-                <option value="3">3(출력중)</option>
+                <c:forEach var="status" items="${statusList}">
+                    <option value="${status}">${status}</option>
+                </c:forEach>
               </select>
             </td>
         </tr>
@@ -114,42 +102,15 @@
         <input type="hidden" name="cate" value="${p.getCate()}">
 
         <select name="sortCate">
-        <% if( p.getSortCate().equals("MASTER_KEY") ){ %>
-            <option value="MASTER_KEY" selected>MASTER_KEY</option>
-            <option value="STATUS">STATUS</option>
-            <option value="RECEIVED_TIME">RECEIVED_TIME</option>
-            <option value="STATUS_TIME">STATUS_TIME</option>
-        <% } else if( p.getSortCate().equals("STATUS") ){ %>
-        <option value="MASTER_KEY" selected>MASTER_KEY</option>
-            <option value="MASTER_KEY" >MASTER_KEY</option>
-            <option value="STATUS" selected>STATUS</option>
-            <option value="RECEIVED_TIME">RECEIVED_TIME</option>
-            <option value="STATUS_TIME">STATUS_TIME</option>
-        <% } else if( p.getSortCate().equals("RECEIVED_TIME") ) { %>
-            <option value="MASTER_KEY" >MASTER_KEY</option>
-            <option value="STATUS" >STATUS</option>
-            <option value="RECEIVED_TIME" selected>RECEIVED_TIME</option>
-            <option value="STATUS_TIME">STATUS_TIME</option>
-        <% } else { %>
-            <option value="MASTER_KEY" >MASTER_KEY</option>
-            <option value="STATUS" >STATUS</option>
-            <option value="RECEIVED_TIME" >RECEIVED_TIME</option>
-            <option value="STATUS_TIME" selected>STATUS_TIME</option>
-        <% } %>
+        <c:forEach var="sortCate" items="${sortCateList}">
+            <option value="${sortCate}" <c:if test="${p.getSortCate() eq sortCate}"> selected </c:if> >${sortCate}</option>
+        </c:forEach>
         </select>
 
         <select name="sort">
-        <%
-        if ( p.getSort().equals("ASC") ){
-        %>
-        <option value="ASC" selected>오름 차순</option>
-        <option value="DESC">내림 차순</option>
-        <%
-        } else {
-        %>
-        <option value="ASC">오름 차순</option>
-        <option value="DESC" selected>내림 차순</option>
-        <% } %>
+        <c:forEach var="sort" items="${sortList}">
+            <option value="${sort}" <c:if test="${p.getSort() eq sort}"> selected </c:if> >${sort}</option>
+        </c:forEach>
         </select>
         <input type="submit" value="정렬">
     </form>
