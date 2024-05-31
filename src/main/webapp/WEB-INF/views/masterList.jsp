@@ -172,9 +172,7 @@
     </table>
 
 <hr>
-start<%= p.getStartPage() %>
-end<%= p.getEndPage() %>
-now<%= p.getPage() %>
+start : <c:out value="${p.getStartPage()}"/> / now : <c:out value="${p.getPage()}"/> / end : <c:out value="${p.getEndPage()}"/>
 
 <script>
 
