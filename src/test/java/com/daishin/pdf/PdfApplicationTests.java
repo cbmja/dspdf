@@ -23,10 +23,7 @@ class PdfApplicationTests {
 
 		for (int i = 0; i < 10; i++) {
 
-			List<Master> masterList = masterInfoService.selectStatusBetween1_5();
-			System.out.println(masterList);
 
-			/*
 			Master master = new Master();
 			master.setMASTER_KEY(i + "");
 			master.setTOTAL_SEND_CNT(10+"");
@@ -49,7 +46,7 @@ class PdfApplicationTests {
 			master.setTYPE("REAL_TIME");
 			masterSaveService.save(master);
 
-*/
+
 		}
 	}
 }
