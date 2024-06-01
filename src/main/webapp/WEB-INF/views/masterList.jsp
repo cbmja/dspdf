@@ -64,6 +64,7 @@
             <th> 현재 상태 시작 시각</th>
             <th> 현재 상태<br>(STATUS) </th>
             <th> 상태 변화</th>
+            <th> TYPE(배치/실시간)</th>
         </tr>
         <% for(Master master : list){ %>
         <tr>
@@ -80,6 +81,7 @@
                 </c:forEach>
               </select>
             </td>
+            <td><%= master.getTYPE() %></td>
         </tr>
         <% } %>
         <tr>

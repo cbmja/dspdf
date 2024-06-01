@@ -26,6 +26,7 @@ public final class SelectOption {
         sortCateList.add("STATUS");
         sortCateList.add("RECEIVED_TIME");
         sortCateList.add("STATUS_TIME");
+        sortCateList.add("TYPE");
         return sortCateList;
     }
     public static List<String> getSortList(){
