@@ -18,6 +18,8 @@ public final class SelectOption {
         statusList.add("1");
         statusList.add("2");
         statusList.add("3");
+        statusList.add("4");
+        statusList.add("5");
         return statusList;
     }
     public static List<String> getSortCateList(){

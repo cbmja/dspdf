@@ -30,7 +30,7 @@ public class SchedulerConfiguration {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //실시간(단일) json 생성 및 상태 변화 1 -> 2
-    @Scheduled(cron = "00 17 14 * * *")
+    @Scheduled(cron = "00 03 14 * * *")
     public void run() throws IOException {
         if(checkTime()){
 
@@ -72,7 +72,7 @@ public class SchedulerConfiguration {
 
     //현재 시각이 14:00 이후인지 체크하는 메서드
     private boolean checkTime(){
-        return LocalTime.now().isAfter(LocalTime.of(14 , 16));
+        return LocalTime.now().isAfter(LocalTime.of(14 , 0));
     }
 
 
