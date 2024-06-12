@@ -38,7 +38,7 @@
 
 
 <hr>
-    <form action="/mList" method="get">
+    <form action="/masters" method="get">
         <input type="hidden" name="sort" value="${p.getSort()}">
         <input type="hidden" name="sortCate" value="${p.getSortCate()}">
         <select name="cate">
@@ -52,7 +52,7 @@
     <p>총 검색 건수 : ${p.getTotal()}</p>
 
 
-    <form action="/changeStatus" method="post">
+    <form action="/masters/update" method="post">
     <table border="1" >
         <tr>
             <th> 그룹명<br>(TR_KEY) </th>
@@ -98,7 +98,7 @@
     </table>
     </form>
 
-    <form action="/mList" method="get">
+    <form action="/masters" method="get">
         <input type="hidden" name="search" value="${p.getSearch()}">
         <input type="hidden" name="page" value="${p.getPage()}">
         <input type="hidden" name="cate" value="${p.getCate()}">
@@ -120,17 +120,17 @@
 
     <table>
         <tr>
-        <a href="/mList?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> <<제일 앞으로<< </a>
+        <a href="/masters?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> <<제일 앞으로<< </a>
         .
-        <a href="/mList?page=${p.getPage()-1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> <이전 페이지< </a>
+        <a href="/masters?page=${p.getPage()-1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> <이전 페이지< </a>
         .
         <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
-                    <a href="/mList?page=${i}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}">${i}</a>
+                    <a href="/masters?page=${i}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}">${i}</a>
                     .
         </c:forEach>
-        <a href="/mList?page=${p.getPage()+1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> >다음 페이지> </a>
+        <a href="/masters?page=${p.getPage()+1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> >다음 페이지> </a>
         .
-        <a href="/mList?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> >>제일 뒤로>> </a>
+        <a href="/masters?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> >>제일 뒤로>> </a>
         </tr>
     </table>
 

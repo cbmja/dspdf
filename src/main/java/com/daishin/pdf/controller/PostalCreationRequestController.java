@@ -31,7 +31,7 @@ public class PostalCreationRequestController {
 
         private final Logger logger = LoggerFactory.getLogger("daishin");
 
-    @PostMapping("/upload")
+    @PostMapping("/detail")
     @ResponseBody
     public Map<String , String> uploadAndUnzip(@RequestParam(name = "File" , required = false) MultipartFile File , @ModelAttribute Detail req){
         long startTime = System.nanoTime();
