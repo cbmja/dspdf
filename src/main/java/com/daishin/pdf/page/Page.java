@@ -1,9 +1,6 @@
 package com.daishin.pdf.page;
 
-import com.daishin.pdf.service.MasterInfoService;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 
 @Data
 public class Page {
@@ -53,13 +50,13 @@ public class Page {
         this.total = total;
         this.totalPage = total % this.pageElement > 0 ? total / this.pageElement + 1 : total / this.pageElement;
 
-        this.page = page <= 0 ? 1 : page;
+        this.page = page;
         if(this.page > this.totalPage){
             this.page = this.totalPage;
         }
 
 
-        this.startNum = (this.page - 1)*this.pageElement;
+        this.startNum = (this.page - 1)*this.pageElement < 0 ? 0 : (this.page - 1)*this.pageElement;
         this.endNum = this.page == this.totalPage ? this.total : startNum + this.pageElement - 1;
 
 
