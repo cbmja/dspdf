@@ -1,10 +1,9 @@
 package com.daishin.pdf.SchedulerConfig;
 
 import com.daishin.pdf.dto.Master;
-import com.daishin.pdf.dto.ReqParam;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
-import com.daishin.pdf.service.ReqInfoService;
+import com.daishin.pdf.service.DetailInfoService;
 import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -27,7 +26,7 @@ public class SchedulerConfiguration {
     private final Utils utils;
     private final MasterSaveService masterSaveService;
     private final MasterInfoService masterInfoService;
-    private final ReqInfoService reqInfoService;
+    private final DetailInfoService detailInfoService;
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //실시간(단일) json 생성 및 상태 변화 1 -> 2
@@ -39,7 +38,7 @@ public class SchedulerConfiguration {
             master.setMASTER_KEY(LocalDate.now()+"");
             master.setSTATUS(2);
 
-            int total = reqInfoService.countMaster(master.getMASTER_KEY());
+            int total = detailInfoService.countMaster(master.getMASTER_KEY());
             master.setTOTAL_SEND_CNT(total+"");
 
             //master 작업 상태 업데이트

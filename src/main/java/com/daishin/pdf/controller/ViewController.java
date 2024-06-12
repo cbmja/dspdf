@@ -6,7 +6,7 @@ import com.daishin.pdf.page.Search;
 import com.daishin.pdf.page.SelectOption;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
-import com.daishin.pdf.service.ReqInfoService;
+import com.daishin.pdf.service.DetailInfoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -30,7 +29,7 @@ public class ViewController {
     private final MasterInfoService masterInfoService;
     private final MasterSaveService masterSaveService;
 
-    private final ReqInfoService reqInfoService;
+    private final DetailInfoService detailInfoService;
 
 
     @GetMapping("/mList")
@@ -38,6 +37,7 @@ public class ViewController {
 
         //페이징 처리
         Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search);
+        System.out.println(page+"////////////");
         model.addAttribute("p" , page);
         List<Master> masterList = masterInfoService.selectMastersByPage(page);
         model.addAttribute("masterList" , masterList);
@@ -70,7 +70,7 @@ public class ViewController {
             }else if(!statusMap.get(master_key).equals("1") && master.getTOTAL_SEND_CNT().equals("수신중")){
             //현재 상태가 1(수신중)인 실시간 건수에 대해서 다른 상태로 바꾸는 경우 (total_send_cnt 가 "수신중"이면 현재 상태가 1인 실시간 건임)
             //total_send_cnt 를 현재 수신 건수로 바꿔줌    
-                int total = reqInfoService.countMaster(master.getMASTER_KEY());
+                int total = detailInfoService.countMaster(master.getMASTER_KEY());
                 master.setTOTAL_SEND_CNT(total+"");
                 masterSaveService.updateStatusAndTotalCnt(master);
             }else{

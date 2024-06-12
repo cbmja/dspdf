@@ -24,7 +24,7 @@ public class Page {
     private int endPage;//보여지는 블럭의 마지막 번호
 
 
-    private int page; //현재 페이지 ok
+    private int page=1; //현재 페이지 ok
     private int totalPage;//총 페이지 수
     
     private int startNum;//첫 게시물 번호 ok
@@ -59,7 +59,7 @@ public class Page {
         }
 
 
-        this.startNum = (this.page-1)*this.pageElement;
+        this.startNum = (this.page - 1)*this.pageElement;
         this.endNum = this.page == this.totalPage ? this.total : startNum + this.pageElement - 1;
 
 

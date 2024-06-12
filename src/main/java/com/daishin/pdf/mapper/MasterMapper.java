@@ -1,7 +1,6 @@
 package com.daishin.pdf.mapper;
 
 import com.daishin.pdf.dto.Master;
-import com.daishin.pdf.dto.ReqParam;
 import com.daishin.pdf.page.Page;
 import com.daishin.pdf.page.Search;
 import org.apache.ibatis.annotations.Mapper;

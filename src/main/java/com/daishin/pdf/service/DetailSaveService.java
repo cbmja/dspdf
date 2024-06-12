@@ -1,28 +1,26 @@
 package com.daishin.pdf.service;
 
-import com.daishin.pdf.dto.ReqParam;
-import com.daishin.pdf.repository.ReqRepository;
+import com.daishin.pdf.dto.Detail;
+import com.daishin.pdf.repository.DetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-
 @Service
 @RequiredArgsConstructor
-public class ReqSaveService {
+public class DetailSaveService {
 
-    private final ReqRepository repository;
+    private final DetailRepository repository;
 
 
-    public int save (ReqParam reqParam){
+    public int save (Detail detail){
 
-        String filePath = reqParam.getPDF_PATH();
+        String filePath = detail.getPDF_PATH();
         int firstIndex = filePath.indexOf('\\');
         int secondIndex = filePath.indexOf('\\', firstIndex + 1);
         int thirdIndex = filePath.indexOf('\\', secondIndex + 1);
         String master =filePath.substring(secondIndex + 1, thirdIndex);
-        reqParam.setMASTER(master);
-        return repository.save(reqParam);
+        detail.setMASTER(master);
+        return repository.save(detail);
     }
 
 

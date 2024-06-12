@@ -2,10 +2,10 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.daishin.pdf.mapper.ReqMapper">
+<mapper namespace="com.daishin.pdf.mapper.DetailMapper">
 
-    <insert id = "save" parameterType="ReqParam">
-        INSERT INTO dbo.REQ
+    <insert id = "save" parameterType="Detail">
+        INSERT INTO dbo.DETAIL
         (PK
         ,TR_KEY
         ,TOTAL_SEND_CNT
@@ -47,12 +47,12 @@
         ,#{PDF_NM})
     </insert>
 
-    <select id="countGroup" parameterType="ReqParam" resultType="int">
-        SELECT COUNT(*) FROM dbo.REQ WHERE TR_KEY = #{TR_KEY}
+    <select id="countGroup" parameterType="Detail" resultType="int">
+        SELECT COUNT(*) FROM dbo.DETAIL WHERE TR_KEY = #{TR_KEY}
     </select>
 
     <select id="countMaster" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM dbo.REQ WHERE MASTER = #{MASTER}
+        SELECT COUNT(*) FROM dbo.DETAIL WHERE MASTER = #{MASTER}
     </select>
 
 <!--
@@ -60,16 +60,16 @@
         SELECT COUNT(*) FROM dbo.REQ WHERE TR_KEY = #{TR_KEY} and RECV_NUM = #{TOTAL_SEND_CNT}
     </select>
 -->
-    <select id="getTrGroup" parameterType="ReqParam" resultType="hashmap">
-        SELECT * FROM dbo.REQ WHERE TR_KEY = #{TR_KEY}
+    <select id="getTrGroup" parameterType="Detail" resultType="hashmap">
+        SELECT * FROM dbo.DETAIL WHERE TR_KEY = #{TR_KEY}
     </select>
 
     <select id="getMasterGroup" parameterType="String" resultType="hashmap">
-        SELECT * FROM dbo.REQ WHERE MASTER = #{MASTER}
+        SELECT * FROM dbo.DETAIL WHERE MASTER = #{MASTER}
     </select>
 
-    <select id="findReq" parameterType="ReqParam" resultType="ReqParam">
-        SELECT * FROM dbo.REQ WHERE PK = #{PK}
+    <select id="findReq" parameterType="Detail" resultType="Detail">
+        SELECT * FROM dbo.DETAIL WHERE PK = #{PK}
     </select>
 
 </mapper>

@@ -3,11 +3,10 @@ package com.daishin.pdf.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
-import java.sql.Date;
 import java.time.LocalDateTime;
 
 @Data
-public class ReqParam {
+public class Detail {
 
     @JsonProperty("PK")
     private String PK;

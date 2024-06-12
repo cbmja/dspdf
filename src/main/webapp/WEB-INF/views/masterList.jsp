@@ -138,7 +138,6 @@
 start : <c:out value="${p.getStartPage()}"/> / now : <c:out value="${p.getPage()}"/> / end : <c:out value="${p.getEndPage()}"/>
 
 <script>
-
     const statusMap = new Map();
 
     function updateStatus(key, value) {

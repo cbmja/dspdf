@@ -1,6 +1,6 @@
 package com.daishin.pdf.util;
 
-import com.daishin.pdf.dto.ReqParam;
+import com.daishin.pdf.dto.Detail;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -28,9 +28,9 @@ public final class Common {
     /**
      * pdf 저장
      * @param file
-     * @param reqParam
+     * @param detail
      */
-    public static void saveFile(MultipartFile file , ReqParam reqParam , Map<String , String> response) throws IOException {
+    public static void saveFile(MultipartFile file , Detail detail, Map<String , String> response) throws IOException {
 
         /////SSSpdf 저장SSS/////
         //저장될 pdf 파일명 (확장자 제외)
@@ -64,11 +64,11 @@ public final class Common {
         /////SSSjson 저장SSS/////
 
         //단일
-        if(reqParam.getTOTAL_SEND_CNT().equals("1")){
+        if(detail.getTOTAL_SEND_CNT().equals("1")){
             ObjectMapper mapper = new ObjectMapper();
 
             //reqParam(발송정보 json으로 변환)
-            String json = mapper.writeValueAsString(reqParam);
+            String json = mapper.writeValueAsString(detail);
 
             try {
                 FileWriter fileWriter = new FileWriter(path+fileName+".json");
@@ -87,7 +87,7 @@ public final class Common {
 
 
         /////EEEjson 저장EEE/////
-        reqParam.setPDF_PATH(path+fileName+".pdf");
+        detail.setPDF_PATH(path+fileName+".pdf");
 
     }
 
