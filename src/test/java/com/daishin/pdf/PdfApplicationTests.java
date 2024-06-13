@@ -22,8 +22,6 @@ class PdfApplicationTests {
 	void contextLoads() {
 /*
 		for (int i = 0; i < 10; i++) {
-
-
 			Master master = new Master();
 			master.setMASTER_KEY(i + "");
 			master.setTOTAL_SEND_CNT(10+"");
@@ -34,7 +32,6 @@ class PdfApplicationTests {
 			master.setTYPE("ARRANGEMENT");
 			masterSaveService.save(master);
 		}
-
 		for (int i = 10; i < 20; i++) {
 			Master master = new Master();
 			master.setMASTER_KEY(i + "");
@@ -45,8 +42,7 @@ class PdfApplicationTests {
 			master.setSTATUS(2);
 			master.setTYPE("REAL_TIME");
 			masterSaveService.save(master);
-
-
-		}*/
+		}
+*/
 	}
 }
