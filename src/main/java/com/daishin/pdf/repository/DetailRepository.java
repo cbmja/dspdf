@@ -25,8 +25,8 @@ public class DetailRepository {
         return sql.selectList("com.daishin.pdf.mapper.DetailMapper.getTrGroup" , detail);
     }
 
-    public Detail findReq(Detail detail){
-        return sql.selectOne("com.daishin.pdf.mapper.DetailMapper.findReq" , detail);
+    public Detail findDetail(Detail detail){
+        return sql.selectOne("com.daishin.pdf.mapper.DetailMapper.findDetail" , detail);
     }
 
     public List getMasterGroup(String MASTER) {

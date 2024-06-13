@@ -24,7 +24,7 @@ public class DetailInfoService {
     }
 
     public Detail findReq(Detail detail){
-        return repository.findReq(detail);
+        return repository.findDetail(detail);
     }
 
     public List<Detail> getMasterGroup(String MASTER){

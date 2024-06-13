@@ -36,10 +36,10 @@ public class Utils {
      * @param file
      * @param detail
      */
-    public void savePdf(MultipartFile file , Detail detail, Map<String , String> response , Logger logger){
+    public void savePdf(Detail detail, Map<String , String> response , Logger logger){
 
         /////SSSpdf 저장SSS/////
-
+        MultipartFile file = detail.getFile();
         //String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
         String fileName = file.getOriginalFilename();
         
@@ -75,6 +75,8 @@ public class Utils {
         Path pdfPath = Paths.get(path).resolve(fileName);
         try {
             file.transferTo(pdfPath.toFile());
+            logger.info("pdf 저장 : " + detail);
+            logger.info("pdf name : " + file.getOriginalFilename());
         } catch (IllegalStateException | IOException e) {
             logger.error("pdf 저장 실패 : "+file.getOriginalFilename()+" / "+ detail);
             e.printStackTrace();
@@ -108,6 +110,7 @@ public class Utils {
             FileWriter fileWriter = new FileWriter(path+master+".json");
             fileWriter.write(jsonlist);
             fileWriter.close();
+            logger.info("json 저장 : "+jsonlist);
         } catch (IOException e) {
             logger.error("json 저장 실패 master : ["+master+"]");
 

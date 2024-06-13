@@ -2,6 +2,7 @@ package com.daishin.pdf.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 
@@ -46,6 +47,8 @@ public class Detail {
     private String MASTER;
     @JsonProperty("PDF_NM")
     private String PDF_NM;
+    @JsonProperty("File")
+    private MultipartFile File;
 
 
 

@@ -12,7 +12,7 @@ public interface DetailMapper {
 
     void getTrGroup(Detail detail);
 
-    void findReq(Detail detail);
+    void findDetail(Detail detail);
 
     void getMasterGroup(String MASTER);
 

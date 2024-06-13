@@ -68,7 +68,7 @@
         SELECT * FROM dbo.DETAIL WHERE MASTER = #{MASTER}
     </select>
 
-    <select id="findReq" parameterType="Detail" resultType="Detail">
+    <select id="findDetail" parameterType="Detail" resultType="Detail">
         SELECT * FROM dbo.DETAIL WHERE PK = #{PK}
     </select>
 
