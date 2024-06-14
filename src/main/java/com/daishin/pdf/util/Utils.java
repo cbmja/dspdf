@@ -33,7 +33,6 @@ public class Utils {
 
     /**
      * pdf 저장
-     * @param file
      * @param detail
      */
     public void savePdf(Detail detail, Map<String , String> response , Logger logger){
@@ -112,7 +111,7 @@ public class Utils {
             fileWriter.close();
             logger.info("json 저장 : "+jsonlist);
         } catch (IOException e) {
-            logger.error("json 저장 실패 master : ["+master+"]");
+            logger.error("json 저장 실패 master : "+masterInfoService.findMaster(master));
 
             e.printStackTrace();
         }
