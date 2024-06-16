@@ -39,32 +39,10 @@ public class Utils {
 
         /////SSSpdf 저장SSS/////
         MultipartFile file = detail.getFile();
-        //String fileName = file.getOriginalFilename().substring(0 , file.getOriginalFilename().length()-4);
         String fileName = file.getOriginalFilename();
         
         //저장경로 (대량이면 dir 하나 더 생성)
-        String path ;
-
-        //단일
-        if(detail.getTOTAL_SEND_CNT().equals("1")){
-
-            LocalTime currentTime = LocalTime.now();
-
-            // 기준 시간 설정
-            LocalTime comparisonTime = LocalTime.of(14, 0);
-
-            //14 이전이면 년도-월-오늘날짜
-            if (currentTime.isBefore(comparisonTime)) {
-                path = "C:\\DATA\\"+ LocalDate.now()+"\\";
-            } else {
-            //14 이후이면 년도-월-내일날짜    
-                path = "C:\\DATA\\"+LocalDate.now().plusDays(1L)+"\\";
-            }
-        } else {
-        //대량
-            path = "C:\\DATA\\"+ detail.getTR_KEY()+"\\";
-        }
-
+        String path = detail.getPDF_PATH();
 
         //디렉토리 생성
         File dir = new File(path);
@@ -80,8 +58,6 @@ public class Utils {
             logger.error("pdf 저장 실패 : "+file.getOriginalFilename()+" / "+ detail);
             e.printStackTrace();
         }
-        /////EEEpdf 저장EEE/////
-        detail.setPDF_PATH(path+fileName);
     }
 
     ///////////////////////

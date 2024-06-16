@@ -14,12 +14,6 @@ public class DetailSaveService {
 
     public int save (Detail detail){
 
-        String filePath = detail.getPDF_PATH();
-        int firstIndex = filePath.indexOf('\\');
-        int secondIndex = filePath.indexOf('\\', firstIndex + 1);
-        int thirdIndex = filePath.indexOf('\\', secondIndex + 1);
-        String master =filePath.substring(secondIndex + 1, thirdIndex);
-        detail.setMASTER(master);
         return repository.save(detail);
     }
 

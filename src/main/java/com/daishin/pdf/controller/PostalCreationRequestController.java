@@ -34,8 +34,12 @@ public class PostalCreationRequestController {
 
     @PostMapping
     @ResponseBody
-    public Map<String , String> detail(@ModelAttribute Detail detail){
+    public Map<String , String> detail(@ModelAttribute Detail _detail){
         long startTime = System.nanoTime();
+
+        //detail 값 세팅
+        //pdf_nm , pdf_path , master
+        Detail detail = _detail.detailSetting(_detail);
 
         //결과값
         Map<String , String> response = new LinkedHashMap<>();
@@ -62,7 +66,6 @@ public class PostalCreationRequestController {
         utils.savePdf(detail , response , logger);
 
         //DB 저장(detail)
-        //master_key 값 세팅
         if(detailSaveService.save(detail) <= 0){
             logger.error("DB 저장 실패 : "+detail);
         }

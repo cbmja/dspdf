@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Data
 public class Detail {
@@ -49,6 +51,42 @@ public class Detail {
     private String PDF_NM;
     @JsonProperty("File")
     private MultipartFile File;
+
+
+    public Detail detailSetting(Detail detail){
+
+        //pdf_nm , pdf_path , master 값 설정 SSS
+        String path = "";
+        String master = "";
+        //단일
+        if(detail.getTOTAL_SEND_CNT().equals("1")){
+
+            LocalTime currentTime = LocalTime.now();
+
+            // 기준 시간 설정
+            LocalTime comparisonTime = LocalTime.of(14, 0);
+
+            //14 이전이면 년도-월-오늘날짜
+            if (currentTime.isBefore(comparisonTime)) {
+                path = "C:\\DATA\\"+ LocalDate.now()+"\\";
+                master = LocalDate.now()+"";
+            } else {
+                //14 이후이면 년도-월-내일날짜
+                path = "C:\\DATA\\"+LocalDate.now().plusDays(1L)+"\\";
+                master = LocalDate.now().plusDays(1L)+"";
+            }
+        } else {
+            //대량
+            path = "C:\\DATA\\"+ detail.getTR_KEY()+"\\";
+            master = detail.getTR_KEY();
+        }
+        detail.setPDF_PATH(path);
+        detail.setPDF_NM(detail.getFile().getOriginalFilename());
+        detail.setMASTER(master);
+        //pdf_nm , pdf_path , master 값 설정 EEE
+
+        return detail;
+    }
 
 
 
