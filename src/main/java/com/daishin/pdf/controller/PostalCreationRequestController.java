@@ -2,6 +2,9 @@ package com.daishin.pdf.controller;
 
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Detail;
+import com.daishin.pdf.log.LogCode;
+import com.daishin.pdf.response.ResponseCode;
+import com.daishin.pdf.response.ResponseMessage;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.DetailInfoService;
@@ -10,7 +13,6 @@ import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,28 +39,30 @@ public class PostalCreationRequestController {
     public Map<String , String> detail(@ModelAttribute Detail _detail){
         long startTime = System.nanoTime();
 
-        //detail 값 세팅
-        //pdf_nm , pdf_path , master
-        Detail detail = _detail.detailSetting(_detail);
-
         //결과값
         Map<String , String> response = new LinkedHashMap<>();
 
         //요청 정보 log
-        logger.info("request body : " +detail);
+        logger.info(LogCode.INFORMATION +" : " +_detail);
+        response.put(ResponseCode.REQUEST , _detail.toString());
+
+        //detail 값 세팅
+        // pdf_path , master
+        Detail detail = _detail.detailSetting(_detail);
+
 
         //필수 항목 누락 체크
         List checkList = detailCheck(detail , logger);
         if((boolean)checkList.get(1)){
-            response.put("필수값 누락" , (String)checkList.get(0));
+            response.put(ResponseCode.MISSING_VALUE, (String)checkList.get(0));
             return response;
         }
 
         //중복 체크
         detail.setPK(detail.getTR_KEY()+"_"+detail.getRECV_NUM());
         if(detailInfoService.findReq(detail) != null){
-            logger.error("중복된 요청 : "+detail);
-            response.put("중복된 요청 : "+detail , "중복된 요청 : "+detail);
+            logger.error(LogCode.DUPLICATE_VALUE+" : "+detail);
+            response.put(ResponseCode.DUPLICATE_VALUE , ResponseMessage.DV);
             return response;
         }
 
@@ -67,7 +71,9 @@ public class PostalCreationRequestController {
 
         //DB 저장(detail)
         if(detailSaveService.save(detail) <= 0){
-            logger.error("DB 저장 실패 : "+detail);
+            logger.error(LogCode.DATABASE_ERROR+" : "+detail);
+            response.put(ResponseCode.DATABASE_ERROR , ResponseMessage.DBE);
+            return response;
         }
 
         //master 값 세팅
@@ -105,7 +111,7 @@ public class PostalCreationRequestController {
         }
         
         long endTime = System.nanoTime();
-        logger.info("처리 시간 : "+(endTime - startTime));
+        logger.info(LogCode.DURATION_TIME+" : "+(endTime - startTime));
 
         response.put("결과","OK");
         response.put("비고","SUCCESS");
@@ -148,7 +154,7 @@ public class PostalCreationRequestController {
         }
         if(!errMsg.isEmpty()){
             errMsg = errMsg.substring(0, errMsg.length() - 2);
-            logger.error(errMsg+"누락");
+            logger.error(LogCode.MISSING_VALUE+" : "+errMsg);
             list.add(errMsg);
             list.add(true);
             return list;
@@ -158,19 +164,5 @@ public class PostalCreationRequestController {
             return list;
         }
     }
-
-/*
-
-    private boolean fileCheck(MultipartFile File , Logger logger){
-        if(File == null || File.isEmpty()){
-            logger.error("pdf file 누락");
-            return true;
-        } else {
-            return false;
-        }
-    }
-*/
-
-
 
 }

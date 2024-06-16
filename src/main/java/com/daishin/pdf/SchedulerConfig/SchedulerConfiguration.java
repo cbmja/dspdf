@@ -30,7 +30,7 @@ public class SchedulerConfiguration {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //실시간(단일) json 생성 및 상태 변화 1 -> 2
-    @Scheduled(cron = "00 03 14 * * *")
+    @Scheduled(cron = "00 36 19 * * *")
     public void run() throws IOException {
         if(checkTime()){
 

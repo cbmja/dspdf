@@ -55,7 +55,7 @@ public class Detail {
 
     public Detail detailSetting(Detail detail){
 
-        //pdf_nm , pdf_path , master 값 설정 SSS
+        // pdf_path , master 값 설정 SSS
         String path = "";
         String master = "";
         //단일
@@ -64,7 +64,7 @@ public class Detail {
             LocalTime currentTime = LocalTime.now();
 
             // 기준 시간 설정
-            LocalTime comparisonTime = LocalTime.of(14, 0);
+            LocalTime comparisonTime = LocalTime.of(19, 36);
 
             //14 이전이면 년도-월-오늘날짜
             if (currentTime.isBefore(comparisonTime)) {
@@ -81,9 +81,9 @@ public class Detail {
             master = detail.getTR_KEY();
         }
         detail.setPDF_PATH(path);
-        detail.setPDF_NM(detail.getFile().getOriginalFilename());
+        //detail.setPDF_NM(detail.getFile().getOriginalFilename());
         detail.setMASTER(master);
-        //pdf_nm , pdf_path , master 값 설정 EEE
+        // pdf_path , master 값 설정 EEE
 
         return detail;
     }

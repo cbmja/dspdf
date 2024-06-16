@@ -2,6 +2,9 @@ package com.daishin.pdf.util;
 
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Detail;
+import com.daishin.pdf.log.LogCode;
+import com.daishin.pdf.response.ResponseCode;
+import com.daishin.pdf.response.ResponseMessage;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.DetailInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,8 +19,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,10 +53,9 @@ public class Utils {
         Path pdfPath = Paths.get(path).resolve(fileName);
         try {
             file.transferTo(pdfPath.toFile());
-            logger.info("pdf 저장 : " + detail);
-            logger.info("pdf name : " + file.getOriginalFilename());
         } catch (IllegalStateException | IOException e) {
-            logger.error("pdf 저장 실패 : "+file.getOriginalFilename()+" / "+ detail);
+            logger.error(LogCode.FILE_SAVE_FAIL+" : "+file.getOriginalFilename());
+            response.put(ResponseCode.FILE_SAVE_FAIL , ResponseMessage.FF);
             e.printStackTrace();
         }
     }
@@ -67,9 +67,6 @@ public class Utils {
 
         //저장경로 
         String path = "C:\\DATA\\"+master+"\\";
-
-
-        //response.put("["+reqParam.getTR_KEY()+"] 전송 완료" , "["+reqParam.getTR_KEY()+"] 전송 완료");
 
         Map<String , List> jsonList = new HashMap<>();
 
@@ -85,10 +82,9 @@ public class Utils {
             FileWriter fileWriter = new FileWriter(path+master+".json");
             fileWriter.write(jsonlist);
             fileWriter.close();
-            logger.info("json 저장 : "+jsonlist);
         } catch (IOException e) {
-            logger.error("json 저장 실패 master : "+masterInfoService.findMaster(master));
-
+            //logger.error(LogCode.JSON_SAVE_FAIL+" : "+masterInfoService.findMaster(master));
+            logger.error(LogCode.JSON_SAVE_FAIL+" : "+ jsonList.toString());
             e.printStackTrace();
         }
 
