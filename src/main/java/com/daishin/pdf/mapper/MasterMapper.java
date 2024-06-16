@@ -26,6 +26,6 @@ public interface MasterMapper {
 
     void countSearch(Search search);
 
-    List<Master> selectStatusBetween1_5();
+    List<Master> selectStatusBetween2_7();
 
 }

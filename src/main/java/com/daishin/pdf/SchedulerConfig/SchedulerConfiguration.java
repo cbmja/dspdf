@@ -53,9 +53,9 @@ public class SchedulerConfiguration {
     @Scheduled(fixedRate = 300000)
     public void changeStatus(){
 
-        //현재상태가 2,3,4 인 master만 select
-        //최종 단꼐가 5라고 가정
-        List<Master> masterList = masterInfoService.selectStatusBetween1_5();
+        //현재상태가 3,4,5,6 인 master만 select
+        //최종 단계가 7라고 가정
+        List<Master> masterList = masterInfoService.selectStatusBetween2_7();
 
         for(Master master : masterList){
                 //현재 상태에서 2시간이 지난 master만 상태값 +1

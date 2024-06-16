@@ -51,8 +51,8 @@
         SELECT COUNT(*) FROM dbo.MASTER WHERE ${cate} LIKE CONCAT('%',#{search},'%')
     </select>
 
-    <select id="selectStatusBetween1_5" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE STATUS > 1 AND 5 > STATUS
+    <select id="selectStatusBetween2_7" resultType="Master">
+        SELECT * FROM dbo.MASTER WHERE STATUS > 2 AND 7 > STATUS
     </select>
 
 </mapper>

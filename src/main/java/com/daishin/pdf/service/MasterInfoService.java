@@ -32,5 +32,5 @@ public class MasterInfoService {
         return masterRepository.countSearch(search);
     }
 
-    public List<Master> selectStatusBetween1_5(){return masterRepository.selectStatusBetween1_5();}
+    public List<Master> selectStatusBetween2_7(){return masterRepository.selectStatusBetween2_7();}
 }
