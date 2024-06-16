@@ -9,5 +9,6 @@ public interface LogCode {
     String DATABASE_ERROR = "DBE"; //DB 오류
     String FILE_SAVE_FAIL = "FF"; //파일 저장 오류
     String JSON_SAVE_FAIL = "JF"; //파일 저장 오류
+    String CHANGE_STATUS = "CS"; //상태 변경
 
 }
