@@ -14,6 +14,9 @@ public class DetailRepository {
     private final SqlSessionTemplate sql;
 
     public int save(Detail detail){
+
+
+
         return sql.insert("com.daishin.pdf.mapper.DetailMapper.save" , detail);
     }
 

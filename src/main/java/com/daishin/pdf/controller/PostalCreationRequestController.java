@@ -44,7 +44,7 @@ public class PostalCreationRequestController {
 
         //요청 정보 log
         logger.info(LogCode.INFORMATION +" : " +_detail);
-        response.put(ResponseCode.REQUEST , _detail.toString());
+        //response.put(ResponseCode.REQUEST , _detail.toString());
 
         //detail 값 세팅
         // pdf_path , master
@@ -54,7 +54,8 @@ public class PostalCreationRequestController {
         //필수 항목 누락 체크
         List checkList = detailCheck(detail , logger);
         if((boolean)checkList.get(1)){
-            response.put(ResponseCode.MISSING_VALUE, (String)checkList.get(0));
+            response.put("결과", "ERROR");
+            response.put("비고", "항목 누락: "+(String)checkList.get(0));
             return response;
         }
 
@@ -62,10 +63,15 @@ public class PostalCreationRequestController {
         detail.setPK(detail.getTR_KEY()+"_"+detail.getRECV_NUM());
         if(detailInfoService.findReq(detail) != null){
             logger.error(LogCode.DUPLICATE_VALUE+" : "+detail);
-            response.put(ResponseCode.DUPLICATE_VALUE , ResponseMessage.DV);
+            response.put("결과", "ERROR");
+            response.put("비고", "중복 발송: TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+            //response.put(ResponseCode.DUPLICATE_VALUE , ResponseMessage.DV);
             return response;
         }
 
+
+        ///////////////////////////////////////내부에 실제 로직이 실행되는 부분에서 에러를 받아야함 savePdf , save
+        //sql문이 동작하는 모든 메서드에 트라이 캐치로 적용시켜야함
         //파일 저장 (pdf)
         utils.savePdf(detail , response , logger);
 
@@ -75,6 +81,8 @@ public class PostalCreationRequestController {
             response.put(ResponseCode.DATABASE_ERROR , ResponseMessage.DBE);
             return response;
         }
+        ///////////////////////////////////////내부에 실제 로직이 실행되는 부분에서 에러를 받아야함
+
 
         //master 값 세팅
         String MASTER_KEY = detail.getMASTER();
