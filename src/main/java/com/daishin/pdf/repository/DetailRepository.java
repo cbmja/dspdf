@@ -85,9 +85,9 @@ public class DetailRepository {
         try{
             list = sql.selectList("com.daishin.pdf.mapper.DetailMapper.getMasterGroup" , MASTER);
         }catch (Exception e){
-            Detail detail = new Detail();
+            /*Detail detail = new Detail();
             detail.setError(LogCode.SQL_ERROR);
-            list.add(detail);
+            list.add(detail);*/
             logger.error(LogCode.SQL_ERROR/*+" : "+e.getMessage()*/);
             e.printStackTrace();
         }

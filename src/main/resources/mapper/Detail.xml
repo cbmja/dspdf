@@ -64,7 +64,7 @@
         SELECT * FROM dbo.DETAIL WHERE TR_KEY = #{TR_KEY}
     </select>
 
-    <select id="getMasterGroup" parameterType="String" resultType="hashmap">
+    <select id="getMasterGroup" parameterType="String" resultType="Detail">
         SELECT * FROM dbo.DETAIL WHERE MASTER = #{MASTER}
     </select>
 

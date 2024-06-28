@@ -69,7 +69,7 @@ public class Utils {
         //저장경로 
         String path = "C:\\DATA\\"+master+"\\";
 
-        Map<String , Object> jsonList = new HashMap<>();
+        Map<String , List> jsonList = new HashMap<>();
 
         List<Master> masterList = new ArrayList<>();
         Master findMaster = masterInfoService.findMaster(master);
