@@ -50,9 +50,11 @@ public class DetailRepository {
 
 
 
+/*
     public List getTrGroup(Detail detail) {
         return sql.selectList("com.daishin.pdf.mapper.DetailMapper.getTrGroup" , detail);
     }
+*/
 
 
     //////////////////////////////////////OK        //////////////////////////////////////OK

@@ -53,7 +53,7 @@ public class Utils {
         try {
             file.transferTo(pdfPath.toFile());
         } catch (Exception e) {
-            logger.error(LogCode.PDF_ERROR+" : "+file.getOriginalFilename()); //
+            logger.error(LogCode.PDF_ERROR+" : "+detail); //
             e.printStackTrace();
             result = false;
         }

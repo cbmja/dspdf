@@ -3,9 +3,6 @@ package com.daishin.pdf.log;
 public interface LogCode {
 
 
-    String DATA = "정보";
-
-    //////////////////////\\
 
     //ERROR
     String SQL_ERROR = "SQL_ERROR"; //SQL 오류
@@ -14,9 +11,9 @@ public interface LogCode {
     String MISSING_VALUE = "MISSING_VALUE"; //필수 항목 누락
     String DUPLICATE_VALUE = "DUPLICATE_VALUE"; //중복 전송 TR_KEY 와 RECV_NUM 이 동일한 경우 중복으로 처리
 
+
     //INFO
     String DETAIL_REQUEST = "DETAIL_REQUEST"; //수신 데이터
     String WORK_TIME = "WORK_TIME"; //처리 시간
-
 
 }

@@ -1,7 +1,6 @@
 package com.daishin.pdf.SchedulerConfig;
 
 import com.daishin.pdf.dto.Master;
-import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.DetailInfoService;
