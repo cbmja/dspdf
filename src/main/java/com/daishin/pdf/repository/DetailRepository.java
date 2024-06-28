@@ -1,8 +1,12 @@
 package com.daishin.pdf.repository;
 
 import com.daishin.pdf.dto.Detail;
+import com.daishin.pdf.log.LogCode;
 import lombok.RequiredArgsConstructor;
+import org.apache.ibatis.session.SqlSessionException;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -12,13 +16,23 @@ import java.util.List;
 public class DetailRepository {
 
     private final SqlSessionTemplate sql;
+    private final Logger logger = LoggerFactory.getLogger("daishin");
 
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public int save(Detail detail){
+        int result = -1;
 
-
-
-        return sql.insert("com.daishin.pdf.mapper.DetailMapper.save" , detail);
+        try{
+            result = sql.insert("com.daishin.pdf.mapper.DetailMapper.save" , detail);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR/*+" : "+e.getMessage()*/);
+            e.printStackTrace();
+        }
+        System.out.println("////////////////////"+result);
+        return result;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+
 
     public int countGroup(Detail detail){
         return sql.selectOne("com.daishin.pdf.mapper.DetailMapper.countGroup" , detail);
@@ -28,9 +42,23 @@ public class DetailRepository {
         return sql.selectList("com.daishin.pdf.mapper.DetailMapper.getTrGroup" , detail);
     }
 
+
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public Detail findDetail(Detail detail){
-        return sql.selectOne("com.daishin.pdf.mapper.DetailMapper.findDetail" , detail);
+
+        Detail _detail = null;
+        try{
+            _detail = sql.selectOne("com.daishin.pdf.mapper.DetailMapper.findDetail" , detail);
+        }catch (Exception e){
+            _detail = new Detail();
+            _detail.setError("SQL_ERROR");
+            logger.error(LogCode.SQL_ERROR/*+" : "+e.getMessage()*/);
+            e.printStackTrace();
+        }
+        return _detail;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+
 
     public List getMasterGroup(String MASTER) {
         return sql.selectList("com.daishin.pdf.mapper.DetailMapper.getMasterGroup" , MASTER);

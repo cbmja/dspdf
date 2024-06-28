@@ -23,7 +23,7 @@ public class DetailInfoService {
         return repository.getTrGroup(detail);
     }
 
-    public Detail findReq(Detail detail){
+    public Detail findDetail(Detail detail){
         return repository.findDetail(detail);
     }
 

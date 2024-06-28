@@ -4,7 +4,6 @@ import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.response.ResponseCode;
-import com.daishin.pdf.response.ResponseMessage;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.DetailInfoService;
@@ -17,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.nio.file.Paths;
 import java.util.*;
 
 @Controller //우편 제작 요청 api
@@ -37,60 +37,89 @@ public class PostalCreationRequestController {
     @PostMapping
     @ResponseBody
     public Map<String , String> detail(@ModelAttribute Detail _detail){
-        long startTime = System.nanoTime();
 
+        //////////////////////////////////////OK        //////////////////////////////////////OK
+        long startTime = System.nanoTime();
         //결과값
         Map<String , String> response = new LinkedHashMap<>();
-
         //요청 정보 log
-        logger.info(LogCode.DATA +" : " +_detail);
-        //response.put(ResponseCode.REQUEST , _detail.toString());
+        logger.info(LogCode.DETAIL_REQUEST +" : " +_detail); //
+        //////////////////////////////////////OK        //////////////////////////////////////OK
 
-        //detail 값 세팅
-        // pdf_path , master
+
+        //////////////////////////////////////OK        //////////////////////////////////////OK
+        //detail 값 세팅 : PDF_PATH , MASTER , PK
         Detail detail = _detail.detailSetting(_detail);
+        //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
+        //////////////////////////////////////OK        //////////////////////////////////////OK
         //필수 항목 누락 체크
-        List checkList = detailCheck(detail , logger);
+        List checkList = detailCheck(detail);
         if((boolean)checkList.get(1)){
-            response.put(LogCode.RESULT, LogCode.ERROR);
-            response.put(LogCode.REMARK, "항목 누락: "+(String)checkList.get(0));
+            logger.error(LogCode.MISSING_VALUE+" : "+(String)(checkList.get(0))); //
+            response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+            response.put(ResponseCode.REMARK, "항목 누락: "+(String)(checkList.get(0)));
             return response;
         }
+        //////////////////////////////////////OK        //////////////////////////////////////OK
 
+
+        //////////////////////////////////////OK        //////////////////////////////////////OK
         //중복 체크
-        detail.setPK(detail.getTR_KEY()+"_"+detail.getRECV_NUM());
-        if(detailInfoService.findReq(detail) != null){
-            logger.error(LogCode.ERROR+" : "+detail);
-            response.put(LogCode.RESULT, LogCode.ERROR);
-            response.put(LogCode.REMARK, "중복 발송: TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
-            //response.put(ResponseCode.DUPLICATE_VALUE , ResponseMessage.DV);
-            return response;
+        Detail existDetail = detailInfoService.findDetail(detail);
+        if(existDetail != null){
+            //중복 값이 있는 경우
+            if(existDetail.getError().isBlank()){
+                logger.error(LogCode.DUPLICATE_VALUE+" : "+detail); //
+                response.put(LogCode.RESULT, LogCode.ERROR);
+                response.put(LogCode.REMARK, "중복 발송: TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                return response;
+            }else if(existDetail.getError().equals("SQL_ERROR")){
+            //Sql Exception
+                response.put(LogCode.RESULT, LogCode.ERROR);
+                response.put(LogCode.REMARK, LogCode.SQL_ERROR);
+                return response;
+            }
         }
+        //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-        ///////////////////////////////////////내부에 실제 로직이 실행되는 부분에서 에러를 받아야함 savePdf , save
-        //sql문이 동작하는 모든 메서드에 트라이 캐치로 적용시켜야함
+
+        //////////////////////////////////////OK        //////////////////////////////////////OK
+        //중복되는 파일명 있을경우 덮어쓰기 됨
         //파일 저장 (pdf)
-        utils.savePdf(detail , response , logger);
-
-
-        //DB 저장(detail)
-        if(detailSaveService.save(detail) <= 0){
-            logger.error(LogCode.RESULT+" : "+detail);
-            response.put(LogCode.RESULT , LogCode.ERROR);
-            response.put(LogCode.REMARK , "detail 저장 실패");
+        utils.savePdf(detail , response , logger); //
+        if(!response.isEmpty()){
             return response;
         }
-        ///////////////////////////////////////내부에 실제 로직이 실행되는 부분에서 에러를 받아야함
+        //////////////////////////////////////OK        //////////////////////////////////////OK
+
+
+        //////////////////////////////////////OK        //////////////////////////////////////OK
+        //DB 저장(detail)
+        int SaveDetailResult = detailSaveService.save(detail);
+
+        if(SaveDetailResult == 0){
+            logger.error(LogCode.DB_ERROR+" : "+detail);
+            response.put(LogCode.RESULT , LogCode.ERROR);
+            response.put(LogCode.REMARK , "detail 저장 실패/DB_ERROR");
+            return response;
+        }
+        if(SaveDetailResult < 0){
+            //logger.error(LogCode.RESULT+" : "+detail);
+            response.put(LogCode.RESULT , LogCode.ERROR);
+            response.put(LogCode.REMARK , "detail 저장 실패/SQL_ERROR");
+            return response;
+        }
+        //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
         //master 값 세팅
         String MASTER_KEY = detail.getMASTER();
         Master master = new Master(); //배치(대량)은 tr_key / 실시간(단일)은 날짜
         master.setMASTER_KEY(MASTER_KEY);
-        master.setRECEIVED_TIME(detailInfoService.findReq(detail).getSAVE_DATE());
+        master.setRECEIVED_TIME(detailInfoService.findDetail(detail).getSAVE_DATE());
 
         //master 최초 저장
         if(masterInfoService.findMaster(MASTER_KEY) == null){
@@ -107,7 +136,7 @@ public class PostalCreationRequestController {
         }else{
         //전송 건수 갱신
             Master _master = masterInfoService.findMaster(MASTER_KEY);
-            _master.setRECEIVED_TIME(detailInfoService.findReq(detail).getSAVE_DATE());
+            _master.setRECEIVED_TIME(detailInfoService.findDetail(detail).getSAVE_DATE());
             _master.setSEND_CNT(_master.getSEND_CNT()+1);
             masterSaveService.updateSendCnt(_master);
         }
@@ -117,11 +146,11 @@ public class PostalCreationRequestController {
             master.setSTATUS(2);
             masterSaveService.updateStatus(master);
             //JSON 파일 생성 및 저장
-            utils.saveJson(detail.getMASTER()  , logger);
+            utils.saveJson(detail.getMASTER()  , logger); //
         }
         
         long endTime = System.nanoTime();
-        logger.info(LogCode.DATA+" : "+(endTime - startTime));
+        logger.info(LogCode.WORK_TIME+" : "+(endTime - startTime)); //
 
         response.put(LogCode.RESULT,LogCode.OK);
         response.put(LogCode.REMARK,LogCode.SUCCESS);
@@ -129,7 +158,7 @@ public class PostalCreationRequestController {
 
     }
 
-    private List detailCheck(Detail detail , Logger logger){
+    private List detailCheck(Detail detail){
         String errMsg = "";
         List list = new ArrayList<>();
         if(detail.getTR_KEY() == null || detail.getTR_KEY().isBlank()){
@@ -164,7 +193,6 @@ public class PostalCreationRequestController {
         }
         if(!errMsg.isEmpty()){
             errMsg = errMsg.substring(0, errMsg.length() - 2);
-            logger.error(LogCode.ERROR+" : "+errMsg);
             list.add(errMsg);
             list.add(true);
             return list;

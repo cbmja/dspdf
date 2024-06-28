@@ -63,7 +63,7 @@ public class SchedulerConfiguration {
                 if (master.getSTATUS_TIME().plusHours(2L).isBefore(LocalDateTime.now())) {
                     master.setSTATUS(master.getSTATUS() + 1);
                     masterSaveService.updateStatus(master);
-                    logger.info(LogCode.CHANGE_STATUS+" : "+master);
+                    logger.info(LogCode.DATA+" : "+master);
                 }
         }
 

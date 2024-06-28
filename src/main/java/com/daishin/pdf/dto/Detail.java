@@ -1,5 +1,6 @@
 package com.daishin.pdf.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
@@ -52,6 +53,9 @@ public class Detail {
     @JsonProperty("File")
     private MultipartFile File;
 
+    @JsonIgnore
+    private String error="";
+
 
     public Detail detailSetting(Detail detail){
 
@@ -84,6 +88,7 @@ public class Detail {
         //detail.setPDF_NM(detail.getFile().getOriginalFilename());
         detail.setMASTER(master);
         // pdf_path , master 값 설정 EEE
+        detail.setPK(detail.getTR_KEY()+"_"+detail.getRECV_NUM());
 
         return detail;
     }

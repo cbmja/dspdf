@@ -4,6 +4,7 @@ import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.repository.DetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
