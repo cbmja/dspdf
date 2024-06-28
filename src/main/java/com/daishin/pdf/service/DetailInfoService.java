@@ -18,10 +18,11 @@ public class DetailInfoService {
 
         return repository.countGroup(detail);
     }
-
+/*
     public List<Detail> getTrGroup(Detail detail){
         return repository.getTrGroup(detail);
     }
+*/
 
     public Detail findDetail(Detail detail){
         return repository.findDetail(detail);

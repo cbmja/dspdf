@@ -66,19 +66,17 @@ public class SchedulerConfiguration {
         //현재상태가 3,4,5,6 인 master만 select
         //최종 단계가 7라고 가정
         List<Master> masterList = masterInfoService.selectStatusBetween2_7();
-        if(masterList == null || masterList.isEmpty()){
-            return;
-        } else if (masterList.get(0).getError().equals(LogCode.SQL_ERROR)) {
-            return;
-        }
 
-        for(Master master : masterList){
+        if(!masterList.isEmpty()){
+            for(Master master : masterList){
                 //현재 상태에서 2시간이 지난 master만 상태값 +1
                 if (master.getSTATUS_TIME().plusHours(2L).isBefore(LocalDateTime.now())) {
                     master.setSTATUS(master.getSTATUS() + 1);
                     masterSaveService.updateStatus(master);
                 }
+            }
         }
+
     }
 
 

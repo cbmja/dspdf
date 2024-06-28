@@ -1,6 +1,7 @@
 package com.daishin.pdf.repository;
 
 import com.daishin.pdf.dto.Detail;
+import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -73,9 +75,22 @@ public class DetailRepository {
     //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-    public List getMasterGroup(String MASTER) {
-        return sql.selectList("com.daishin.pdf.mapper.DetailMapper.getMasterGroup" , MASTER);
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+    public List<Detail> getMasterGroup(String MASTER) {
+        List<Detail> list = new ArrayList<>();
+        try{
+            list = sql.selectList("com.daishin.pdf.mapper.DetailMapper.getMasterGroup" , MASTER);
+        }catch (Exception e){
+            Detail detail = new Detail();
+            detail.setError(LogCode.SQL_ERROR);
+            list.add(detail);
+            logger.error(LogCode.SQL_ERROR/*+" : "+e.getMessage()*/);
+            e.printStackTrace();
+        }
+        return list;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+
 
     //////////////////////////////////////OK        //////////////////////////////////////OK
     public int countMaster(String MASTER){

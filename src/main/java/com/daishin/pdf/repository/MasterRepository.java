@@ -88,24 +88,44 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
         }
-
         return result;
     }
     //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
 
-    public List<Master> selectAll(){
+/*    public List<Master> selectAll(){
         return sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectAll");
-    }
+    }*/
 
+
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public List<Master> selectMastersByPage(Page page){
-        return sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectMastersByPage",page);
-    }
+        List<Master> list = new ArrayList<>();
+        try{
+            list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectMastersByPage",page);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
 
-    public int countSearch(Search search){
-        return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.countSearch" , search);
+        return list;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+
+
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+    public int countSearch(Search search){
+        int result = 0;
+        try{
+            result = sql.selectOne("com.daishin.pdf.mapper.MasterMapper.countSearch" , search);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
+        return result;
+    }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
     //////////////////////////////////////OK        //////////////////////////////////////OK
@@ -114,8 +134,6 @@ public class MasterRepository {
         try {
             list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectStatusBetween2_7");
         }catch (Exception e) {
-            Master master = new Master();
-            master.setError(LogCode.SQL_ERROR);
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
         }

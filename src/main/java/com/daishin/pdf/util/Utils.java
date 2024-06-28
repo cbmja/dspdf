@@ -72,9 +72,22 @@ public class Utils {
         Map<String , List> jsonList = new HashMap<>();
 
         List<Master> masterList = new ArrayList<>();
-        masterList.add(masterInfoService.findMaster(master));
+        Master findMaster = masterInfoService.findMaster(master);
+        if(findMaster.getError().equals(ResponseCode.SQL_ERROR)){
+            result = false;
+        }
+        masterList.add(findMaster);
         jsonList.put("master" , masterList);
-        jsonList.put("detail" , detailInfoService.getMasterGroup(master));
+
+
+        List<Detail> detailList = detailInfoService.getMasterGroup(master);
+        if(detailList.get(0).getError().equals(LogCode.SQL_ERROR)){
+            result = false;
+        }
+        jsonList.put("detail" , detailList);
+        if(!result){
+            return result;
+        }
 
         try {
             ObjectMapper mapper = new ObjectMapper();
