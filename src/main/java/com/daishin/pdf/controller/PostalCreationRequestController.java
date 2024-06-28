@@ -43,7 +43,7 @@ public class PostalCreationRequestController {
         Map<String , String> response = new LinkedHashMap<>();
 
         //요청 정보 log
-        logger.info(LogCode.INFORMATION +" : " +_detail);
+        logger.info(LogCode.DATA +" : " +_detail);
         //response.put(ResponseCode.REQUEST , _detail.toString());
 
         //detail 값 세팅
@@ -54,17 +54,17 @@ public class PostalCreationRequestController {
         //필수 항목 누락 체크
         List checkList = detailCheck(detail , logger);
         if((boolean)checkList.get(1)){
-            response.put("결과", "ERROR");
-            response.put("비고", "항목 누락: "+(String)checkList.get(0));
+            response.put(LogCode.RESULT, LogCode.ERROR);
+            response.put(LogCode.REMARK, "항목 누락: "+(String)checkList.get(0));
             return response;
         }
 
         //중복 체크
         detail.setPK(detail.getTR_KEY()+"_"+detail.getRECV_NUM());
         if(detailInfoService.findReq(detail) != null){
-            logger.error(LogCode.DUPLICATE_VALUE+" : "+detail);
-            response.put("결과", "ERROR");
-            response.put("비고", "중복 발송: TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+            logger.error(LogCode.ERROR+" : "+detail);
+            response.put(LogCode.RESULT, LogCode.ERROR);
+            response.put(LogCode.REMARK, "중복 발송: TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
             //response.put(ResponseCode.DUPLICATE_VALUE , ResponseMessage.DV);
             return response;
         }
@@ -75,10 +75,12 @@ public class PostalCreationRequestController {
         //파일 저장 (pdf)
         utils.savePdf(detail , response , logger);
 
+
         //DB 저장(detail)
         if(detailSaveService.save(detail) <= 0){
-            logger.error(LogCode.DATABASE_ERROR+" : "+detail);
-            response.put(ResponseCode.DATABASE_ERROR , ResponseMessage.DBE);
+            logger.error(LogCode.RESULT+" : "+detail);
+            response.put(LogCode.RESULT , LogCode.ERROR);
+            response.put(LogCode.REMARK , "detail 저장 실패");
             return response;
         }
         ///////////////////////////////////////내부에 실제 로직이 실행되는 부분에서 에러를 받아야함
@@ -119,10 +121,10 @@ public class PostalCreationRequestController {
         }
         
         long endTime = System.nanoTime();
-        logger.info(LogCode.DURATION_TIME+" : "+(endTime - startTime));
+        logger.info(LogCode.DATA+" : "+(endTime - startTime));
 
-        response.put("결과","OK");
-        response.put("비고","SUCCESS");
+        response.put(LogCode.RESULT,LogCode.OK);
+        response.put(LogCode.REMARK,LogCode.SUCCESS);
         return response;
 
     }
@@ -162,7 +164,7 @@ public class PostalCreationRequestController {
         }
         if(!errMsg.isEmpty()){
             errMsg = errMsg.substring(0, errMsg.length() - 2);
-            logger.error(LogCode.MISSING_VALUE+" : "+errMsg);
+            logger.error(LogCode.ERROR+" : "+errMsg);
             list.add(errMsg);
             list.add(true);
             return list;

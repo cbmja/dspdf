@@ -54,8 +54,9 @@ public class Utils {
         try {
             file.transferTo(pdfPath.toFile());
         } catch (IllegalStateException | IOException e) {
-            logger.error(LogCode.FILE_SAVE_FAIL+" : "+file.getOriginalFilename());
-            response.put(ResponseCode.FILE_SAVE_FAIL , ResponseMessage.FF);
+            logger.error(LogCode.ERROR+" : "+file.getOriginalFilename());
+            response.put(LogCode.RESULT, LogCode.ERROR);
+            response.put(LogCode.REMARK, "파일 저장 실패: "+e.getMessage());
             e.printStackTrace();
         }
     }
@@ -84,7 +85,7 @@ public class Utils {
             fileWriter.close();
         } catch (IOException e) {
             //logger.error(LogCode.JSON_SAVE_FAIL+" : "+masterInfoService.findMaster(master));
-            logger.error(LogCode.JSON_SAVE_FAIL+" : "+ jsonList.toString());
+            logger.error(LogCode.ERROR+" : "+ jsonList.toString());
             e.printStackTrace();
         }
 
