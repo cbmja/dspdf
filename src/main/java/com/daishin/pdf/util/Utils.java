@@ -4,7 +4,6 @@ import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.response.ResponseCode;
-import com.daishin.pdf.response.ResponseMessage;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.DetailInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -36,8 +34,9 @@ public class Utils {
      * pdf 저장
      * @param detail
      */
-    public void savePdf(Detail detail, Map<String , String> response , Logger logger){
+    public boolean savePdf(Detail detail, Logger logger){
 
+        boolean result = true;
         /////SSSpdf 저장SSS/////
         MultipartFile file = detail.getFile();
         String fileName = file.getOriginalFilename();
@@ -55,17 +54,18 @@ public class Utils {
             file.transferTo(pdfPath.toFile());
         } catch (Exception e) {
             logger.error(LogCode.PDF_ERROR+" : "+file.getOriginalFilename()); //
-            response.put(LogCode.RESULT, LogCode.ERROR);
-            response.put(LogCode.REMARK, "파일 저장 실패: "+e.getMessage());
             e.printStackTrace();
+            result = false;
         }
+        return result;
     }
 
     ///////////////////////
 
     //json 저장
-    public void saveJson(String master ,  Logger logger) {
+    public boolean saveJson(String master ,  Logger logger) {
 
+        boolean result = true;
         //저장경로 
         String path = "C:\\DATA\\"+master+"\\";
 
@@ -87,8 +87,9 @@ public class Utils {
             //logger.error(LogCode.JSON_SAVE_FAIL+" : "+masterInfoService.findMaster(master));
             logger.error(LogCode.JSON_ERROR+" : "+ master); //
             e.printStackTrace();
+            result = false;
         }
-
+        return result;
         }
 
 }

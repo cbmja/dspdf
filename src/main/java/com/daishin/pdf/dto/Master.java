@@ -1,6 +1,7 @@
 package com.daishin.pdf.dto;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
@@ -23,4 +24,7 @@ public class Master {
     private LocalDateTime STATUS_TIME; //현재 상태 시작 시간
     @JsonProperty("TYPE")
     private String TYPE; //배치 : AR / 실시간 : RT
+
+    @JsonIgnore
+    private String error="";
 }

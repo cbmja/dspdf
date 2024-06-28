@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 
 import java.nio.file.Paths;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @Controller //우편 제작 요청 api
@@ -42,87 +43,82 @@ public class PostalCreationRequestController {
         long startTime = System.nanoTime();
         //결과값
         Map<String , String> response = new LinkedHashMap<>();
+
         //요청 정보 log
-        logger.info(LogCode.DETAIL_REQUEST +" : " +_detail); //
-        //////////////////////////////////////OK        //////////////////////////////////////OK
+        logger.info(LogCode.DETAIL_REQUEST +" : " +_detail);
 
-
-        //////////////////////////////////////OK        //////////////////////////////////////OK
         //detail 값 세팅 : PDF_PATH , MASTER , PK
         Detail detail = _detail.detailSetting(_detail);
-        //////////////////////////////////////OK        //////////////////////////////////////OK
 
-
-        //////////////////////////////////////OK        //////////////////////////////////////OK
         //필수 항목 누락 체크
         List checkList = detailCheck(detail);
         if((boolean)checkList.get(1)){
-            logger.error(LogCode.MISSING_VALUE+" : "+(String)(checkList.get(0))); //
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
-            response.put(ResponseCode.REMARK, "항목 누락: "+(String)(checkList.get(0)));
+            response.put(ResponseCode.REMARK, ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
             return response;
         }
-        //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-        //////////////////////////////////////OK        //////////////////////////////////////OK
         //중복 체크
         Detail existDetail = detailInfoService.findDetail(detail);
         if(existDetail != null){
             //중복 값이 있는 경우
             if(existDetail.getError().isBlank()){
-                logger.error(LogCode.DUPLICATE_VALUE+" : "+detail); //
-                response.put(LogCode.RESULT, LogCode.ERROR);
-                response.put(LogCode.REMARK, "중복 발송: TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                response.put(ResponseCode.REMARK, ResponseCode.DUPLICATE_VALUE+"["+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
                 return response;
-            }else if(existDetail.getError().equals("SQL_ERROR")){
+            }else if(existDetail.getError().equals(ResponseCode.SQL_ERROR)){
             //Sql Exception
-                response.put(LogCode.RESULT, LogCode.ERROR);
-                response.put(LogCode.REMARK, LogCode.SQL_ERROR);
+                response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
                 return response;
             }
         }
-        //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-
-        //////////////////////////////////////OK        //////////////////////////////////////OK
         //중복되는 파일명 있을경우 덮어쓰기 됨
-        //파일 저장 (pdf)
-        utils.savePdf(detail , response , logger); //
-        if(!response.isEmpty()){
+        //파일 저장 (pdf) //
+        if(!utils.savePdf(detail , logger)){
+            response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+            response.put(ResponseCode.REMARK, ResponseCode.FILE_ERROR);
             return response;
         }
-        //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-        //////////////////////////////////////OK        //////////////////////////////////////OK
         //DB 저장(detail)
-        int SaveDetailResult = detailSaveService.save(detail);
-
-        if(SaveDetailResult == 0){
-            logger.error(LogCode.DB_ERROR+" : "+detail);
-            response.put(LogCode.RESULT , LogCode.ERROR);
-            response.put(LogCode.REMARK , "detail 저장 실패/DB_ERROR");
+        if(detailSaveService.save(detail) <= 0){
+            response.put(ResponseCode.RESULT , ResponseCode.ERROR);
+            response.put(ResponseCode.REMARK , ResponseCode.SQL_ERROR);
             return response;
         }
-        if(SaveDetailResult < 0){
-            //logger.error(LogCode.RESULT+" : "+detail);
-            response.put(LogCode.RESULT , LogCode.ERROR);
-            response.put(LogCode.REMARK , "detail 저장 실패/SQL_ERROR");
+
+
+        //DB에서 detail select -> master에 들어갈 데이터 수집
+        Detail findDetail = detailInfoService.findDetail(detail);
+        if(findDetail != null && findDetail.getError().equals(ResponseCode.SQL_ERROR)){
+            response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+            response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
             return response;
         }
-        //////////////////////////////////////OK        //////////////////////////////////////OK
-
-
+        LocalDateTime detailSavedTime = findDetail.getSAVE_DATE();
         //master 값 세팅
         String MASTER_KEY = detail.getMASTER();
         Master master = new Master(); //배치(대량)은 tr_key / 실시간(단일)은 날짜
         master.setMASTER_KEY(MASTER_KEY);
-        master.setRECEIVED_TIME(detailInfoService.findDetail(detail).getSAVE_DATE());
+        master.setRECEIVED_TIME(detailSavedTime);
 
-        //master 최초 저장
-        if(masterInfoService.findMaster(MASTER_KEY) == null){
+
+        //master_key 로 select 해서 존재 하면 update 존재하지 않으면 새로 저장
+        Master findMaster = masterInfoService.findMaster(MASTER_KEY);
+        if(findMaster != null && findMaster.getError().equals(ResponseCode.SQL_ERROR)){
+            response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+            response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+            return response;
+        }
+
+
+        //첫 저장
+        if(findMaster == null){
             if(!detail.getTOTAL_SEND_CNT().equals("1")){
                 master.setTYPE("ARRANGEMENT"); //배치(대량)
                 master.setTOTAL_SEND_CNT(detail.getTOTAL_SEND_CNT());
@@ -132,28 +128,60 @@ public class PostalCreationRequestController {
             }
             master.setSEND_CNT(1);
             master.setSTATUS(1);
-            masterSaveService.save(master);
+            int masterSaveResult = masterSaveService.save(master);
+            //저장 실패시
+            if(masterSaveResult <= 0){
+                response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+                return response;
+            }
         }else{
         //전송 건수 갱신
-            Master _master = masterInfoService.findMaster(MASTER_KEY);
-            _master.setRECEIVED_TIME(detailInfoService.findDetail(detail).getSAVE_DATE());
-            _master.setSEND_CNT(_master.getSEND_CNT()+1);
-            masterSaveService.updateSendCnt(_master);
+            findMaster.setRECEIVED_TIME(detailSavedTime);
+            findMaster.setSEND_CNT(findMaster.getSEND_CNT()+1);
+            int masterUpdateResult = masterSaveService.updateSendCnt(findMaster);
+            //업데이트 실패
+            if(masterUpdateResult <= 0){
+                response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+                return response;
+            }
         }
 
-        //배치(대량)그룹 전송 완료시 처리 / status 갱신 : 1(수신중) -> 2(수신완료) , JSON 파일저장
-        if(!detail.getTOTAL_SEND_CNT().equals("1") && detailInfoService.countGroup(detail)==Integer.parseInt(detail.getTOTAL_SEND_CNT())){
-            master.setSTATUS(2);
-            masterSaveService.updateStatus(master);
-            //JSON 파일 생성 및 저장
-            utils.saveJson(detail.getMASTER()  , logger); //
+
+        //배치(대량)그룹 전송 완료 처리 / status 갱신 : 1(수신중) -> 2(수신완료) , JSON 파일저장
+        int detailGroupCnt = detailInfoService.countGroup(detail);
+        if(detailGroupCnt <= 0){
+            response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+            response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+            return response;
         }
-        
+
+
+        //현재 수신한 detail이, 속한 그룹의 마지막 건 인지 체크
+        if(!detail.getTOTAL_SEND_CNT().equals("1") && detailGroupCnt==Integer.parseInt(detail.getTOTAL_SEND_CNT())){
+            master.setSTATUS(2);
+            int masterUpdateResult = masterSaveService.updateStatus(master);
+            //업데이트 실패
+            if(masterUpdateResult <=0){
+                response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+                return response;
+            }
+
+            //JSON 파일 생성 및 저장
+            if(!utils.saveJson(detail.getMASTER()  , logger)){
+                response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                response.put(ResponseCode.REMARK, ResponseCode.JSON_ERROR);
+                return response;
+            }
+        }
+
+
         long endTime = System.nanoTime();
         logger.info(LogCode.WORK_TIME+" : "+(endTime - startTime)); //
-
-        response.put(LogCode.RESULT,LogCode.OK);
-        response.put(LogCode.REMARK,LogCode.SUCCESS);
+        response.put(ResponseCode.RESULT,ResponseCode.OK);
+        response.put(ResponseCode.REMARK,ResponseCode.SUCCESS);
         return response;
 
     }
@@ -192,7 +220,8 @@ public class PostalCreationRequestController {
             errMsg += "pdf file , ";
         }
         if(!errMsg.isEmpty()){
-            errMsg = errMsg.substring(0, errMsg.length() - 2);
+            logger.error(LogCode.MISSING_VALUE+" : "+errMsg);
+            errMsg = errMsg.substring(0, errMsg.length() - 3);
             list.add(errMsg);
             list.add(true);
             return list;

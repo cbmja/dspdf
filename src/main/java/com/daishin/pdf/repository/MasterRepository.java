@@ -1,10 +1,14 @@
 package com.daishin.pdf.repository;
 
 import com.daishin.pdf.dto.Master;
+import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.page.Page;
 import com.daishin.pdf.page.Search;
+import com.daishin.pdf.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.SqlSessionTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,22 +18,65 @@ import java.util.List;
 public class MasterRepository {
 
     private final SqlSessionTemplate sql;
+    private final Logger logger = LoggerFactory.getLogger("daishin");
 
+
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public int save(Master master){
-        return sql.insert("com.daishin.pdf.mapper.MasterMapper.save" , master);
+        int result = -1;
+        try{
+            result = sql.insert("com.daishin.pdf.mapper.MasterMapper.save" , master);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
+        return result;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
 
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public Master findMaster(String MASTER_KEY){
-        return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.findMaster",MASTER_KEY);
+        Master master = null;
+        try{
+            master = sql.selectOne("com.daishin.pdf.mapper.MasterMapper.findMaster",MASTER_KEY);
+        }catch (Exception e){
+            master = new Master();
+            master.setError(ResponseCode.SQL_ERROR);
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
+        return master;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
 
+
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public int updateSendCnt(Master master){
-        return sql.update("com.daishin.pdf.mapper.MasterMapper.updateSendCnt",master);
+        int result = -1;
+        try{
+            result = sql.update("com.daishin.pdf.mapper.MasterMapper.updateSendCnt",master);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
+        return result;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
 
+
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public int updateStatus(Master master){
-        return sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatus",master);
+        int result = -1;
+        try{
+            result = sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatus",master);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
+        return result;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+
 
     public int updateStatusAndTotalCnt(Master master){
         return sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatusAndTotalCnt",master);

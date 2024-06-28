@@ -2,6 +2,7 @@ package com.daishin.pdf.repository;
 
 import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.log.LogCode;
+import com.daishin.pdf.response.ResponseCode;
 import lombok.RequiredArgsConstructor;
 import org.apache.ibatis.session.SqlSessionException;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -21,22 +22,31 @@ public class DetailRepository {
     //////////////////////////////////////OK        //////////////////////////////////////OK
     public int save(Detail detail){
         int result = -1;
-
         try{
             result = sql.insert("com.daishin.pdf.mapper.DetailMapper.save" , detail);
         }catch (Exception e){
-            logger.error(LogCode.SQL_ERROR/*+" : "+e.getMessage()*/);
+            logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
         }
-        System.out.println("////////////////////"+result);
         return result;
     }
     //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public int countGroup(Detail detail){
-        return sql.selectOne("com.daishin.pdf.mapper.DetailMapper.countGroup" , detail);
+        int result = -1;
+        try{
+            result = sql.selectOne("com.daishin.pdf.mapper.DetailMapper.countGroup" , detail);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
+        return result;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+
+
 
     public List getTrGroup(Detail detail) {
         return sql.selectList("com.daishin.pdf.mapper.DetailMapper.getTrGroup" , detail);
@@ -49,9 +59,12 @@ public class DetailRepository {
         Detail _detail = null;
         try{
             _detail = sql.selectOne("com.daishin.pdf.mapper.DetailMapper.findDetail" , detail);
+            if(_detail != null){
+                logger.error(LogCode.DUPLICATE_VALUE+" : "+detail);
+            }
         }catch (Exception e){
             _detail = new Detail();
-            _detail.setError("SQL_ERROR");
+            _detail.setError(ResponseCode.SQL_ERROR);
             logger.error(LogCode.SQL_ERROR/*+" : "+e.getMessage()*/);
             e.printStackTrace();
         }
