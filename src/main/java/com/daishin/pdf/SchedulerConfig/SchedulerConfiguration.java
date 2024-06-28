@@ -40,15 +40,24 @@ public class SchedulerConfiguration {
             master.setSTATUS(2);
 
             int total = detailInfoService.countMaster(master.getMASTER_KEY());
+            if(total < 0){
+            return;
+            }
             master.setTOTAL_SEND_CNT(total+"");
 
             //master 작업 상태 업데이트
-            masterSaveService.updateStatusAndTotalCnt(master);
+            int masterUpdateResult = masterSaveService.updateStatusAndTotalCnt(master);
+            if(masterUpdateResult <= 0){
+                return;
+            }
+
             //json 파일 생성
             utils.saveJson(LocalDate.now()+"" , logger);
 
         }
     }
+
+
     // 5분마다 체크
     // 상태 변화 된 지 2시간이 지났으면 다음 상태로 (1(수신중)일때는 해당 안됨)
     @Scheduled(fixedRate = 300000)
@@ -57,18 +66,19 @@ public class SchedulerConfiguration {
         //현재상태가 3,4,5,6 인 master만 select
         //최종 단계가 7라고 가정
         List<Master> masterList = masterInfoService.selectStatusBetween2_7();
+        if(masterList == null || masterList.isEmpty()){
+            return;
+        } else if (masterList.get(0).getError().equals(LogCode.SQL_ERROR)) {
+            return;
+        }
 
         for(Master master : masterList){
                 //현재 상태에서 2시간이 지난 master만 상태값 +1
                 if (master.getSTATUS_TIME().plusHours(2L).isBefore(LocalDateTime.now())) {
                     master.setSTATUS(master.getSTATUS() + 1);
                     masterSaveService.updateStatus(master);
-                    logger.info(LogCode.DATA+" : "+master);
                 }
         }
-
-
-
     }
 
 

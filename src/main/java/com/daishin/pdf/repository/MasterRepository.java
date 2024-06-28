@@ -11,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -78,9 +79,21 @@ public class MasterRepository {
     //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public int updateStatusAndTotalCnt(Master master){
-        return sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatusAndTotalCnt",master);
+        int result = -1;
+        try{
+            result = sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatusAndTotalCnt",master);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
+
+        return result;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+
+
 
     public List<Master> selectAll(){
         return sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectAll");
@@ -94,6 +107,20 @@ public class MasterRepository {
         return sql.selectOne("com.daishin.pdf.mapper.MasterMapper.countSearch" , search);
     }
 
-    public List<Master> selectStatusBetween2_7(){return sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectStatusBetween2_7");}
 
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+    public List<Master> selectStatusBetween2_7(){
+        List<Master> list = new ArrayList<>();
+        try {
+            list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectStatusBetween2_7");
+        }catch (Exception e) {
+            Master master = new Master();
+            master.setError(LogCode.SQL_ERROR);
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
+
+        return list;
+    }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
 }

@@ -77,7 +77,16 @@ public class DetailRepository {
         return sql.selectList("com.daishin.pdf.mapper.DetailMapper.getMasterGroup" , MASTER);
     }
 
+    //////////////////////////////////////OK        //////////////////////////////////////OK
     public int countMaster(String MASTER){
-        return sql.selectOne("com.daishin.pdf.mapper.DetailMapper.countMaster" , MASTER);
+        int result = -1;
+        try{
+            result = sql.selectOne("com.daishin.pdf.mapper.DetailMapper.countMaster" , MASTER);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+        }
+        return result;
     }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
 }
