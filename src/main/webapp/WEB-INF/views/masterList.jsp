@@ -12,16 +12,58 @@
     <title>Title</title>
 
         <style>
-        table{
-            margin-left : auto;
-            margin-right : auto;
-            margin-top : 50px;
-            margin-bottom : 50px;
-            width : 80%;
-        }
+
 
         body{
                 text-align: center;
+            }
+
+            table {
+              margin-left : 10%;
+              margin-right : 10%;
+              margin-top : 50px;
+              margin-bottom : 50px;
+              width : 95%;
+              border-collapse: collapse;
+              margin: 1rem auto;
+              border: 1px solid #ddd;
+              background-color: white;
+            }
+
+            /* 테이블 행 */
+            th, td {
+              padding: 8px;
+              text-align: left;
+              border-bottom: 1px solid #ddd;
+              text-align: center;
+            }
+
+            th {
+              background-color: #1b1b1b;
+              color: #ddd;
+            }
+
+            /* 테이블 올렸을 때 */
+            tbody tr:hover {
+              background-color: #d3d3d3;
+              opacity: 0.9;
+              cursor: pointer;
+            }
+
+            /* 테이블 비율 */
+            th:nth-child(1),
+            td:nth-child(1) {
+              width: 15%;
+            }
+
+            th:nth-child(2),
+            td:nth-child(2) {
+              width: 55%;
+            }
+
+            th:nth-child(3),
+            td:nth-child(3) {
+              width: 30%;
             }
         </style>
 
