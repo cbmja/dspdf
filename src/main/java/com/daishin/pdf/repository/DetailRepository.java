@@ -31,7 +31,7 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+detail.toString());
             errorsRepository.save(errors);
         }
         return result;
@@ -48,7 +48,7 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+detail);
             errorsRepository.save(errors);
         }
         return result;
@@ -79,7 +79,7 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR/*+" : "+e.getMessage()*/);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+detail);
             errorsRepository.save(errors);
         }
         return _detail;
@@ -99,7 +99,7 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR/*+" : "+e.getMessage()*/);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+MASTER);
             errorsRepository.save(errors);
         }
         return list;
@@ -116,7 +116,7 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+MASTER);
             errorsRepository.save(errors);
         }
         return result;
