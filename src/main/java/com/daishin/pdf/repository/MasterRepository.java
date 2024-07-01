@@ -1,5 +1,6 @@
 package com.daishin.pdf.repository;
 
+import com.daishin.pdf.dto.Error;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.page.Page;
@@ -18,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class MasterRepository {
 
+    private final ErrorRepository errorsRepository;
+
     private final SqlSessionTemplate sql;
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
@@ -30,6 +33,9 @@ public class MasterRepository {
         }catch (Exception e){
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
+            Error errors = new Error();
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
         }
         return result;
     }
@@ -45,6 +51,9 @@ public class MasterRepository {
             master.setError(ResponseCode.SQL_ERROR);
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
+            Error errors = new Error();
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
         }
         return master;
     }
@@ -59,6 +68,9 @@ public class MasterRepository {
         }catch (Exception e){
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
+            Error errors = new Error();
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
         }
         return result;
     }
@@ -73,6 +85,9 @@ public class MasterRepository {
         }catch (Exception e){
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
+            Error errors = new Error();
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
         }
         return result;
     }
@@ -87,6 +102,9 @@ public class MasterRepository {
         }catch (Exception e){
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
+            Error errors = new Error();
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
         }
         return result;
     }
@@ -107,6 +125,9 @@ public class MasterRepository {
         }catch (Exception e){
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
+            Error errors = new Error();
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
         }
 
         return list;
@@ -122,6 +143,9 @@ public class MasterRepository {
         }catch (Exception e){
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
+            Error errors = new Error();
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
         }
         return result;
     }
@@ -136,6 +160,9 @@ public class MasterRepository {
         }catch (Exception e) {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
+            Error errors = new Error();
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
         }
 
         return list;

@@ -26,7 +26,7 @@ class PdfApplicationTests {
 
 	@Test
 	void contextLoads() {
-/*
+
 		Detail detail = new Detail();
 		detail.setPK("dv");
 		detail.setTR_KEY("asdf");
@@ -42,7 +42,7 @@ class PdfApplicationTests {
 		int i = detailSaveService.save(detail);
 
 		System.out.println(i+"/////////////////////////////////////////////////////");
-*/
+
 
 	}
 }
