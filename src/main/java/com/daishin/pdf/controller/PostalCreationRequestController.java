@@ -1,8 +1,10 @@
 package com.daishin.pdf.controller;
 
+import com.daishin.pdf.dto.Error;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.log.LogCode;
+import com.daishin.pdf.repository.ErrorRepository;
 import com.daishin.pdf.response.ResponseCode;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
@@ -24,6 +26,8 @@ import java.util.*;
 @RequiredArgsConstructor
 @RequestMapping("/detail")
 public class PostalCreationRequestController {
+
+        private final ErrorRepository errorRepository;
 
         private final DetailSaveService detailSaveService;
         private final DetailInfoService detailInfoService;
@@ -55,6 +59,9 @@ public class PostalCreationRequestController {
         if((boolean)checkList.get(1)){
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
+            Error error = new Error();
+            error.setERROR_MESSAGE(ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
+            errorRepository.save(error);
             return response;
         }
 
@@ -65,7 +72,10 @@ public class PostalCreationRequestController {
             //중복 값이 있는 경우
             if(existDetail.getError().isBlank()){
                 response.put(ResponseCode.RESULT, ResponseCode.ERROR);
-                response.put(ResponseCode.REMARK, ResponseCode.DUPLICATE_VALUE+"["+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                response.put(ResponseCode.REMARK, ResponseCode.DUPLICATE_VALUE+"TR_KEY ["+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                Error error = new Error();
+                error.setERROR_MESSAGE(ResponseCode.DUPLICATE_VALUE+"TR_KEY ["+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                errorRepository.save(error);
                 return response;
             }else if(existDetail.getError().equals(ResponseCode.SQL_ERROR)){
             //Sql Exception
