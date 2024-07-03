@@ -85,6 +85,34 @@
         tbody th {
           background-color: #f8f8f8;
         }
+        ul {
+            list-style:none;
+            float:left;
+            display:inline;
+        }
+        ul li {
+            float:left;
+        }
+        ul li a {
+            float:left;
+            padding:4px;
+            margin-right:3px;
+            width:25px;
+            height:25px;
+            color:#000;
+            font:bold 12px tahoma;
+            border:1px solid #eee;
+            text-align:center;
+            text-decoration:none;
+        }
+        ul li a:hover, ul li a:focus {
+            color:#fff;
+            border:1px solid #f40;
+            background-color:#f40;
+        }
+        .active{
+            background-color : #f40;
+        }
         </style>
 
 </head>
@@ -161,9 +189,9 @@
     </table>
     </form>
 
-    <table>
+    <table border=0;>
         <tr>
-            <th>
+            <td colspan="2">
             <form action="/masters" method="get">
                     <input type="hidden" name="search" value="${p.getSearch()}">
                     <input type="hidden" name="page" value="${p.getPage()}">
@@ -183,9 +211,35 @@
                     </select>
                     <input type="submit" value="정렬">
                 </form>
-            </th>
+            </td>
+            <td>
+            <ul>
+                    <li>
+                        <a class="page-button" href="/masters?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> << </a>
+                    </li>
+                    <li>
+                        <a class="page-button" href="/masters?page=${p.getPage()-1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> < </a>
+                    </li>
+                    <li>
+                    <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
+                    <li>
+                                <a class="page-button<c:if test='${p.getPage() eq i}'> active </c:if> " href="/masters?page=${i}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}">${i}</a>
+                    </li>
+                    </c:forEach>
 
-            <th>
+                    <li>
+                        <a class="page-button" href="/masters?page=${p.getPage()+1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> > </a>
+                    </li>
+                    <li>
+                        <a class="page-button" href="/masters?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >> </a>
+                    </li>
+            </ul>
+
+            </td>
+
+
+
+            <td colspan="2">
             <form action="/masters" method="get">
                     <input type="hidden" name="search" value="${p.getSearch()}">
                     <input type="hidden" name="page" value="${p.getPage()}">
@@ -207,26 +261,12 @@
                     </select>
                     <input type="submit" value="목록 수">
                 </form>
-            </th>
+            </td>
         <tr>
     </table>
 
-    <table>
-        <tr>
-        <a href="/masters?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> <<제일 앞으로<< </a>
-        .
-        <a href="/masters?page=${p.getPage()-1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> <이전 페이지< </a>
-        .
-        <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
-                    <a href="/masters?page=${i}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}">${i}</a>
-                    .
-        </c:forEach>
-        <a href="/masters?page=${p.getPage()+1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >다음 페이지> </a>
-        .
-        <a href="/masters?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >>제일 뒤로>> </a>
-        </tr>
-    </table>
-<p>현재 페이지 : <c:out value="${p.getPage()}"/></p>
+
+
 
 <script>
     const statusMap = new Map();
