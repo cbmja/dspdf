@@ -107,11 +107,15 @@
         }
         ul li a:hover, ul li a:focus {
             color:#fff;
-            border:1px solid #f40;
-            background-color:#f40;
+            border:1px solid #141414;
+            background-color: #a3adac;
         }
         .active{
-            background-color : #f40;
+            background-color : #a3adac;
+        }
+
+        .table-row:hover{
+            background-color: #d6c7c7;
         }
         </style>
 
@@ -156,7 +160,7 @@
         </tr>
 
         <c:forEach var="master" items="${masterList}">
-        <tr>
+        <tr class="table-row">
             <td>${master.getMASTER_KEY()}</td>
             <td>${master.getSEND_CNT()} / ${master.getTOTAL_SEND_CNT()}</td>
             <td>${master.getRECEIVED_TIME()}</td>
@@ -189,9 +193,9 @@
     </table>
     </form>
 
-    <table border=0;>
-        <tr>
-            <td colspan="2">
+    <ul>
+        <li>
+            <li>
             <form action="/masters" method="get">
                     <input type="hidden" name="search" value="${p.getSearch()}">
                     <input type="hidden" name="page" value="${p.getPage()}">
@@ -211,8 +215,35 @@
                     </select>
                     <input type="submit" value="정렬">
                 </form>
-            </td>
-            <td>
+            </li>
+            <li>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            </li>
+            <li>
+            <form action="/masters" method="get">
+                    <input type="hidden" name="search" value="${p.getSearch()}">
+                    <input type="hidden" name="page" value="${p.getPage()}">
+                    <input type="hidden" name="cate" value="${p.getCate()}">
+                    <input type="hidden" name="sort" value="${p.getSort()}">
+                    <input type="hidden" name="sortCate" value="${p.getSortCate()}">
+
+                    <select name="pageElement" style="margin-lift: 15px;">
+                        <option value="10" <c:if test="${p.getPageElement() eq 10}"> selected </c:if> >10</option>
+                        <option value="20" <c:if test="${p.getPageElement() eq 20}"> selected </c:if> >20</option>
+                        <option value="30" <c:if test="${p.getPageElement() eq 30}"> selected </c:if> >30</option>
+                        <option value="40" <c:if test="${p.getPageElement() eq 40}"> selected </c:if> >40</option>
+                        <option value="50" <c:if test="${p.getPageElement() eq 50}"> selected </c:if> >50</option>
+                        <option value="60" <c:if test="${p.getPageElement() eq 60}"> selected </c:if> >60</option>
+                        <option value="70" <c:if test="${p.getPageElement() eq 70}"> selected </c:if> >70</option>
+                        <option value="80" <c:if test="${p.getPageElement() eq 80}"> selected </c:if> >80</option>
+                        <option value="90" <c:if test="${p.getPageElement() eq 90}"> selected </c:if> >90</option>
+                        <option value="100" <c:if test="${p.getPageElement() eq 100}"> selected </c:if> >100</option>
+                    </select>
+                    <input type="submit" value="목록 수">
+                </form>
+            </li>
+
+            <li>
             <ul>
                     <li>
                         <a class="page-button" href="/masters?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> << </a>
@@ -234,36 +265,9 @@
                         <a class="page-button" href="/masters?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >> </a>
                     </li>
             </ul>
-
-            </td>
-
-
-
-            <td colspan="2">
-            <form action="/masters" method="get">
-                    <input type="hidden" name="search" value="${p.getSearch()}">
-                    <input type="hidden" name="page" value="${p.getPage()}">
-                    <input type="hidden" name="cate" value="${p.getCate()}">
-                    <input type="hidden" name="sort" value="${p.getSort()}">
-                    <input type="hidden" name="sortCate" value="${p.getSortCate()}">
-
-                    <select name="pageElement">
-                        <option value="10" <c:if test="${p.getPageElement() eq 10}"> selected </c:if> >10</option>
-                        <option value="20" <c:if test="${p.getPageElement() eq 20}"> selected </c:if> >20</option>
-                        <option value="30" <c:if test="${p.getPageElement() eq 30}"> selected </c:if> >30</option>
-                        <option value="40" <c:if test="${p.getPageElement() eq 40}"> selected </c:if> >40</option>
-                        <option value="50" <c:if test="${p.getPageElement() eq 50}"> selected </c:if> >50</option>
-                        <option value="60" <c:if test="${p.getPageElement() eq 60}"> selected </c:if> >60</option>
-                        <option value="70" <c:if test="${p.getPageElement() eq 70}"> selected </c:if> >70</option>
-                        <option value="80" <c:if test="${p.getPageElement() eq 80}"> selected </c:if> >80</option>
-                        <option value="90" <c:if test="${p.getPageElement() eq 90}"> selected </c:if> >90</option>
-                        <option value="100" <c:if test="${p.getPageElement() eq 100}"> selected </c:if> >100</option>
-                    </select>
-                    <input type="submit" value="목록 수">
-                </form>
-            </td>
-        <tr>
-    </table>
+            </li>
+        <li>
+    </ul>
 
 
 
