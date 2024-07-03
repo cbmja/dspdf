@@ -30,41 +30,61 @@
               background-color: white;
             }
 
-            /* 테이블 행 */
-            th, td {
-              padding: 8px;
-              text-align: left;
-              border-bottom: 1px solid #ddd;
-              text-align: center;
-            }
+        header {
+          padding: 7vh 5vw;
+          border-bottom: 1px solid #ddd;
+        }
+        header h1,
+        header p {
+          margin: 0;
+        }
+        footer {
+          padding: 7vh 5vw;
+          border-top: 1px solid #ddd;
+        }
+        aside {
+          padding: 7vh 5vw;
+        }
+        .primary {
+          overflow: auto;
+          scroll-snap-type: both mandatory;
+          height: 80vh;
+        }
+        @media (min-width: 40em) {
+          main {
+            display: flex;
+          }
+          aside {
+            flex: 0 1 20vw;
+            order: 1;
+            border-right: 1px solid #ddd;
+          }
+          .primary {
+            order: 2;
+          }
+        }
+        table {
+          border-collapse: collapse;
+          border: 0;
+        }
+        th,
+        td {
+          border: 1px solid #aaa;
+          background-clip: padding-box;
+          scroll-snap-align: start;
 
-            th {
-              background-color: #1b1b1b;
-              color: #ddd;
-            }
-
-            /* 테이블 올렸을 때 */
-            tbody tr:hover {
-              background-color: #d3d3d3;
-              opacity: 0.9;
-              cursor: pointer;
-            }
-
-            /* 테이블 비율 */
-            th:nth-child(1),
-            td:nth-child(1) {
-              width: 15%;
-            }
-
-            th:nth-child(2),
-            td:nth-child(2) {
-              width: 55%;
-            }
-
-            th:nth-child(3),
-            td:nth-child(3) {
-              width: 30%;
-            }
+        }
+        th,
+        td {
+          padding: 0.6rem;
+          min-width: 6rem;
+          text-align: center;
+          margin: 0;
+        }
+        thead th,
+        tbody th {
+          background-color: #f8f8f8;
+        }
         </style>
 
 </head>
@@ -83,6 +103,7 @@
     <form action="/masters" method="get">
         <input type="hidden" name="sort" value="${p.getSort()}">
         <input type="hidden" name="sortCate" value="${p.getSortCate()}">
+        <input type="hidden" name="pageElement" value="${p.getPageElement()}">
         <select name="cate">
             <c:forEach var="cate" items="${cateList}">
                 <option value="${cate}" <c:if test="${p.getCate() eq cate}">selected</c:if> >${cate}</option>
@@ -97,16 +118,13 @@
     <form action="/masters/update" method="post">
     <table border="1" >
         <tr>
-            <th> 그룹명<br>(TR_KEY) </th>
-            <th> 현재 수신 건수 / 총 건수
-                <br>
-                (SEND_CNT) / (TOTAL_SEND_CNT)
-            </th>
-            <th> 마지막 건수 수신 시각<br>(RECEIVED_TIME) </th>
+            <th> 그룹키 </th>
+            <th> 현재 수신 건수 / 총 건수 </th>
+            <th> 마지막 건수 수신 시각</th>
             <th> 현재 상태 시작 시각</th>
-            <th> 현재 상태<br>(STATUS) </th>
-            <th> 상태 변화</th>
-            <th> TYPE(배치/실시간)</th>
+            <th> 현재 상태 </th>
+            <th> 상태 수정 </th>
+            <th> 타입 </th>
         </tr>
         <% for(Master master : list){ %>
         <tr>
@@ -134,9 +152,12 @@
                 <input type="hidden" name="cate" value="${p.getCate()}">
                 <input type="hidden" name="sort" value="${p.getSort()}">
                 <input type="hidden" name="sortCate" value="${p.getSortCate()}">
+                <input type="hidden" name="pageElement" value="${p.getPageElement()}">
             </td>
             <td><input type="submit" value="상태 저장" onclick="prepareData()"></td>
+            <td></td>
         </tr>
+
     </table>
     </form>
 
@@ -144,6 +165,7 @@
         <input type="hidden" name="search" value="${p.getSearch()}">
         <input type="hidden" name="page" value="${p.getPage()}">
         <input type="hidden" name="cate" value="${p.getCate()}">
+        <input type="hidden" name="pageElement" value="${p.getPageElement()}">
 
         <select name="sortCate">
         <c:forEach var="sortCate" items="${sortCateList}">
@@ -159,20 +181,42 @@
         <input type="submit" value="정렬">
     </form>
 <hr>
+    <form action="/masters" method="get">
+        <input type="hidden" name="search" value="${p.getSearch()}">
+        <input type="hidden" name="page" value="${p.getPage()}">
+        <input type="hidden" name="cate" value="${p.getCate()}">
+        <input type="hidden" name="sort" value="${p.getSort()}">
+        <input type="hidden" name="sortCate" value="${p.getSortCate()}">
+
+        <select name="pageElement">
+            <option value="10" <c:if test="${p.getPageElement() eq 10}"> selected </c:if> >10</option>
+            <option value="20" <c:if test="${p.getPageElement() eq 20}"> selected </c:if> >20</option>
+            <option value="30" <c:if test="${p.getPageElement() eq 30}"> selected </c:if> >30</option>
+            <option value="40" <c:if test="${p.getPageElement() eq 40}"> selected </c:if> >40</option>
+            <option value="50" <c:if test="${p.getPageElement() eq 50}"> selected </c:if> >50</option>
+            <option value="60" <c:if test="${p.getPageElement() eq 60}"> selected </c:if> >60</option>
+            <option value="70" <c:if test="${p.getPageElement() eq 70}"> selected </c:if> >70</option>
+            <option value="80" <c:if test="${p.getPageElement() eq 80}"> selected </c:if> >80</option>
+            <option value="90" <c:if test="${p.getPageElement() eq 90}"> selected </c:if> >90</option>
+            <option value="100" <c:if test="${p.getPageElement() eq 100}"> selected </c:if> >100</option>
+        </select>
+        <input type="submit" value="목록 수">
+    </form>
+
 
     <table>
         <tr>
-        <a href="/masters?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> <<제일 앞으로<< </a>
+        <a href="/masters?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> <<제일 앞으로<< </a>
         .
-        <a href="/masters?page=${p.getPage()-1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> <이전 페이지< </a>
+        <a href="/masters?page=${p.getPage()-1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> <이전 페이지< </a>
         .
         <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
-                    <a href="/masters?page=${i}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}">${i}</a>
+                    <a href="/masters?page=${i}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}">${i}</a>
                     .
         </c:forEach>
-        <a href="/masters?page=${p.getPage()+1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> >다음 페이지> </a>
+        <a href="/masters?page=${p.getPage()+1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >다음 페이지> </a>
         .
-        <a href="/masters?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}"> >>제일 뒤로>> </a>
+        <a href="/masters?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >>제일 뒤로>> </a>
         </tr>
     </table>
 

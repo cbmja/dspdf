@@ -15,7 +15,7 @@ public class Page {
     private int total;//총 게시물 수 ok
     
     private int pageElement = 7;//한 페이지에 보여줄 게시물 수 ok
-    private int pageSize = 4;//보여줄 페이지 블럭 수 ok
+    private int pageSize = 5;//보여줄 페이지 블럭 수 ok
 
     private int startPage;//보여지는 블럭의 시작번호
     private int endPage;//보여지는 블럭의 마지막 번호
@@ -46,6 +46,7 @@ public class Page {
         this.cate = search.getCate();
         this.sort = search.getSort();
         this.sortCate = search.getSortCate();
+        this.pageElement = search.getPageElement();
 
         this.total = total;
         this.totalPage = total % this.pageElement > 0 ? total / this.pageElement + 1 : total / this.pageElement;
