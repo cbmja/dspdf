@@ -126,23 +126,24 @@
             <th> 상태 수정 </th>
             <th> 타입 </th>
         </tr>
-        <% for(Master master : list){ %>
+
+        <c:forEach var="master" items="${masterList}">
         <tr>
-            <td><%= master.getMASTER_KEY() %></td>
-            <td><%= master.getSEND_CNT() %> / <%= master.getTOTAL_SEND_CNT() %></td>
-            <td><%= master.getRECEIVED_TIME() %></td>
-            <td><%= master.getSTATUS_TIME() %></td>
-            <td><%= master.getStatusName() %></td>
+            <td>${master.getMASTER_KEY()}</td>
+            <td>${master.getSEND_CNT()} / ${master.getTOTAL_SEND_CNT()}</td>
+            <td>${master.getRECEIVED_TIME()}</td>
+            <td>${master.getSTATUS_TIME()}</td>
+            <td>${master.getStatusName()}</td>
             <td>
-              <select name="${master.getMASTER_KEY()}" onchange="updateStatus('<%= master.getMASTER_KEY() %>', this.value)">
+              <select name="${master.getMASTER_KEY()}" onchange="updateStatus('${ master.getMASTER_KEY()}', this.value)">
                 <c:forEach var="status" items="${statusList}">
                     <option value="${status.getSTATUS_CODE()}" <c:if test="${status.getSTATUS_NAME() eq master.getStatusName()}"> selected </c:if> >${status.getSTATUS_NAME()}</option>
                 </c:forEach>
               </select>
             </td>
-            <td><%= master.getTypeName() %></td>
+            <td>${master.getTypeName()}</td>
         </tr>
-        <% } %>
+        </c:forEach>
         <tr>
             <td colspan="5">
                 <input type="hidden" id="statusData" name="statusData">

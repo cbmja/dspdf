@@ -72,13 +72,13 @@ public class ViewController {
             //master.setMASTER_KEY(master_key);
             master.setSTATUS(Integer.parseInt(statusMap.get(master_key)));
 
-            //실시간 건에 대하여 상태를 1(수신중)으로 바꾸려는 경우
+            //바꾸려는 상태가 100(수신중)인 실시간 건
             //total_send_cnt 를 다시 "수신중"으로 바꿔줌
-            if(statusMap.get(master_key).equals("1") && !master.getTOTAL_SEND_CNT().equals("수신중") && master.getTYPE().equals("REAL_TIME")){
+            if(statusMap.get(master_key).equals("100") && master.getTYPE().equals("REAL_TIME")){
                 master.setTOTAL_SEND_CNT("수신중");
                 masterSaveService.updateStatusAndTotalCnt(master);
-            }else if(!statusMap.get(master_key).equals("1") && master.getTOTAL_SEND_CNT().equals("수신중")){
-            //현재 상태가 1(수신중)인 실시간 건수에 대해서 다른 상태로 바꾸는 경우 (total_send_cnt 가 "수신중"이면 현재 상태가 1인 실시간 건임)
+            }else if(!statusMap.get(master_key).equals("100") && master.getTOTAL_SEND_CNT().equals("수신중")){
+            //현재 상태가 수신중이고 , 수신중 이외의 상태로 바꾸려는 경우
             //total_send_cnt 를 현재 수신 건수로 바꿔줌    
                 int total = detailInfoService.countMaster(master.getMASTER_KEY());
                 master.setTOTAL_SEND_CNT(total+"");
