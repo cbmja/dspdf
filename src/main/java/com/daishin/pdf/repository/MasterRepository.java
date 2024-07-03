@@ -24,6 +24,22 @@ public class MasterRepository {
     private final SqlSessionTemplate sql;
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
+    //////////////////////////////////////OK        //////////////////////////////////////OK
+    public List<Master> selectAll(){
+        List<Master> list = null;
+        try{
+            list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectAll");
+        }catch (Exception e){
+            list = new ArrayList<>();
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+            Error errors = new Error();
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
+        }
+        return list;
+    }
+    //////////////////////////////////////OK        //////////////////////////////////////OK
 
     //////////////////////////////////////OK        //////////////////////////////////////OK
     public int save(Master master){

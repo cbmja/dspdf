@@ -3,13 +3,11 @@ package com.daishin.pdf.controller;
 import com.daishin.pdf.dto.Error;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Detail;
+import com.daishin.pdf.dto.Status;
 import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.repository.ErrorRepository;
 import com.daishin.pdf.response.ResponseCode;
-import com.daishin.pdf.service.MasterInfoService;
-import com.daishin.pdf.service.MasterSaveService;
-import com.daishin.pdf.service.DetailInfoService;
-import com.daishin.pdf.service.DetailSaveService;
+import com.daishin.pdf.service.*;
 import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
@@ -36,6 +34,8 @@ public class PostalCreationRequestController {
 
         private final MasterInfoService masterInfoService;
         private final MasterSaveService masterSaveService;
+
+        private final StatusInfoService statusInfoService;
 
         private final Logger logger = LoggerFactory.getLogger("daishin");
 
@@ -127,17 +127,26 @@ public class PostalCreationRequestController {
         }
 
 
+
+        List<Status> statusList = statusInfoService.selectAll();
+        if(statusList == null){
+            response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+            response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+            return response;
+        }
+
+
         //첫 저장
         if(findMaster == null){
             if(!detail.getTOTAL_SEND_CNT().equals("1")){
                 master.setTYPE("ARRANGEMENT"); //배치(대량)
                 master.setTOTAL_SEND_CNT(detail.getTOTAL_SEND_CNT());
             }else{
-                master.setTOTAL_SEND_CNT("수신중");
+                master.setTOTAL_SEND_CNT(statusList.get(0).getSTATUS_NAME());
                 master.setTYPE("REAL_TIME"); //실시간(단일)
             }
             master.setSEND_CNT(1);
-            master.setSTATUS(1);
+            master.setSTATUS(statusList.get(0).getSTATUS_CODE());
             int masterSaveResult = masterSaveService.save(master);
             //저장 실패시
             if(masterSaveResult <= 0){
@@ -170,7 +179,7 @@ public class PostalCreationRequestController {
 
         //현재 수신한 detail이, 속한 그룹의 마지막 건 인지 체크
         if(!detail.getTOTAL_SEND_CNT().equals("1") && detailGroupCnt==Integer.parseInt(detail.getTOTAL_SEND_CNT())){
-            master.setSTATUS(2);
+            master.setSTATUS(statusList.get(1).getSTATUS_CODE());
             int masterUpdateResult = masterSaveService.updateStatus(master);
             //업데이트 실패
             if(masterUpdateResult <=0){

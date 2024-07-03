@@ -20,7 +20,7 @@ public interface MasterMapper {
 
     void updateStatusAndTotalCnt(Master master);
 
-    void selectAll();
+    List<Master> selectAll();
 
     List<Master> selectMastersByPage(Page page);
 

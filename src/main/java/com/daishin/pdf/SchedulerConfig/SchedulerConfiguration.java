@@ -1,9 +1,11 @@
 package com.daishin.pdf.SchedulerConfig;
 
 import com.daishin.pdf.dto.Master;
+import com.daishin.pdf.dto.Status;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.DetailInfoService;
+import com.daishin.pdf.service.StatusInfoService;
 import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +18,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Configuration
 @RequiredArgsConstructor
@@ -26,6 +30,8 @@ public class SchedulerConfiguration {
     private final MasterSaveService masterSaveService;
     private final MasterInfoService masterInfoService;
     private final DetailInfoService detailInfoService;
+
+    private final StatusInfoService statusInfoService;
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //실시간(단일) json 생성 및 상태 변화 1 -> 2
@@ -58,20 +64,54 @@ public class SchedulerConfiguration {
 
     // 5분마다 체크
     // 상태 변화 된 지 2시간이 지났으면 다음 상태로 (1(수신중)일때는 해당 안됨)
-    @Scheduled(fixedRate = 300000)
+    @Scheduled(fixedRate = 60000)
     public void changeStatus(){
 
         //현재상태가 3,4,5,6 인 master만 select
         //최종 단계가 7라고 가정
-        List<Master> masterList = masterInfoService.selectStatusBetween2_7();
+        List<Master> masterList = masterInfoService.selectAll();
+        List<Status> statusList = statusInfoService.selectAll();
 
-        if(!masterList.isEmpty()){
+        if(!masterList.isEmpty() && !statusList.isEmpty()){
+
             for(Master master : masterList){
-                //현재 상태에서 2시간이 지난 master만 상태값 +1
-                if (master.getSTATUS_TIME().plusHours(2L).isBefore(LocalDateTime.now())) {
-                    master.setSTATUS(master.getSTATUS() + 1);
-                    masterSaveService.updateStatus(master);
-                }
+                System.out.println(master+"//////////////");
+                Status status = statusInfoService.selectByStatusCode(master.getSTATUS());
+
+                    if(status.getCHANGE_TYPE().equals("AUTO") && !status.getIS_LAST().equals("TRUE")){
+                        String waitTime = status.getWAIT_TIME().trim();
+
+                        // 정규 표현식을 사용하여 시간과 분을 추출
+                        String regex = "(\\d+)H(\\d+)M";
+                        Pattern pattern = Pattern.compile(regex);
+                        Matcher matcher = pattern.matcher(waitTime);
+
+                        String h = "";
+                        String m = "";
+
+                        if (matcher.find()) {
+                            h = matcher.group(1); // 'h' 앞의 숫자
+                            m = matcher.group(2); // 'h'와 'm' 사이의 숫자
+                        }
+
+                        Long hour = Long.parseLong(h);
+                        Long min = Long.parseLong(m);
+                        int nextCode = -1;
+                        for(int i=0; i<statusList.size(); i++){
+                            if(statusList.get(i).getSTATUS_CODE() == status.getSTATUS_CODE()){
+                                nextCode = statusList.get(i+1).getSTATUS_CODE();
+                                return;
+                            }
+                        }
+
+                        //설정한 시간만큼 시간 이 지났다면 다음 상태로 변경
+                        if (master.getSTATUS_TIME().plusHours(hour).plusMinutes(min).isBefore(LocalDateTime.now())) {
+                            master.setSTATUS(statusList.get(nextCode).getSTATUS_CODE());
+                            masterSaveService.updateStatus(master);
+                            return;
+                        }
+
+                    }
             }
         }
 

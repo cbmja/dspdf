@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.daishin.pdf.mapper.StatusMapper">
+
+    <select id="selectAll" resultType="Status">
+        SELECT * FROM dbo.STATUS ORDER BY STATUS_CODE ASC
+    </select>
+
+    <select id="selectByStatusCode" parameterType="int" resultType="Status">
+        SELECT * FROM dbo.STATUS WHERE STATUS_CODE = #{statusCode}
+    </select>
+
+</mapper>

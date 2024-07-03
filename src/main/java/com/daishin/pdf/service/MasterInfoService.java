@@ -18,11 +18,10 @@ public class MasterInfoService {
     public Master findMaster(String MASTER_KEY){
         return masterRepository.findMaster(MASTER_KEY);
     }
-/*
+
     public List<Master> selectAll(){
         return masterRepository.selectAll();
     }
-*/
 
     public List<Master> selectMastersByPage(Page page){
         return masterRepository.selectMastersByPage(page);
@@ -34,4 +33,6 @@ public class MasterInfoService {
     }
 
     public List<Master> selectStatusBetween2_7(){return masterRepository.selectStatusBetween2_7();}
+
+
 }
