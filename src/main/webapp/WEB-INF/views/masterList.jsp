@@ -132,16 +132,15 @@
             <td><%= master.getSEND_CNT() %> / <%= master.getTOTAL_SEND_CNT() %></td>
             <td><%= master.getRECEIVED_TIME() %></td>
             <td><%= master.getSTATUS_TIME() %></td>
-            <td><%= master.getSTATUS() %></td>
+            <td><%= master.getStatusName() %></td>
             <td>
               <select name="${master.getMASTER_KEY()}" onchange="updateStatus('<%= master.getMASTER_KEY() %>', this.value)">
-                <option value="0" disabled selected>선택</option>
                 <c:forEach var="status" items="${statusList}">
-                    <option value="${status}">${status}</option>
+                    <option value="${status.getSTATUS_CODE()}" <c:if test="${status.getSTATUS_NAME() eq master.getStatusName()}"> selected </c:if> >${status.getSTATUS_NAME()}</option>
                 </c:forEach>
               </select>
             </td>
-            <td><%= master.getTYPE() %></td>
+            <td><%= master.getTypeName() %></td>
         </tr>
         <% } %>
         <tr>

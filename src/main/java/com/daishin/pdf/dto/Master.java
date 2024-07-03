@@ -27,4 +27,8 @@ public class Master {
 
     @JsonIgnore
     private String error="";
+    @JsonIgnore
+    private String statusName;
+    @JsonIgnore
+    private String typeName;
 }

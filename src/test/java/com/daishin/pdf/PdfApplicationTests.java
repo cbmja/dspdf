@@ -27,21 +27,24 @@ class PdfApplicationTests {
 	@Test
 	void contextLoads() {
 
-		Detail detail = new Detail();
-		detail.setPK("dv");
-		detail.setTR_KEY("asdf");
-		detail.setDLV_TYPE_CD("asdf");
-		detail.setPRINT_TYPE_NM("asdf");
-		detail.setRECV_NUM("asdf");
-		detail.setDM_LINK_KEY("asdf");
-		detail.setPDF_NM("asdf");
-		detail.setRECV_NM("asdf");
-		detail.setRECV_POST_CD("asdf");
-		detail.setRECV_ADDR("asdf");
+/*
 
-		int i = detailSaveService.save(detail);
+		for(int i=1; i<=300; i++){
+			Master master = new Master();
+			master.setMASTER_KEY(i+"");
+			master.setTOTAL_SEND_CNT("10");
+			master.setSEND_CNT(2);
+			master.setSTATUS(100);
+			master.setRECEIVED_TIME(LocalDateTime.now());
+			master.setSTATUS_TIME(LocalDateTime.now());
+			master.setTYPE("df");
 
-		System.out.println(i+"/////////////////////////////////////////////////////");
+			masterSaveService.save(master);
+		}
+
+
+*/
+
 
 
 	}

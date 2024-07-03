@@ -1,12 +1,14 @@
 package com.daishin.pdf.controller;
 
 import com.daishin.pdf.dto.Master;
+import com.daishin.pdf.dto.Status;
 import com.daishin.pdf.page.Page;
 import com.daishin.pdf.page.Search;
 import com.daishin.pdf.page.SelectOption;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.DetailInfoService;
+import com.daishin.pdf.service.StatusInfoService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequiredArgsConstructor
@@ -28,6 +31,10 @@ public class ViewController {
 
     private final DetailInfoService detailInfoService;
 
+    private final SelectOption selectOption;
+
+    private final StatusInfoService statusInfoService;
+
 
     @GetMapping("/masters")
     public String masterList(@ModelAttribute Search search, Model model){
@@ -36,14 +43,20 @@ public class ViewController {
         Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search);
         System.out.println(page+"////////////");
         model.addAttribute("p" , page);
-        List<Master> masterList = masterInfoService.selectMastersByPage(page);
-        model.addAttribute("masterList" , masterList);
+        List<Master> masters = masterInfoService.selectMastersByPage(page);
 
+        List<Master> masterList = masters.stream().map(m ->{
+            m.setStatusName(statusInfoService.selectByStatusCode(m.getSTATUS()).getSTATUS_NAME());
+            m.setTypeName(m.getTYPE().equals("REAL_TIME")?"실시간":"배치");
+            return m;
+        }).collect(Collectors.toList());
+
+        model.addAttribute("masterList" , masterList);
         //selectOption
-        model.addAttribute("cateList" , SelectOption.getCateList());
-        model.addAttribute("statusList" , SelectOption.getStatusList());
-        model.addAttribute("sortCateList" , SelectOption.getSortCateList());
-        model.addAttribute("sortList" , SelectOption.getSortList());
+        model.addAttribute("cateList" , selectOption.getCateList());
+        model.addAttribute("statusList" , selectOption.getStatusList());
+        model.addAttribute("sortCateList" , selectOption.getSortCateList());
+        model.addAttribute("sortList" , selectOption.getSortList());
         //페이징 처리
         return "masterList";
     }
@@ -81,14 +94,21 @@ public class ViewController {
         //페이징 처리
         Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search);
         model.addAttribute("p" , page);
-        List<Master> masterList = masterInfoService.selectMastersByPage(page);
+        List<Master> masters = masterInfoService.selectMastersByPage(page);
+
+
+        List<Master> masterList = masters.stream().map(m ->{
+            m.setStatusName(statusInfoService.selectByStatusCode(m.getSTATUS()).getSTATUS_NAME());
+            m.setTypeName(m.getTYPE().equals("REAL_TIME")?"실시간":"배치");
+            return m;
+        }).collect(Collectors.toList());
         model.addAttribute("masterList" , masterList);
 
         //selectOption
-        model.addAttribute("cateList" , SelectOption.getCateList());
-        model.addAttribute("statusList" , SelectOption.getStatusList());
-        model.addAttribute("sortCateList" , SelectOption.getSortCateList());
-        model.addAttribute("sortList" , SelectOption.getSortList());
+        model.addAttribute("cateList" , selectOption.getCateList());
+        model.addAttribute("statusList" , selectOption.getStatusList());
+        model.addAttribute("sortCateList" , selectOption.getSortCateList());
+        model.addAttribute("sortList" , selectOption.getSortList());
         //페이징 처리
         return "masterList";
     }
