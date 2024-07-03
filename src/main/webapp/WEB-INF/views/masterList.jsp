@@ -161,48 +161,55 @@
     </table>
     </form>
 
-    <form action="/masters" method="get">
-        <input type="hidden" name="search" value="${p.getSearch()}">
-        <input type="hidden" name="page" value="${p.getPage()}">
-        <input type="hidden" name="cate" value="${p.getCate()}">
-        <input type="hidden" name="pageElement" value="${p.getPageElement()}">
+    <table>
+        <tr>
+            <th>
+            <form action="/masters" method="get">
+                    <input type="hidden" name="search" value="${p.getSearch()}">
+                    <input type="hidden" name="page" value="${p.getPage()}">
+                    <input type="hidden" name="cate" value="${p.getCate()}">
+                    <input type="hidden" name="pageElement" value="${p.getPageElement()}">
 
-        <select name="sortCate">
-        <c:forEach var="sortCate" items="${sortCateList}">
-            <option value="${sortCate}" <c:if test="${p.getSortCate() eq sortCate}"> selected </c:if> >${sortCate}</option>
-        </c:forEach>
-        </select>
+                    <select name="sortCate">
+                    <c:forEach var="sortCate" items="${sortCateList}">
+                        <option value="${sortCate}" <c:if test="${p.getSortCate() eq sortCate}"> selected </c:if> >${sortCate}</option>
+                    </c:forEach>
+                    </select>
 
-        <select name="sort">
-        <c:forEach var="sort" items="${sortList}">
-            <option value="${sort}" <c:if test="${p.getSort() eq sort}"> selected </c:if> >${sort}</option>
-        </c:forEach>
-        </select>
-        <input type="submit" value="정렬">
-    </form>
-<hr>
-    <form action="/masters" method="get">
-        <input type="hidden" name="search" value="${p.getSearch()}">
-        <input type="hidden" name="page" value="${p.getPage()}">
-        <input type="hidden" name="cate" value="${p.getCate()}">
-        <input type="hidden" name="sort" value="${p.getSort()}">
-        <input type="hidden" name="sortCate" value="${p.getSortCate()}">
+                    <select name="sort">
+                    <c:forEach var="sort" items="${sortList}">
+                        <option value="${sort}" <c:if test="${p.getSort() eq sort}"> selected </c:if> >${sort}</option>
+                    </c:forEach>
+                    </select>
+                    <input type="submit" value="정렬">
+                </form>
+            </th>
 
-        <select name="pageElement">
-            <option value="10" <c:if test="${p.getPageElement() eq 10}"> selected </c:if> >10</option>
-            <option value="20" <c:if test="${p.getPageElement() eq 20}"> selected </c:if> >20</option>
-            <option value="30" <c:if test="${p.getPageElement() eq 30}"> selected </c:if> >30</option>
-            <option value="40" <c:if test="${p.getPageElement() eq 40}"> selected </c:if> >40</option>
-            <option value="50" <c:if test="${p.getPageElement() eq 50}"> selected </c:if> >50</option>
-            <option value="60" <c:if test="${p.getPageElement() eq 60}"> selected </c:if> >60</option>
-            <option value="70" <c:if test="${p.getPageElement() eq 70}"> selected </c:if> >70</option>
-            <option value="80" <c:if test="${p.getPageElement() eq 80}"> selected </c:if> >80</option>
-            <option value="90" <c:if test="${p.getPageElement() eq 90}"> selected </c:if> >90</option>
-            <option value="100" <c:if test="${p.getPageElement() eq 100}"> selected </c:if> >100</option>
-        </select>
-        <input type="submit" value="목록 수">
-    </form>
+            <th>
+            <form action="/masters" method="get">
+                    <input type="hidden" name="search" value="${p.getSearch()}">
+                    <input type="hidden" name="page" value="${p.getPage()}">
+                    <input type="hidden" name="cate" value="${p.getCate()}">
+                    <input type="hidden" name="sort" value="${p.getSort()}">
+                    <input type="hidden" name="sortCate" value="${p.getSortCate()}">
 
+                    <select name="pageElement">
+                        <option value="10" <c:if test="${p.getPageElement() eq 10}"> selected </c:if> >10</option>
+                        <option value="20" <c:if test="${p.getPageElement() eq 20}"> selected </c:if> >20</option>
+                        <option value="30" <c:if test="${p.getPageElement() eq 30}"> selected </c:if> >30</option>
+                        <option value="40" <c:if test="${p.getPageElement() eq 40}"> selected </c:if> >40</option>
+                        <option value="50" <c:if test="${p.getPageElement() eq 50}"> selected </c:if> >50</option>
+                        <option value="60" <c:if test="${p.getPageElement() eq 60}"> selected </c:if> >60</option>
+                        <option value="70" <c:if test="${p.getPageElement() eq 70}"> selected </c:if> >70</option>
+                        <option value="80" <c:if test="${p.getPageElement() eq 80}"> selected </c:if> >80</option>
+                        <option value="90" <c:if test="${p.getPageElement() eq 90}"> selected </c:if> >90</option>
+                        <option value="100" <c:if test="${p.getPageElement() eq 100}"> selected </c:if> >100</option>
+                    </select>
+                    <input type="submit" value="목록 수">
+                </form>
+            </th>
+        <tr>
+    </table>
 
     <table>
         <tr>
@@ -219,9 +226,7 @@
         <a href="/masters?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >>제일 뒤로>> </a>
         </tr>
     </table>
-
-<hr>
-start : <c:out value="${p.getStartPage()}"/> / now : <c:out value="${p.getPage()}"/> / end : <c:out value="${p.getEndPage()}"/>
+<p>현재 페이지 : <c:out value="${p.getPage()}"/></p>
 
 <script>
     const statusMap = new Map();
