@@ -78,7 +78,7 @@ public class SchedulerConfiguration {
                 System.out.println(master+"//////////////");
                 Status status = statusInfoService.selectByStatusCode(master.getSTATUS());
 
-                    if(status.getCHANGE_TYPE().equals("AUTO") && !status.getIS_LAST().equals("TRUE")){
+                    if(status.getCHANGE_TYPE().equals("AUTO") && status.getIS_LAST().equals("FALSE")){
                         String waitTime = status.getWAIT_TIME().trim();
 
                         // 정규 표현식을 사용하여 시간과 분을 추출
@@ -100,15 +100,13 @@ public class SchedulerConfiguration {
                         for(int i=0; i<statusList.size(); i++){
                             if(statusList.get(i).getSTATUS_CODE() == status.getSTATUS_CODE()){
                                 nextCode = statusList.get(i+1).getSTATUS_CODE();
-                                return;
                             }
                         }
 
                         //설정한 시간만큼 시간 이 지났다면 다음 상태로 변경
                         if (master.getSTATUS_TIME().plusHours(hour).plusMinutes(min).isBefore(LocalDateTime.now())) {
-                            master.setSTATUS(statusList.get(nextCode).getSTATUS_CODE());
+                            master.setSTATUS(nextCode);
                             masterSaveService.updateStatus(master);
-                            return;
                         }
 
                     }

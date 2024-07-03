@@ -42,7 +42,7 @@ public class StatusRepository {
         Status result = null;
 
         try{
-            result = sql.selectOne("com.daishin.pdf.mapper.StatusMapper.selectByStatusCode");
+            result = sql.selectOne("com.daishin.pdf.mapper.StatusMapper.selectByStatusCode", statusCode);
         }catch (Exception e){
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
