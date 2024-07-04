@@ -96,6 +96,7 @@ public class SchedulerConfiguration {
 
                         Long hour = Long.parseLong(h);
                         Long min = Long.parseLong(m);
+
                         int nextCode = -1;
                         for(int i=0; i<statusList.size(); i++){
                             if(statusList.get(i).getSTATUS_CODE() == status.getSTATUS_CODE()){
@@ -103,7 +104,7 @@ public class SchedulerConfiguration {
                             }
                         }
 
-                        //설정한 시간만큼 시간 이 지났다면 다음 상태로 변경
+                        //설정한 시간만큼 시간이 지났다면 다음 상태로 변경
                         if (master.getSTATUS_TIME().plusHours(hour).plusMinutes(min).isBefore(LocalDateTime.now())) {
                             master.setSTATUS(nextCode);
                             masterSaveService.updateStatus(master);

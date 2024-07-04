@@ -13,6 +13,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SpringBootTest
 class PdfApplicationTests {
@@ -27,8 +29,7 @@ class PdfApplicationTests {
 	@Test
 	void contextLoads() {
 
-
-
+/*
 		for(int i=1; i<=300; i++){
 			Master master = new Master();
 			master.setMASTER_KEY(i+"");
@@ -41,6 +42,7 @@ class PdfApplicationTests {
 
 			masterSaveService.save(master);
 		}
+*/
 
 
 
