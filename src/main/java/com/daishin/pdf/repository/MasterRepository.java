@@ -57,7 +57,7 @@ public class MasterRepository {
 
 
 
-    public Master findMaster(String MASTER_KEY){
+    public Master findMaster(String MASTER_KEY){ //////////////////////////////////////OK
         Master master = null;
         try{
             master = sql.selectOne("com.daishin.pdf.mapper.MasterMapper.findMaster",MASTER_KEY);
@@ -133,7 +133,7 @@ public class MasterRepository {
 
 
 
-    public List<Master> selectMastersByPage(Page page){
+    public List<Master> selectMastersByPage(Page page){ //////////////////////////////////////OK
         List<Master> list = new ArrayList<>();
         try{
             list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectMastersByPage",page);
@@ -151,7 +151,7 @@ public class MasterRepository {
 
 
 
-    public int countSearch(Search search){
+    public int countSearch(Search search){ //////////////////////////////////////OK
         int result = 0;
         try{
             result = sql.selectOne("com.daishin.pdf.mapper.MasterMapper.countSearch" , search);

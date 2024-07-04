@@ -38,9 +38,9 @@ public class StatusRepository {
         return list;
     }
 
-    public Status selectByStatusCode(int statusCode){
+    public Status selectByStatusCode(int statusCode){ //////////////////////////////////////OK
 
-        Status result = null;
+        Status result = new Status();
 
         try{
             result = sql.selectOne("com.daishin.pdf.mapper.StatusMapper.selectByStatusCode", statusCode);

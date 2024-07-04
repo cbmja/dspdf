@@ -78,6 +78,7 @@ public class SchedulerConfiguration {
             for(Master master : masterList){
                 Status status = statusInfoService.selectByStatusCode(master.getSTATUS());
 
+                if(status.getSTATUS_NAME() != null && !status.getSTATUS_NAME().isEmpty()){
                     if(status.getCHANGE_TYPE().equals("AUTO") && status.getIS_LAST().equals("FALSE")){
                         String waitTime = status.getWAIT_TIME().trim();
 
@@ -110,8 +111,10 @@ public class SchedulerConfiguration {
                             master.setSTATUS(nextCode);
                             masterSaveService.updateStatus(master);
                         }
-
                     }
+                }
+
+
             }
         }
 
