@@ -241,8 +241,8 @@ public class PostalCreationRequestController {
             errMsg += "pdf file , ";
         }
         if(!errMsg.isEmpty()){
-            logger.error(LogCode.MISSING_VALUE+" : "+errMsg);
             errMsg = errMsg.substring(0, errMsg.length() - 3);
+            logger.error(LogCode.MISSING_VALUE+" : "+errMsg);
             list.add(errMsg);
             list.add(true);
             return list;
