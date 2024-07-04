@@ -25,12 +25,11 @@ public class MasterRepository {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
 
-    public List<Master> selectAll(){
-        List<Master> list = null;
+    public List<Master> selectAll(){ //////////////////////////////////////OK
+        List<Master> list = new ArrayList<>();
         try{
             list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectAll");
         }catch (Exception e){
-            list = new ArrayList<>();
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
@@ -111,7 +110,7 @@ public class MasterRepository {
 
 
 
-    public int updateStatusAndTotalCnt(Master master){
+    public int updateStatusAndTotalCnt(Master master){ //////////////////////////////////////OK
         int result = -1;
         try{
             result = sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatusAndTotalCnt",master);

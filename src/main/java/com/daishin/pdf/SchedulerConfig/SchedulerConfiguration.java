@@ -32,32 +32,34 @@ public class SchedulerConfiguration {
     private final DetailInfoService detailInfoService;
 
     private final StatusInfoService statusInfoService;
+
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //실시간(단일) json 생성 및 상태 변화 1 -> 2
     @Scheduled(cron = "00 03 14 * * *")
-    public void run() throws IOException {
+    public void run() { //////////////////////////////////////OK
         if(checkTime()){
+
+            List<Status> statusList = statusInfoService.selectAll();
 
             Master master = new Master();
             master.setMASTER_KEY(LocalDate.now()+"");
-            master.setSTATUS(2);
+            master.setSTATUS(statusList.get(1).getSTATUS_CODE());
 
             int total = detailInfoService.countMaster(master.getMASTER_KEY());
-            if(total < 0){
+            if(total <= 0){
             return;
             }
+
             master.setTOTAL_SEND_CNT(total+"");
 
             //master 작업 상태 업데이트
-            int masterUpdateResult = masterSaveService.updateStatusAndTotalCnt(master);
-            if(masterUpdateResult <= 0){
+            if(masterSaveService.updateStatusAndTotalCnt(master) <= 0){
                 return;
             }
 
             //json 파일 생성
             utils.saveJson(LocalDate.now()+"" , logger);
-
         }
     }
 
@@ -65,7 +67,7 @@ public class SchedulerConfiguration {
     // 5분마다 체크
     // 상태 변화 된 지 2시간이 지났으면 다음 상태로 (1(수신중)일때는 해당 안됨)
     @Scheduled(fixedRate = 300000)
-    public void changeStatus(){
+    public void changeStatus(){ //////////////////////////////////////OK
 
         //현재상태가 3,4,5,6 인 master만 select
         //최종 단계가 7라고 가정
@@ -100,6 +102,7 @@ public class SchedulerConfiguration {
                         for(int i=0; i<statusList.size(); i++){
                             if(statusList.get(i).getSTATUS_CODE() == status.getSTATUS_CODE()){
                                 nextCode = statusList.get(i+1).getSTATUS_CODE();
+                                break;
                             }
                         }
 

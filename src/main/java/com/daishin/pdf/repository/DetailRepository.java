@@ -102,7 +102,7 @@ public class DetailRepository {
 
 
 
-    public int countMaster(String MASTER){
+    public int countMaster(String MASTER){ //////////////////////////////////////OK
         int result = -1;
         try{
             result = sql.selectOne("com.daishin.pdf.mapper.DetailMapper.countMaster" , MASTER);
