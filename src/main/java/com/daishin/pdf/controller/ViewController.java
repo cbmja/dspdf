@@ -41,7 +41,6 @@ public class ViewController {
 
         //페이징 처리
         Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search);
-        System.out.println(page+"////////////");
         model.addAttribute("p" , page);
         List<Master> masters = masterInfoService.selectMastersByPage(page);
 
