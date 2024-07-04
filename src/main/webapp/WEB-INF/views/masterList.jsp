@@ -2,8 +2,10 @@
 <%@page import="com.daishin.pdf.page.Page"%>
 <%@page import="java.util.List"%>
 <%@page import="java.util.ArrayList"%>
+<%@page import= "java.util.LinkedHashMap" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 
 <!DOCTYPE html>
 <html>
@@ -123,10 +125,10 @@
 <body>
     <%
         List<Master> list = (List<Master>)request.getAttribute("masterList");
-        List<String> cateList = (List<String>)request.getAttribute("cateList");
+        LinkedHashMap<String,String> cateList = (LinkedHashMap<String,String>)request.getAttribute("cateList");
         List<String> statusList = (List<String>)request.getAttribute("statusList");
-        List<String> sortCateList = (List<String>)request.getAttribute("sortCateList");
-        List<String> sortList = (List<String>)request.getAttribute("sortList");
+        LinkedHashMap<String,String> sortCateList = (LinkedHashMap<String,String>)request.getAttribute("sortCateList");
+        LinkedHashMap<String,String> sortList = (LinkedHashMap<String,String>)request.getAttribute("sortList");
         Page p = (Page)(request.getAttribute("p"));
     %>
 
@@ -138,7 +140,7 @@
         <input type="hidden" name="pageElement" value="${p.getPageElement()}">
         <select name="cate">
             <c:forEach var="cate" items="${cateList}">
-                <option value="${cate}" <c:if test="${p.getCate() eq cate}">selected</c:if> >${cate}</option>
+                <option value="${cate.key}" <c:if test="${p.getCate() eq cate.key}">selected</c:if> >${cate.value}</option>
             </c:forEach>
         </select>
         <input type="text" name="search" value="${search.getSearch()}">
@@ -204,13 +206,13 @@
 
                     <select name="sortCate">
                     <c:forEach var="sortCate" items="${sortCateList}">
-                        <option value="${sortCate}" <c:if test="${p.getSortCate() eq sortCate}"> selected </c:if> >${sortCate}</option>
+                        <option value="${sortCate.key}" <c:if test="${p.getSortCate() eq sortCate.key}"> selected </c:if> >${sortCate.value}</option>
                     </c:forEach>
                     </select>
 
                     <select name="sort">
                     <c:forEach var="sort" items="${sortList}">
-                        <option value="${sort}" <c:if test="${p.getSort() eq sort}"> selected </c:if> >${sort}</option>
+                        <option value="${sort.key}" <c:if test="${p.getSort() eq sort.key}"> selected </c:if> >${sort.value}</option>
                     </c:forEach>
                     </select>
                     <input type="submit" value="정렬">

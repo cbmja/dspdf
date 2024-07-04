@@ -7,8 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -16,11 +16,12 @@ public class SelectOption {
 
     private final StatusInfoService statusInfoService;
 
-    public List<String> getCateList(){
-        List<String> cateList = new ArrayList<>();
-        cateList.add("MASTER_KEY");
-        cateList.add("STATUS");
-        cateList.add("TYPE");
+    public LinkedHashMap<String,String> getCateList(){
+
+        LinkedHashMap<String,String> cateList = new LinkedHashMap<>();
+        cateList.put("MASTER_KEY" , "그룹키");
+        cateList.put("STATUS" , "현재 상태");
+        cateList.put("TYPE" , "타입");
         return cateList;
     }
     public List<Status> getStatusList(){
@@ -33,19 +34,23 @@ public class SelectOption {
         statusList.add("5");*/
         return statusInfoService.selectAll();
     }
-    public List<String> getSortCateList(){
-        List<String> sortCateList = new ArrayList<>();
-        sortCateList.add("MASTER_KEY");
-        sortCateList.add("STATUS");
-        sortCateList.add("RECEIVED_TIME");
-        sortCateList.add("STATUS_TIME");
-        sortCateList.add("TYPE");
+    public LinkedHashMap<String,String> getSortCateList(){
+
+        LinkedHashMap<String,String> sortCateList = new LinkedHashMap<>();
+        sortCateList.put("MASTER_KEY" , "그룹키");
+        sortCateList.put("STATUS" , "현재 상태");
+        sortCateList.put("RECEIVED_TIME" , "마지막 건수 수신 시각");
+        sortCateList.put("STATUS_TIME" , "상태 변경 시각");
+        sortCateList.put("TYPE" , "타입");
+
         return sortCateList;
     }
-    public List<String> getSortList(){
-        List<String> sortList = new ArrayList<>();
-        sortList.add("ASC");
-        sortList.add("DESC");
+    public LinkedHashMap<String,String> getSortList(){
+
+        LinkedHashMap<String,String> sortList = new LinkedHashMap<>();
+        sortList.put("ASC" , "오름차순");
+        sortList.put("DESC" , "내림차순");
+
         return sortList;
     }
 
