@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository
@@ -20,9 +21,9 @@ public class StatusRepository {
     private final ErrorRepository errorsRepository;
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
-    public List<Status> selectAll(){
+    public List<Status> selectAll(){ //////////////////////////////////////
 
-        List<Status> list = null;
+        List<Status> list = new ArrayList<>();
 
         try{
             list = sql.selectList("com.daishin.pdf.mapper.StatusMapper.selectAll");

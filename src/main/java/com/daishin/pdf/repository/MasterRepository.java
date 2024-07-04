@@ -24,7 +24,7 @@ public class MasterRepository {
     private final SqlSessionTemplate sql;
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
-    //////////////////////////////////////OK        //////////////////////////////////////OK
+
     public List<Master> selectAll(){
         List<Master> list = null;
         try{
@@ -39,10 +39,10 @@ public class MasterRepository {
         }
         return list;
     }
-    //////////////////////////////////////OK        //////////////////////////////////////OK
 
-    //////////////////////////////////////OK        //////////////////////////////////////OK
-    public int save(Master master){
+
+
+    public int save(Master master){ //////////////////////////////////////OK
         int result = -1;
         try{
             result = sql.insert("com.daishin.pdf.mapper.MasterMapper.save" , master);
@@ -55,9 +55,9 @@ public class MasterRepository {
         }
         return result;
     }
-    //////////////////////////////////////OK        //////////////////////////////////////OK
 
-    //////////////////////////////////////OK        //////////////////////////////////////OK
+
+
     public Master findMaster(String MASTER_KEY){
         Master master = null;
         try{
@@ -73,11 +73,11 @@ public class MasterRepository {
         }
         return master;
     }
-    //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-    //////////////////////////////////////OK        //////////////////////////////////////OK
-    public int updateSendCnt(Master master){
+
+
+    public int updateSendCnt(Master master){ //////////////////////////////////////OK
         int result = -1;
         try{
             result = sql.update("com.daishin.pdf.mapper.MasterMapper.updateSendCnt",master);
@@ -90,11 +90,11 @@ public class MasterRepository {
         }
         return result;
     }
-    //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-    //////////////////////////////////////OK        //////////////////////////////////////OK
-    public int updateStatus(Master master){
+
+
+    public int updateStatus(Master master){ //////////////////////////////////////OK
         int result = -1;
         try{
             result = sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatus",master);
@@ -107,10 +107,10 @@ public class MasterRepository {
         }
         return result;
     }
-    //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-    //////////////////////////////////////OK        //////////////////////////////////////OK
+
+
     public int updateStatusAndTotalCnt(Master master){
         int result = -1;
         try{
@@ -124,7 +124,7 @@ public class MasterRepository {
         }
         return result;
     }
-    //////////////////////////////////////OK        //////////////////////////////////////OK
+
 
 
 
@@ -133,7 +133,7 @@ public class MasterRepository {
     }*/
 
 
-    //////////////////////////////////////OK        //////////////////////////////////////OK
+
     public List<Master> selectMastersByPage(Page page){
         List<Master> list = new ArrayList<>();
         try{
@@ -148,10 +148,10 @@ public class MasterRepository {
 
         return list;
     }
-    //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-    //////////////////////////////////////OK        //////////////////////////////////////OK
+
+
     public int countSearch(Search search){
         int result = 0;
         try{
@@ -165,10 +165,10 @@ public class MasterRepository {
         }
         return result;
     }
-    //////////////////////////////////////OK        //////////////////////////////////////OK
 
 
-    //////////////////////////////////////OK        //////////////////////////////////////OK
+
+
     public List<Master> selectStatusBetween2_7(){
         List<Master> list = new ArrayList<>();
         try {
@@ -183,5 +183,5 @@ public class MasterRepository {
 
         return list;
     }
-    //////////////////////////////////////OK        //////////////////////////////////////OK
+
 }

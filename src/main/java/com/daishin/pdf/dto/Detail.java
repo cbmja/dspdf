@@ -63,7 +63,8 @@ public class Detail {
         String path = "";
         String master = "";
         //단일
-        if(detail.getTOTAL_SEND_CNT().equals("1")){
+        if(detail.getRECV_NUM() != null && detail.getTR_KEY() != null &&
+                detail.getTOTAL_SEND_CNT() != null && detail.getTOTAL_SEND_CNT().equals("1")){
 
             LocalTime currentTime = LocalTime.now();
 
@@ -85,9 +86,7 @@ public class Detail {
             master = detail.getTR_KEY();
         }
         detail.setPDF_PATH(path);
-        //detail.setPDF_NM(detail.getFile().getOriginalFilename());
         detail.setMASTER(master);
-        // pdf_path , master 값 설정 EEE
         detail.setPK(detail.getTR_KEY()+"_"+detail.getRECV_NUM());
 
         return detail;

@@ -75,7 +75,6 @@ public class SchedulerConfiguration {
         if(!masterList.isEmpty() && !statusList.isEmpty()){
 
             for(Master master : masterList){
-                System.out.println(master+"//////////////");
                 Status status = statusInfoService.selectByStatusCode(master.getSTATUS());
 
                     if(status.getCHANGE_TYPE().equals("AUTO") && status.getIS_LAST().equals("FALSE")){

@@ -1,8 +1,10 @@
 package com.daishin.pdf.util;
 
+import com.daishin.pdf.dto.Error;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.log.LogCode;
+import com.daishin.pdf.repository.ErrorRepository;
 import com.daishin.pdf.response.ResponseCode;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.DetailInfoService;
@@ -29,12 +31,14 @@ public class Utils {
     private final DetailInfoService detailInfoService;
     private final MasterInfoService masterInfoService;
 
+    private final ErrorRepository errorRepository;
+
 
     /**
      * pdf 저장
      * @param detail
      */
-    public boolean savePdf(Detail detail, Logger logger){
+    public boolean savePdf(Detail detail, Logger logger){ //////////////////////////////////////OK
 
         boolean result = true;
         /////SSSpdf 저장SSS/////
@@ -55,6 +59,9 @@ public class Utils {
         } catch (Exception e) {
             logger.error(LogCode.PDF_ERROR+" : "+detail); //
             e.printStackTrace();
+            Error error = new Error();
+            error.setERROR_MESSAGE(e.getMessage()+"\n param : "+detail);
+            errorRepository.save(error);
             result = false;
         }
         return result;
@@ -65,7 +72,7 @@ public class Utils {
     //json 저장
     public boolean saveJson(String master ,  Logger logger) {
 
-        boolean result = true;
+
         //저장경로 
         String path = "C:\\DATA\\"+master+"\\";
 
@@ -73,21 +80,20 @@ public class Utils {
 
         List<Master> masterList = new ArrayList<>();
         Master findMaster = masterInfoService.findMaster(master);
-        if(findMaster.getError().equals(ResponseCode.SQL_ERROR)){
-            result = false;
+        if(findMaster != null && findMaster.getError().equals(ResponseCode.SQL_ERROR)){
+            return false;
         }
+
         masterList.add(findMaster);
         jsonList.put("master" , masterList);
 
 
         List<Detail> detailList = detailInfoService.getMasterGroup(master);
-        if(detailList.get(0).getError().equals(LogCode.SQL_ERROR)){
-            result = false;
+        if(detailList.isEmpty()){
+            return false;
         }
         jsonList.put("detail" , detailList);
-        if(!result){
-            return result;
-        }
+
 
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -97,12 +103,14 @@ public class Utils {
             fileWriter.write(jsonlist);
             fileWriter.close();
         } catch (Exception e) {
-            //logger.error(LogCode.JSON_SAVE_FAIL+" : "+masterInfoService.findMaster(master));
             logger.error(LogCode.JSON_ERROR+" : "+ master); //
             e.printStackTrace();
-            result = false;
+            Error error = new Error();
+            error.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
+            errorRepository.save(error);
+            return false;
         }
-        return result;
+        return true;
         }
 
 }
