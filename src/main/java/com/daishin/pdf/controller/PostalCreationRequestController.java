@@ -225,9 +225,6 @@ public class PostalCreationRequestController {
         if(detail.getDM_LINK_KEY() == null || detail.getDM_LINK_KEY().isBlank()){
             errMsg += "DM_LINK_KEY , ";
         }
-        if(detail.getPDF_NM() == null || detail.getPDF_NM().isBlank()){
-            errMsg += "PDF_NM , ";
-        }
         if(detail.getRECV_NM() == null || detail.getRECV_NM().isBlank()){
             errMsg += "RECV_NM , ";
         }

@@ -89,6 +89,10 @@ public class Detail {
         detail.setMASTER(master);
         detail.setPK(detail.getTR_KEY()+"_"+detail.getRECV_NUM());
 
+        if(detail.getFile() != null && !detail.getFile().isEmpty()){
+            detail.setPDF_NM(detail.getFile().getOriginalFilename());
+        }
+
         return detail;
     }
 
