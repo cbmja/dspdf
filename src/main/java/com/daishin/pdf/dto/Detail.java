@@ -50,9 +50,9 @@ public class Detail {
     private String MASTER;
     @JsonProperty("PDF_NM")
     private String PDF_NM;
-
-    @JsonIgnore
+    @JsonProperty("File")
     private MultipartFile File;
+
     @JsonIgnore
     private String error="";
 
