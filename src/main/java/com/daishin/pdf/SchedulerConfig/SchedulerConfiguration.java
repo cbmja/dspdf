@@ -35,7 +35,7 @@ public class SchedulerConfiguration {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //실시간(단일) json 생성 및 상태 변화 1 -> 2
-    @Scheduled(cron = "00 03 14 * * *")
+    @Scheduled(cron = "00 17 9 * * *")
     public void run() { //////////////////////////////////////OK
         if(checkTime()){
 
@@ -65,7 +65,7 @@ public class SchedulerConfiguration {
 
     // 3분마다 체크
     // 상태 변화 된 지 2시간이 지났으면 다음 상태로 (1(수신중)일때는 해당 안됨)
-    @Scheduled(fixedRate = 180000)
+    @Scheduled(fixedRate = 30000)
     public void changeStatus(){ //////////////////////////////////////OK
 
         //현재상태가 3,4,5,6 인 master만 select
@@ -123,7 +123,7 @@ public class SchedulerConfiguration {
 
     //현재 시각이 14:00 이후인지 체크하는 메서드
     private boolean checkTime(){
-        return LocalTime.now().isAfter(LocalTime.of(14 , 0));
+        return LocalTime.now().isAfter(LocalTime.of(9 , 0));
     }
 
 
