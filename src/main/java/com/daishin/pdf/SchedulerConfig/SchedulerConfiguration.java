@@ -66,7 +66,7 @@ public class SchedulerConfiguration {
     // 3분마다 체크
     // 상태 변화 된 지 2시간이 지났으면 다음 상태로 (1(수신중)일때는 해당 안됨)
     @Scheduled(fixedRate = 180000)
-    public void changeStatus(){ //////////////////////////////////////OK
+    public void changeStatus(){
 
         //현재상태가 3,4,5,6 인 master만 select
         //최종 단계가 7라고 가정
