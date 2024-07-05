@@ -132,8 +132,13 @@
         Page p = (Page)(request.getAttribute("p"));
     %>
 
+<div style="margin-top: 30px; margin-bottom: 10px;">
+    상태 검색시에는 코드로 검색해주세요
+    <c:forEach var="status" items="${statusList}">
+        / [${status.getSTATUS_NAME()} : ${status.getSTATUS_CODE()}]
+    </c:forEach>
+</div>
 
-<hr>
     <form action="/masters" method="get">
         <input type="hidden" name="sort" value="${p.getSort()}">
         <input type="hidden" name="sortCate" value="${p.getSortCate()}">
@@ -146,7 +151,7 @@
         <input type="text" name="search" value="${search.getSearch()}">
         <input type="submit" value="검색">
     </form>
-    <p>총 검색 건수 : ${p.getTotal()}</p>
+
 
 
     <form action="/masters/update" method="post">
@@ -180,6 +185,7 @@
         </c:forEach>
         <tr>
             <td colspan="5">
+                총 검색 건수 : ${p.getTotal()}
                 <input type="hidden" id="statusData" name="statusData">
                 <input type="hidden" name="search" value="${p.getSearch()}">
                 <input type="hidden" name="page" value="${p.getPage()}">
