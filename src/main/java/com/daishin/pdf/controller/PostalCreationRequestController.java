@@ -60,6 +60,7 @@ public class PostalCreationRequestController {
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
             Error error = new Error();
+            error.setMASTER_KEY(detail.getTR_KEY());
             error.setERROR_MESSAGE(ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
             errorRepository.save(error);
             return response;
@@ -74,6 +75,7 @@ public class PostalCreationRequestController {
                 response.put(ResponseCode.RESULT, ResponseCode.ERROR);
                 response.put(ResponseCode.REMARK, ResponseCode.DUPLICATE_VALUE+"TR_KEY ["+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
                 Error error = new Error();
+                error.setMASTER_KEY(detail.getTR_KEY());
                 error.setERROR_MESSAGE(ResponseCode.DUPLICATE_VALUE+"TR_KEY ["+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
                 errorRepository.save(error);
                 logger.error(LogCode.DUPLICATE_VALUE+" : "+detail);
