@@ -25,7 +25,7 @@ public class MasterRepository {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
 
-    public List<Master> selectAll(){ //////////////////////////////////////OK
+    public List<Master> selectAll(){
         List<Master> list = new ArrayList<>();
         try{
             list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectAll");
@@ -33,6 +33,7 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage());
             errorsRepository.save(errors);
         }
@@ -41,7 +42,7 @@ public class MasterRepository {
 
 
 
-    public int save(Master master){ //////////////////////////////////////OK
+    public int save(Master master){
         int result = -1;
         try{
             result = sql.insert("com.daishin.pdf.mapper.MasterMapper.save" , master);
@@ -49,6 +50,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("MasterRepository");
+            errors.setMASTER_KEY(master.getMASTER_KEY());
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
             errorsRepository.save(errors);
         }
@@ -57,7 +60,7 @@ public class MasterRepository {
 
 
 
-    public Master findMaster(String MASTER_KEY){ //////////////////////////////////////OK
+    public Master findMaster(String MASTER_KEY){
         Master master = null;
         try{
             master = sql.selectOne("com.daishin.pdf.mapper.MasterMapper.findMaster",MASTER_KEY);
@@ -67,6 +70,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setMASTER_KEY(MASTER_KEY);
+            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+MASTER_KEY);
             errorsRepository.save(errors);
         }
@@ -76,7 +81,7 @@ public class MasterRepository {
 
 
 
-    public int updateSendCnt(Master master){ //////////////////////////////////////OK
+    public int updateSendCnt(Master master){
         int result = -1;
         try{
             result = sql.update("com.daishin.pdf.mapper.MasterMapper.updateSendCnt",master);
@@ -84,6 +89,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setMASTER_KEY(master.getMASTER_KEY());
+            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
             errorsRepository.save(errors);
         }
@@ -93,7 +100,7 @@ public class MasterRepository {
 
 
 
-    public int updateStatus(Master master){ //////////////////////////////////////OK
+    public int updateStatus(Master master){
         int result = -1;
         try{
             result = sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatus",master);
@@ -101,6 +108,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("MasterRepository");
+            errors.setMASTER_KEY(master.getMASTER_KEY());
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
             errorsRepository.save(errors);
         }
@@ -110,7 +119,7 @@ public class MasterRepository {
 
 
 
-    public int updateStatusAndTotalCnt(Master master){ //////////////////////////////////////OK
+    public int updateStatusAndTotalCnt(Master master){
         int result = -1;
         try{
             result = sql.update("com.daishin.pdf.mapper.MasterMapper.updateStatusAndTotalCnt",master);
@@ -118,6 +127,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("MasterRepository");
+            errors.setMASTER_KEY(master.getMASTER_KEY());
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
             errorsRepository.save(errors);
         }
@@ -133,7 +144,7 @@ public class MasterRepository {
 
 
 
-    public List<Master> selectMastersByPage(Page page){ //////////////////////////////////////OK
+    public List<Master> selectMastersByPage(Page page){
         List<Master> list = new ArrayList<>();
         try{
             list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectMastersByPage",page);
@@ -141,6 +152,7 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+page);
             errorsRepository.save(errors);
         }
@@ -151,7 +163,7 @@ public class MasterRepository {
 
 
 
-    public int countSearch(Search search){ //////////////////////////////////////OK
+    public int countSearch(Search search){
         int result = 0;
         try{
             result = sql.selectOne("com.daishin.pdf.mapper.MasterMapper.countSearch" , search);
@@ -159,6 +171,7 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+search);
             errorsRepository.save(errors);
         }
@@ -176,6 +189,7 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage());
             errorsRepository.save(errors);
         }

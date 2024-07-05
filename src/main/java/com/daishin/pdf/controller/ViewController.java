@@ -40,11 +40,11 @@ public class ViewController {
     public String masterList(@ModelAttribute Search search, Model model){
 
         //페이징 처리
-        Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search); //////////////////////////////////////OK
+        Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search);
         model.addAttribute("p" , page);
-        List<Master> masters = masterInfoService.selectMastersByPage(page); //////////////////////////////////////OK
+        List<Master> masters = masterInfoService.selectMastersByPage(page);
 
-        List<Master> masterList = masters.stream().map(m ->{ //////////////////////////////////////OK
+        List<Master> masterList = masters.stream().map(m ->{
             m.setStatusName(statusInfoService.selectByStatusCode(m.getSTATUS()).getSTATUS_NAME());
             m.setTypeName(m.getTYPE().equals("REAL_TIME")?"실시간":"배치");
             return m;
@@ -67,7 +67,7 @@ public class ViewController {
         Map<String, String> statusMap = objectMapper.readValue(statusData, new TypeReference<Map<String, String>>() {});
 
         for(String master_key : statusMap.keySet()){
-            Master master = masterInfoService.findMaster(master_key); //////////////////////////////////////OK
+            Master master = masterInfoService.findMaster(master_key);
             if(master != null && master.getError().equals(ResponseCode.SQL_ERROR)){
                 break;
             }
@@ -78,29 +78,29 @@ public class ViewController {
             //total_send_cnt 를 다시 "수신중"으로 바꿔줌
             if(statusMap.get(master_key).equals("100") && master.getTYPE().equals("REAL_TIME")){
                 master.setTOTAL_SEND_CNT("수신중");
-                masterSaveService.updateStatusAndTotalCnt(master); //////////////////////////////////////OK
+                masterSaveService.updateStatusAndTotalCnt(master);
             }else if(!statusMap.get(master_key).equals("100") && master.getTOTAL_SEND_CNT().equals("수신중")){
             //현재 상태가 수신중이고 , 수신중 이외의 상태로 바꾸려는 경우
             //total_send_cnt 를 현재 수신 건수로 바꿔줌    
-                int total = detailInfoService.countMaster(master.getMASTER_KEY()); //////////////////////////////////////OK
+                int total = detailInfoService.countMaster(master.getMASTER_KEY());
                 master.setTOTAL_SEND_CNT(total+"");
-                masterSaveService.updateStatusAndTotalCnt(master); //////////////////////////////////////OK
+                masterSaveService.updateStatusAndTotalCnt(master);
             }else{
             //이외의 경우에는 상태만 업데이트
-                masterSaveService.updateStatus(master); //////////////////////////////////////OK
+                masterSaveService.updateStatus(master);
             }
 
         }
         
         //수정 이후에도 이후 작업을 동일한 페이지에서 이어서 할 수 있도록 redirect 하지 않고 여기서 페이징 처리
         //페이징 처리
-        Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search); //////////////////////////////////////OK
+        Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search);
         model.addAttribute("p" , page);
-        List<Master> masters = masterInfoService.selectMastersByPage(page); //////////////////////////////////////OK
+        List<Master> masters = masterInfoService.selectMastersByPage(page);
 
 
         List<Master> masterList = masters.stream().map(m ->{
-            m.setStatusName(statusInfoService.selectByStatusCode(m.getSTATUS()).getSTATUS_NAME()); //////////////////////////////////////OK
+            m.setStatusName(statusInfoService.selectByStatusCode(m.getSTATUS()).getSTATUS_NAME());
             m.setTypeName(m.getTYPE().equals("REAL_TIME")?"실시간":"배치");
             return m;
         }).collect(Collectors.toList());

@@ -44,18 +44,18 @@ public class PostalCreationRequestController {
     public Map<String , String> detail(@ModelAttribute Detail _detail){
 
 
-        long startTime = System.nanoTime(); //////////////////////////////////////OK
+        long startTime = System.nanoTime();
         //결과값
-        Map<String , String> response = new LinkedHashMap<>(); //////////////////////////////////////OK
+        Map<String , String> response = new LinkedHashMap<>();
 
         //요청 정보 log
-        logger.info(LogCode.DETAIL_REQUEST +" : " +_detail); //////////////////////////////////////OK
+        logger.info(LogCode.DETAIL_REQUEST +" : " +_detail);
 
         //detail 값 세팅 : PDF_PATH , MASTER , PK
-        Detail detail = _detail.detailSetting(_detail); //////////////////////////////////////OK
+        Detail detail = _detail.detailSetting(_detail);
 
         //필수 항목 누락 체크
-        List checkList = detailCheck(detail); //////////////////////////////////////OK
+        List checkList = detailCheck(detail);
         if((boolean)checkList.get(1)){
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
@@ -67,7 +67,7 @@ public class PostalCreationRequestController {
 
 
         //중복 체크
-        Detail existDetail = detailInfoService.findDetail(detail); //////////////////////////////////////OK
+        Detail existDetail = detailInfoService.findDetail(detail);
         if(existDetail != null){
             //중복 값이 있는 경우
             if(existDetail.getError().isBlank()){
@@ -89,7 +89,7 @@ public class PostalCreationRequestController {
 
         //중복되는 파일명 있을경우 덮어쓰기 됨
         //파일 저장 (pdf) //
-        if(!utils.savePdf(detail , logger)){ //////////////////////////////////////OK
+        if(!utils.savePdf(detail , logger)){
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.FILE_ERROR);
             return response;
@@ -97,7 +97,7 @@ public class PostalCreationRequestController {
 
 
         //DB 저장(detail)
-        if(detailSaveService.save(detail) <= 0){ //////////////////////////////////////OK
+        if(detailSaveService.save(detail) <= 0){
             response.put(ResponseCode.RESULT , ResponseCode.ERROR);
             response.put(ResponseCode.REMARK , ResponseCode.SQL_ERROR);
             return response;
@@ -105,7 +105,7 @@ public class PostalCreationRequestController {
 
 
         //DB에서 detail select -> master에 들어갈 데이터 수집
-        Detail findDetail = detailInfoService.findDetail(detail); //////////////////////////////////////OK
+        Detail findDetail = detailInfoService.findDetail(detail);
         if(findDetail != null && findDetail.getError().equals(ResponseCode.SQL_ERROR)){
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
@@ -122,7 +122,7 @@ public class PostalCreationRequestController {
 
 
         //master_key 로 select 해서 존재 하면 update 존재 하지 않으면 새로 저장
-        Master findMaster = masterInfoService.findMaster(MASTER_KEY); //////////////////////////////////////OK
+        Master findMaster = masterInfoService.findMaster(MASTER_KEY);
         if(findMaster != null && findMaster.getError().equals(ResponseCode.SQL_ERROR)){
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
@@ -131,7 +131,7 @@ public class PostalCreationRequestController {
 
 
 
-        List<Status> statusList = statusInfoService.selectAll(); //////////////////////////////////////OK
+        List<Status> statusList = statusInfoService.selectAll();
         if(statusList.isEmpty()){
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
@@ -140,7 +140,7 @@ public class PostalCreationRequestController {
 
 
         //첫 저장
-        if(findMaster == null){ //////////////////////////////////////OK
+        if(findMaster == null){
             if(!detail.getTOTAL_SEND_CNT().equals("1")){
                 master.setTYPE("ARRANGEMENT"); //배치(대량)
                 master.setTOTAL_SEND_CNT(detail.getTOTAL_SEND_CNT());
@@ -156,7 +156,7 @@ public class PostalCreationRequestController {
                 response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
                 return response;
             }
-        }else{ //////////////////////////////////////OK
+        }else{
         //전송 건수 갱신
             findMaster.setRECEIVED_TIME(detailSavedTime);
             findMaster.setSEND_CNT(findMaster.getSEND_CNT()+1);
@@ -170,7 +170,7 @@ public class PostalCreationRequestController {
 
 
         //배치(대량)그룹 전송 완료 처리 / status 갱신 : 100(수신중) -> 200(수신완료) , JSON 파일저장
-        int detailGroupCnt = detailInfoService.countGroup(detail); //////////////////////////////////////OK
+        int detailGroupCnt = detailInfoService.countGroup(detail);
         if(detailGroupCnt <= 0){
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
@@ -180,7 +180,7 @@ public class PostalCreationRequestController {
 
         //현재 수신한 detail이, 속한 그룹의 마지막 건 인지 체크
         if(!detail.getTOTAL_SEND_CNT().equals("1") &&
-                detailGroupCnt==Integer.parseInt(detail.getTOTAL_SEND_CNT())){ //////////////////////////////////////OK
+                detailGroupCnt==Integer.parseInt(detail.getTOTAL_SEND_CNT())){
 
             master.setSTATUS(statusList.get(1).getSTATUS_CODE());
             //업데이트 실패
@@ -200,7 +200,7 @@ public class PostalCreationRequestController {
 
 
         long endTime = System.nanoTime();
-        logger.info(LogCode.WORK_TIME+" : "+(endTime - startTime)); //
+        logger.info(LogCode.WORK_TIME+" : "+(endTime - startTime));
         response.put(ResponseCode.RESULT,ResponseCode.OK);
         response.put(ResponseCode.REMARK,ResponseCode.SUCCESS);
         return response;

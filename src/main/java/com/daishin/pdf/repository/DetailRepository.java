@@ -4,6 +4,7 @@ import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.dto.Error;
 import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.response.ResponseCode;
+import com.daishin.pdf.service.MasterSaveService;
 import lombok.RequiredArgsConstructor;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.slf4j.Logger;
@@ -23,7 +24,7 @@ public class DetailRepository {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
 
-    public int save(Detail detail){ //////////////////////////////////////OK
+    public int save(Detail detail){
         int result = -1;
         try{
             result = sql.insert("com.daishin.pdf.mapper.DetailMapper.save" , detail);
@@ -31,6 +32,8 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("DetailRepository");
+            errors.setMASTER_KEY(detail.getMASTER());
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+detail.toString());
             errorsRepository.save(errors);
         }
@@ -40,7 +43,7 @@ public class DetailRepository {
 
 
 
-    public int countGroup(Detail detail){ //////////////////////////////////////OK
+    public int countGroup(Detail detail){
         int result = -1;
         try{
             result = sql.selectOne("com.daishin.pdf.mapper.DetailMapper.countGroup" , detail);
@@ -48,6 +51,8 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("DetailRepository");
+            errors.setMASTER_KEY(detail.getTR_KEY());
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+detail);
             errorsRepository.save(errors);
         }
@@ -65,7 +70,7 @@ public class DetailRepository {
 
 
 
-    public Detail findDetail(Detail detail){ //////////////////////////////////////OK
+    public Detail findDetail(Detail detail){
 
         Detail _detail = null;
         try{
@@ -76,6 +81,7 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("DetailRepository");
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+detail);
             errorsRepository.save(errors);
         }
@@ -93,6 +99,8 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("DetailRepository");
+            errors.setMASTER_KEY(MASTER);
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+MASTER);
             errorsRepository.save(errors);
         }
@@ -102,7 +110,7 @@ public class DetailRepository {
 
 
 
-    public int countMaster(String MASTER){ //////////////////////////////////////OK
+    public int countMaster(String MASTER){
         int result = -1;
         try{
             result = sql.selectOne("com.daishin.pdf.mapper.DetailMapper.countMaster" , MASTER);
@@ -110,6 +118,8 @@ public class DetailRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("DetailRepository");
+            errors.setMASTER_KEY(MASTER);
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+MASTER);
             errorsRepository.save(errors);
         }

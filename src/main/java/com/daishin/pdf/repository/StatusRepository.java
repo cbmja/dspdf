@@ -21,7 +21,7 @@ public class StatusRepository {
     private final ErrorRepository errorsRepository;
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
-    public List<Status> selectAll(){ //////////////////////////////////////
+    public List<Status> selectAll(){
 
         List<Status> list = new ArrayList<>();
 
@@ -31,6 +31,7 @@ public class StatusRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("StatusRepository");
             errors.setERROR_MESSAGE(e.getMessage());
             errorsRepository.save(errors);
         }
@@ -38,7 +39,7 @@ public class StatusRepository {
         return list;
     }
 
-    public Status selectByStatusCode(int statusCode){ //////////////////////////////////////OK
+    public Status selectByStatusCode(int statusCode){
 
         Status result = new Status();
 
@@ -48,6 +49,7 @@ public class StatusRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
+            errors.setREPOSITORY("StatusRepository");
             errors.setERROR_MESSAGE(e.getMessage());
             errorsRepository.save(errors);
         }

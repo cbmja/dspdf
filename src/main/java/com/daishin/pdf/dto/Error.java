@@ -2,6 +2,7 @@ package com.daishin.pdf.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
 
@@ -14,5 +15,9 @@ public class Error {
     private String ERROR_MESSAGE;
     @JsonProperty("CREATE_DATE")
     private LocalDateTime CREATE_DATE;
+    @JsonProperty("REPOSITORY")
+    private String REPOSITORY;
+    @JsonProperty("MASTER_KEY")
+    private String MASTER_KEY;
 
 }
