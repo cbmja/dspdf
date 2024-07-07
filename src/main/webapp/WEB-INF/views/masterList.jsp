@@ -119,6 +119,9 @@
         .table-row:hover{
             background-color: #a3adac;
         }
+
+
+
         </style>
 
 </head>
@@ -195,7 +198,7 @@
                 <input type="hidden" name="pageElement" value="${p.getPageElement()}">
             </td>
             <td><input type="submit" value="상태 저장" onclick="prepareData()"></td>
-            <td></td>
+            <td class="move"><a href="#">파일 이동</a></td>
         </tr>
 
     </table>
