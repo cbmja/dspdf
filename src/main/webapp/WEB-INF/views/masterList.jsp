@@ -117,7 +117,7 @@
         }
 
         .table-row:hover{
-            background-color: #d6c7c7;
+            background-color: #a3adac;
         }
         </style>
 
