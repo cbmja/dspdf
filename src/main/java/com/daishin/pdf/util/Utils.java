@@ -6,6 +6,7 @@ import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.repository.ErrorRepository;
 import com.daishin.pdf.response.ResponseCode;
+import com.daishin.pdf.service.DetailSaveService;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.DetailInfoService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -30,6 +32,8 @@ public class Utils {
 
     private final DetailInfoService detailInfoService;
     private final MasterInfoService masterInfoService;
+
+    private final DetailSaveService detailSaveService;
 
     private final ErrorRepository errorRepository;
 
@@ -147,6 +151,16 @@ public class Utils {
                     error.setERROR_MESSAGE(e.getMessage()+"\n param : "+masterKey);
                     errorRepository.save(error);
                 }
+
+                List<Detail> details = detailInfoService.getMasterGroup(masterKey);
+
+                for(Detail detail : details){
+                    detail.setPDF_PATH("C:\\DATA\\complete\\"+masterKey);
+
+                    detailSaveService.updatePdfPath(detail);
+                }
+
+
 
             return 0;
         }

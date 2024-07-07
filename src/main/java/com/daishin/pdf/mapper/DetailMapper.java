@@ -17,4 +17,6 @@ public interface DetailMapper {
     void getMasterGroup(String MASTER);
 
     void countMaster(String MASTER);
+
+    void updatePdfPath(Detail detail);
 }

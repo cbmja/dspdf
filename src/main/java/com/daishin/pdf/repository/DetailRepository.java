@@ -126,4 +126,21 @@ public class DetailRepository {
         return result;
     }
 
+
+    public int updatePdfPath(Detail detail){
+        int result = -1;
+        try{
+            result = sql.update("com.daishin.pdf.mapper.DetailMapper.updatePdfPath" , detail);
+        }catch (Exception e){
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+            Error errors = new Error();
+            errors.setREPOSITORY("DetailRepository");
+            errors.setMASTER_KEY(detail.getMASTER());
+            errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+detail.getMASTER());
+            errorsRepository.save(errors);
+        }
+        return result;
+    }
+
 }

@@ -18,6 +18,10 @@ public class DetailSaveService {
         return repository.save(detail);
     }
 
+    public int updatePdfPath(Detail detail){
+        return repository.updatePdfPath(detail);
+    }
+
 
 
 }

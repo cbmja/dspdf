@@ -72,4 +72,8 @@
         SELECT * FROM dbo.DETAIL WHERE PK = #{PK}
     </select>
 
+    <update id="updatePdfPath" parameterType="Detail">
+        UPDATE dbo.DETAIL SET PDF_PATH = #{PDF_PATH} WHERE MASTER = #{MASTER}
+    </update>
+
 </mapper>
