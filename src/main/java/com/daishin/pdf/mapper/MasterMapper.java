@@ -28,4 +28,6 @@ public interface MasterMapper {
 
     List<Master> selectStatusBetween2_7();
 
+    List<Master> selectByStatus(int status);
+
 }

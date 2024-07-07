@@ -9,10 +9,13 @@ import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.DetailInfoService;
 import com.daishin.pdf.service.StatusInfoService;
+import com.daishin.pdf.util.Utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -34,6 +37,10 @@ public class ViewController {
     private final SelectOption selectOption;
 
     private final StatusInfoService statusInfoService;
+
+    private final Utils utils;
+
+    private final Logger logger = LoggerFactory.getLogger("daishin");
 
 
     @GetMapping("/masters")
@@ -114,5 +121,15 @@ public class ViewController {
         //페이징 처리
         return "masterList";
     }
+
+
+    @GetMapping("/masters/move")
+    public String move(){
+
+        utils.createMove(logger);
+
+        return "redirect:/masters";
+    }
+
 
 }

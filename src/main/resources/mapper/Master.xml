@@ -55,4 +55,8 @@
         SELECT * FROM dbo.MASTER WHERE STATUS > 2 AND 7 > STATUS
     </select>
 
+    <select id="selectByStatus" parameterType="int" resultType="Master">
+        SELECT * FROM dbo.MASTER WHERE STATUS = #{status}
+    </select>
+
 </mapper>

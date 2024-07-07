@@ -34,5 +34,7 @@ public class MasterInfoService {
 
     public List<Master> selectStatusBetween2_7(){return masterRepository.selectStatusBetween2_7();}
 
-
+    public List<Master> selectByStatus(int status){
+        return masterRepository.selectByStatus(status);
+    }
 }

@@ -197,4 +197,20 @@ public class MasterRepository {
         return list;
     }
 
+
+    public List<Master> selectByStatus(int status){
+        List<Master> list = new ArrayList<>();
+        try {
+            list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectByStatus",status);
+        }catch (Exception e) {
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+            Error errors = new Error();
+            errors.setREPOSITORY("MasterRepository");
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
+        }
+        return list;
+    }
+
 }

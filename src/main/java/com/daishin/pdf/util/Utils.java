@@ -9,6 +9,7 @@ import com.daishin.pdf.response.ResponseCode;
 import com.daishin.pdf.service.DetailSaveService;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.DetailInfoService;
+import com.daishin.pdf.service.MasterSaveService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +37,8 @@ public class Utils {
     private final DetailSaveService detailSaveService;
 
     private final ErrorRepository errorRepository;
+
+    private final MasterSaveService masterSaveService;
 
 
     /**
@@ -129,6 +132,7 @@ public class Utils {
         }
 
 
+        //수신 완료 되면 receiving 에서 complete 폴더로 이동
         public int moveDir(String masterKey , Logger logger){
 
                 Path sourceDir = Paths.get("C:\\DATA\\receiving\\"+masterKey);
@@ -166,6 +170,54 @@ public class Utils {
 
             return 0;
         }
+
+
+
+        //폴더 이동 버튼 누르면 현재 수신 완료인 complete 폴더에서 move 폴더로 옮겨지고 상태 200 -> 300으로
+        public void createMove(Logger logger){
+            List<Master> masters = masterInfoService.selectByStatus(200);
+
+            for(Master master : masters){
+                Path sourceDir = Paths.get("C:\\DATA\\complete\\"+master.getMASTER_KEY());
+                Path targetDir = Paths.get("C:\\DATA\\move\\"+master.getMASTER_KEY());
+
+                try {
+                    //이동시킬 폴더 생성
+                    if (!Files.exists(targetDir)) {
+                        Files.createDirectories(targetDir);
+                    }
+
+                    DirectoryStream<Path> stream = Files.newDirectoryStream(sourceDir);
+                    for (Path entry : stream) {
+                        Path targetPath = targetDir.resolve(entry.getFileName());
+                        Files.move(entry, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    stream.close();
+                    Files.delete(sourceDir);
+
+                    master.setSTATUS(300);
+                    masterSaveService.updateStatus(master);
+                } catch (IOException e) {
+                    logger.error(LogCode.FILE_MOVE_ERROR+" : "+ master.getMASTER_KEY()); //
+                    e.printStackTrace();
+                    Error error = new Error();
+                    error.setMASTER_KEY(master.getMASTER_KEY());
+                    error.setERROR_MESSAGE(e.getMessage()+"\n param : "+master.getMASTER_KEY());
+                    errorRepository.save(error);
+                }
+
+            }
+
+
+
+
+
+        }
+
+
+
+
+
 
 }
 
