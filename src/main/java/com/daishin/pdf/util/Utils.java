@@ -94,7 +94,11 @@ public class Utils {
         jsonList.put("master" , masterList);
 
 
-        List<Detail> detailList = detailInfoService.getMasterGroup(master);
+        List<Detail> detailList = detailInfoService.getMasterGroup(master).stream().map(d ->{
+            d.setPDF_PATH("C:\\DATA\\complete\\"+d.getMASTER());
+            return d;
+        }).toList();
+
         if(detailList.isEmpty()){
             return false;
         }
