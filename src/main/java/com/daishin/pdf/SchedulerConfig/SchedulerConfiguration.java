@@ -57,7 +57,7 @@ public class SchedulerConfiguration {
                 return;
             }
 
-            //json 파일 생성
+            //json 파일 생성 및 폴더 이동 receiving -> complete
             utils.saveJson(LocalDate.now()+"" , logger);
         }
     }

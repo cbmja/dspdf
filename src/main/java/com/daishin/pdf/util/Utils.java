@@ -17,8 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.FileWriter;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.IOException;
+import java.nio.file.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +50,9 @@ public class Utils {
 
         //디렉토리 생성
         File dir = new File(path);
-        dir.mkdirs();
+        if(!dir.exists()){
+            dir.mkdirs();
+        }
 
         //파일 저장처리SSS
         Path pdfPath = Paths.get(path).resolve(fileName);
@@ -74,7 +76,7 @@ public class Utils {
 
 
         //저장경로 
-        String path = "C:\\DATA\\"+master+"\\";
+        String path = "C:\\DATA\\receiving\\"+master+"\\";
 
         Map<String , List> jsonList = new HashMap<>();
 
@@ -106,11 +108,47 @@ public class Utils {
             logger.error(LogCode.JSON_ERROR+" : "+ master); //
             e.printStackTrace();
             Error error = new Error();
+            error.setMASTER_KEY(master);
             error.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
             errorRepository.save(error);
             return false;
         }
+        
+        //폴더 이동
+        moveDir(master,logger);
+
         return true;
+        }
+
+
+        public int moveDir(String masterKey , Logger logger){
+
+                Path sourceDir = Paths.get("C:\\DATA\\receiving\\"+masterKey);
+                Path targetDir = Paths.get("C:\\DATA\\complete\\"+masterKey);
+
+                try {
+                    //이동시킬 폴더 생성
+                    if (!Files.exists(targetDir)) {
+                        Files.createDirectories(targetDir);
+                    }
+
+                    DirectoryStream<Path> stream = Files.newDirectoryStream(sourceDir);
+                    for (Path entry : stream) {
+                        Path targetPath = targetDir.resolve(entry.getFileName());
+                        Files.move(entry, targetPath, StandardCopyOption.REPLACE_EXISTING);
+                    }
+                    stream.close();
+                    Files.delete(sourceDir);
+                } catch (IOException e) {
+                    logger.error(LogCode.FILE_MOVE_ERROR+" : "+ masterKey); //
+                    e.printStackTrace();
+                    Error error = new Error();
+                    error.setMASTER_KEY(masterKey);
+                    error.setERROR_MESSAGE(e.getMessage()+"\n param : "+masterKey);
+                    errorRepository.save(error);
+                }
+
+            return 0;
         }
 
 }

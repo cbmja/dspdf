@@ -192,7 +192,7 @@ public class PostalCreationRequestController {
                 return response;
             }
 
-            //JSON 파일 생성 및 저장
+            //JSON 파일 생성 및 폴더 이동 receiving -> complete
             if(!utils.saveJson(detail.getMASTER()  , logger)){
                 response.put(ResponseCode.RESULT, ResponseCode.ERROR);
                 response.put(ResponseCode.REMARK, ResponseCode.JSON_ERROR);

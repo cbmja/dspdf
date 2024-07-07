@@ -73,16 +73,16 @@ public class Detail {
 
             //14 이전이면 년도-월-오늘날짜
             if (currentTime.isBefore(comparisonTime)) {
-                path = "C:\\DATA\\"+ LocalDate.now()+"\\";
+                path = "C:\\DATA\\receiving\\"+ LocalDate.now()+"\\";
                 master = LocalDate.now()+"";
             } else {
                 //14 이후이면 년도-월-내일날짜
-                path = "C:\\DATA\\"+LocalDate.now().plusDays(1L)+"\\";
+                path = "C:\\DATA\\receiving\\"+LocalDate.now().plusDays(1L)+"\\";
                 master = LocalDate.now().plusDays(1L)+"";
             }
         } else {
             //대량
-            path = "C:\\DATA\\"+ detail.getTR_KEY()+"\\";
+            path = "C:\\DATA\\receiving\\"+ detail.getTR_KEY()+"\\";
             master = detail.getTR_KEY();
         }
         detail.setPDF_PATH(path);
