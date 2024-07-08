@@ -97,15 +97,19 @@ public class Utils {
         jsonList.put("master" , masterList);
 
 
-        List<Detail> detailList = detailInfoService.getMasterGroup(master).stream().map(d ->{
-            d.setPDF_PATH("C:\\DATA\\complete\\"+d.getMASTER());
-            return d;
-        }).toList();
-
+        List<Detail> detailList = detailInfoService.getMasterGroup(master);
         if(detailList.isEmpty()){
             return false;
         }
-        jsonList.put("detail" , detailList);
+
+        List<Detail> details = new ArrayList<>();
+        for(Detail d : detailList){
+            d.setPDF_PATH("C:\\DATA\\complete\\"+d.getMASTER());
+            details.add(d);
+        }
+
+
+        jsonList.put("detail" , details);
 
 
         try {
@@ -124,9 +128,7 @@ public class Utils {
             errorRepository.save(error);
             return false;
         }
-        
-        //폴더 이동
-        moveDir(master,logger);
+
 
         return true;
         }
@@ -135,6 +137,7 @@ public class Utils {
         //수신 완료 되면 receiving 에서 complete 폴더로 이동
         public int moveDir(String masterKey , Logger logger){
 
+                int result = 1;
                 Path sourceDir = Paths.get("C:\\DATA\\receiving\\"+masterKey);
                 Path targetDir = Paths.get("C:\\DATA\\complete\\"+masterKey);
 
@@ -158,17 +161,25 @@ public class Utils {
                     error.setMASTER_KEY(masterKey);
                     error.setERROR_MESSAGE(e.getMessage()+"\n param : "+masterKey);
                     errorRepository.save(error);
+                    result = -1;
                 }
 
                 List<Detail> details = detailInfoService.getMasterGroup(masterKey);
 
-                for(Detail detail : details){
-                    detail.setPDF_PATH("C:\\DATA\\complete\\"+masterKey);
-
-                    detailSaveService.updatePdfPath(detail);
+                if(details.isEmpty()){
+                    result = 0;
+                    return result;
                 }
 
-            return 0;
+                for(Detail detail : details){
+                    detail.setPDF_PATH("C:\\DATA\\complete\\"+masterKey);
+                    if(detailSaveService.updatePdfPath(detail) < 0){
+                        result = 0;
+                        return result;
+                    }
+                }
+
+            return result;
         }
 
 

@@ -2,6 +2,7 @@ package com.daishin.pdf.SchedulerConfig;
 
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Status;
+import com.daishin.pdf.response.ResponseCode;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.DetailInfoService;
@@ -59,6 +60,13 @@ public class SchedulerConfiguration {
 
             //json 파일 생성 및 폴더 이동 receiving -> complete
             utils.saveJson(LocalDate.now()+"" , logger);
+
+            //폴더 이동
+            int mdresult = utils.moveDir(master.getMASTER_KEY() , logger);
+            if(mdresult <= 0){
+                return ;
+            }
+
         }
     }
 

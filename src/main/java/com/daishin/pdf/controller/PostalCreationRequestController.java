@@ -51,20 +51,20 @@ public class PostalCreationRequestController {
         //요청 정보 log
         logger.info(LogCode.DETAIL_REQUEST +" : " +_detail);
 
-        //detail 값 세팅 : PDF_PATH , MASTER , PK
-        Detail detail = _detail.detailSetting(_detail);
-
         //필수 항목 누락 체크
-        List checkList = detailCheck(detail);
+        List<Object> checkList = detailCheck(_detail);
         if((boolean)checkList.get(1)){
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
             Error error = new Error();
-            error.setMASTER_KEY(detail.getTR_KEY());
+            error.setMASTER_KEY(_detail.getTR_KEY());
             error.setERROR_MESSAGE(ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
             errorRepository.save(error);
             return response;
         }
+
+        //detail 값 세팅 : PDF_PATH , MASTER , PK
+        Detail detail = _detail.detailSetting(_detail);
 
 
         //중복 체크
@@ -113,6 +113,13 @@ public class PostalCreationRequestController {
             response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
             return response;
         }
+        //db에서 직접 건드리지 않은 이상 null일 수 없음
+        if(findDetail == null){
+            response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+            response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+            return response;
+        }
+        
         //master 값 세팅
         String MASTER_KEY = detail.getMASTER();
         Master master = new Master(); //배치(대량)은 tr_key / 실시간(단일)은 날짜
@@ -172,33 +179,50 @@ public class PostalCreationRequestController {
 
 
         //배치(대량)그룹 전송 완료 처리 / status 갱신 : 100(수신중) -> 200(수신완료) , JSON 파일저장
-        int detailGroupCnt = detailInfoService.countGroup(detail);
-        if(detailGroupCnt <= 0){
-            response.put(ResponseCode.RESULT, ResponseCode.ERROR);
-            response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
-            return response;
-        }
+        if(!detail.getTOTAL_SEND_CNT().equals("1")){
 
-
-        //현재 수신한 detail이, 속한 그룹의 마지막 건 인지 체크
-        if(!detail.getTOTAL_SEND_CNT().equals("1") &&
-                detailGroupCnt==Integer.parseInt(detail.getTOTAL_SEND_CNT())){
-
-            master.setSTATUS(statusList.get(1).getSTATUS_CODE());
-            //업데이트 실패
-            if(masterSaveService.updateStatus(master) <=0){
+            int detailGroupCnt = detailInfoService.countGroup(detail);
+            if(detailGroupCnt < 0){
                 response.put(ResponseCode.RESULT, ResponseCode.ERROR);
                 response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
                 return response;
             }
 
-            //JSON 파일 생성 및 폴더 이동 receiving -> complete
-            if(!utils.saveJson(detail.getMASTER()  , logger)){
-                response.put(ResponseCode.RESULT, ResponseCode.ERROR);
-                response.put(ResponseCode.REMARK, ResponseCode.JSON_ERROR);
-                return response;
+            //그룹의 마지막 건수일 경우
+            if(detailGroupCnt==Integer.parseInt(detail.getTOTAL_SEND_CNT())){
+
+                master.setSTATUS(statusList.get(1).getSTATUS_CODE());
+                //업데이트 실패
+                if(masterSaveService.updateStatus(master) <=0){
+                    response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                    response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+                    return response;
+                }
+
+                //JSON 파일 생성
+                if(!utils.saveJson(detail.getMASTER()  , logger)){
+                    response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                    response.put(ResponseCode.REMARK, ResponseCode.JSON_ERROR);
+                    return response;
+                }
+
+                //폴더 이동
+                int mdresult = utils.moveDir(detail.getMASTER() , logger);
+                if(mdresult == -1){
+                    response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                    response.put(ResponseCode.REMARK, ResponseCode.FILE_ERROR);
+                    return response;
+                }
+                if(mdresult == 0){
+                    response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                    response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+                    return response;
+                }
             }
         }
+
+
+
 
 
         long endTime = System.nanoTime();
@@ -209,9 +233,9 @@ public class PostalCreationRequestController {
 
     }
 
-    private List detailCheck(Detail detail){
+    private List<Object> detailCheck(Detail detail){
         String errMsg = "";
-        List list = new ArrayList<>();
+        List<Object> list = new ArrayList<>();
         if(detail.getTR_KEY() == null || detail.getTR_KEY().isBlank()){
             errMsg += "TR_KEY , ";
         }
