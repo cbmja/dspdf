@@ -19,4 +19,6 @@ public interface DetailMapper {
     void countMaster(String MASTER);
 
     void updatePdfPath(Detail detail);
+
+    void deleteById(Detail detail);
 }

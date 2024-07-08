@@ -212,4 +212,20 @@ public class MasterRepository {
         return list;
     }
 
+    public int deleteById(Master master){
+        int result = -1;
+        try {
+            result = sql.delete("com.daishin.pdf.mapper.MasterMapper.deleteById",master);
+        }catch (Exception e) {
+            logger.error(LogCode.SQL_ERROR);
+            e.printStackTrace();
+            Error errors = new Error();
+            errors.setMASTER_KEY(master.getMASTER_KEY());
+            errors.setREPOSITORY("MasterRepository");
+            errors.setERROR_MESSAGE(e.getMessage());
+            errorsRepository.save(errors);
+        }
+        return result;
+    }
+
 }

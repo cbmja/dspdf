@@ -30,4 +30,5 @@ public interface MasterMapper {
 
     List<Master> selectByStatus(int status);
 
+    void deleteById(Master master);
 }

@@ -59,4 +59,8 @@
         SELECT * FROM dbo.MASTER WHERE STATUS = #{status}
     </select>
 
+    <delete id="deleteById" parameterType="Master">
+        DELETE FROM dbo.MASTER WHERE MASTER_KEY = #{MASTER_KEY}
+    </delete>
+
 </mapper>

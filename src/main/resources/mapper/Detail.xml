@@ -76,4 +76,8 @@
         UPDATE dbo.DETAIL SET PDF_PATH = #{PDF_PATH} WHERE MASTER = #{MASTER}
     </update>
 
+    <delete id="deleteById" parameterType="Detail">
+        DELETE FROM dbo.DETAIL WHERE PK = #{PK}
+    </delete>
+
 </mapper>

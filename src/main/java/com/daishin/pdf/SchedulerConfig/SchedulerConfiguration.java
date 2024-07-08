@@ -1,11 +1,9 @@
 package com.daishin.pdf.SchedulerConfig;
 
+import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Status;
-import com.daishin.pdf.service.MasterInfoService;
-import com.daishin.pdf.service.MasterSaveService;
-import com.daishin.pdf.service.DetailInfoService;
-import com.daishin.pdf.service.StatusInfoService;
+import com.daishin.pdf.service.*;
 import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +28,9 @@ public class SchedulerConfiguration {
     private final DetailInfoService detailInfoService;
 
     private final StatusInfoService statusInfoService;
+
+    private final MasterDeleteService masterDeleteService;
+    private final DetailDeleteService detailDeleteService;
 
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
@@ -82,7 +83,7 @@ public class SchedulerConfiguration {
                     if(status.getCHANGE_TYPE().equals("AUTO") && status.getIS_LAST().equals("FALSE")){
                         String waitTime = status.getWAIT_TIME().trim();
 
-                        // 정규 표현식을 사용하여 시간과 분을 추출
+                        //시간, 분 추출
                         String regex = "(\\d+)H(\\d+)M";
                         Pattern pattern = Pattern.compile(regex);
                         Matcher matcher = pattern.matcher(waitTime);
@@ -117,6 +118,26 @@ public class SchedulerConfiguration {
         }
         //이동시킨 master 상태 변화 200 -> 300
         utils.checkDirectoryExists();
+
+    }
+
+    //마지막 상태에서 1달 지난 master 삭제
+    @Scheduled(cron = "00 00 09 * * *")
+    public void delete() {
+
+        List<Status> statusList = statusInfoService.selectAll();
+        //마지막 상태인 master만 select
+        List<Master> masterList = masterInfoService.selectByStatus(statusList.getLast().getSTATUS_CODE());
+        
+        for(Master master : masterList){
+            if(master.getSTATUS_TIME().isBefore(LocalDateTime.now().minusMonths(1L))){
+                List<Detail> detailList = detailInfoService.getMasterGroup(master.getMASTER_KEY());
+                for(Detail detail : detailList){
+                    detailDeleteService.deleteById(detail);
+                }
+                masterDeleteService.deleteById(master);
+            }
+        }
 
     }
 
