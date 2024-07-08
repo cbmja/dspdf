@@ -215,11 +215,15 @@ public class PostalCreationRequestController {
         if(detail.getTR_KEY() == null || detail.getTR_KEY().isBlank()){
             errMsg += "TR_KEY , ";
         }
-        if(!detail.getTOTAL_SEND_CNT().equals("1")){
+
+        if(detail.getTOTAL_SEND_CNT() == null || detail.getTOTAL_SEND_CNT().isEmpty()){
+            errMsg += "TOTAL_SEND_CNT , ";
+        }else if(!detail.getTOTAL_SEND_CNT().equals("1")){
             if(detail.getDLV_CD() == null || detail.getDLV_CD().isBlank()){
-                errMsg += "DLV_CD , ";
+            errMsg += "DLV_CD , ";
             }
         }
+
         if(detail.getDLV_TYPE_CD() == null || detail.getDLV_TYPE_CD().isBlank()){
             errMsg += "DLV_TYPE_CD , ";
         }
