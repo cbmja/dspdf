@@ -215,6 +215,11 @@ public class PostalCreationRequestController {
         if(detail.getTR_KEY() == null || detail.getTR_KEY().isBlank()){
             errMsg += "TR_KEY , ";
         }
+        if(!detail.getTOTAL_SEND_CNT().equals("1")){
+            if(detail.getDLV_CD() == null || detail.getDLV_CD().isBlank()){
+                errMsg += "DLV_CD , ";
+            }
+        }
         if(detail.getDLV_TYPE_CD() == null || detail.getDLV_TYPE_CD().isBlank()){
             errMsg += "DLV_TYPE_CD , ";
         }
@@ -236,9 +241,10 @@ public class PostalCreationRequestController {
         if(detail.getRECV_ADDR() == null || detail.getRECV_ADDR().isBlank()){
             errMsg += "RECV_ADDR , ";
         }
+        /*
         if(detail.getCIFNO() == null || detail.getCIFNO().isBlank()){
             errMsg += "CIFNO , ";
-        }
+        }*/
         if(detail.getFile() == null || detail.getFile().isEmpty()){
             errMsg += "pdf file , ";
         }
