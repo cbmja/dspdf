@@ -138,7 +138,6 @@ public class SchedulerConfiguration {
                 masterDeleteService.deleteById(master);
             }
         }
-
     }
 
 
