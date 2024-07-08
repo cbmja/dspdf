@@ -123,6 +123,7 @@ public class ViewController {
     }
 
 
+/*
     @GetMapping("/masters/move")
     public String move(){
 
@@ -130,6 +131,7 @@ public class ViewController {
 
         return "redirect:/masters";
     }
+*/
 
 
 }
