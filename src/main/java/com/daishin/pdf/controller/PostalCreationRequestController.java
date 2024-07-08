@@ -240,9 +240,12 @@ public class PostalCreationRequestController {
             errMsg += "TR_KEY , ";
         }
 
-        if(detail.getTOTAL_SEND_CNT() == null || detail.getTOTAL_SEND_CNT().isEmpty()){
+        if(detail.getTOTAL_SEND_CNT() == null || detail.getTOTAL_SEND_CNT().isBlank()){
             errMsg += "TOTAL_SEND_CNT , ";
-        }else if(!detail.getTOTAL_SEND_CNT().equals("1")){
+        }
+
+        if(detail.getTOTAL_SEND_CNT() != null && !detail.getTOTAL_SEND_CNT().isBlank() &&
+                !detail.getTOTAL_SEND_CNT().equals("1")){
             if(detail.getDLV_CD() == null || detail.getDLV_CD().isBlank()){
             errMsg += "DLV_CD , ";
             }
