@@ -184,6 +184,27 @@ public class Utils {
 
 
 
+    public void checkDirectoryExists() {
+
+        List<Master> masters = masterInfoService.selectByStatus(200);
+        if(masters.isEmpty()){
+            return;
+        }
+
+        String parentDirectory = "C:\\DATA\\complete";
+        for(Master master : masters){
+            String directoryName = master.getMASTER_KEY();
+            Path directoryPath = Paths.get(parentDirectory, directoryName);
+            if(!Files.exists(directoryPath) || !Files.isDirectory(directoryPath)) {
+                //존재하지 않는 경우 (이동시킨 경우) 200-> 300
+                master.setSTATUS(300);
+                masterSaveService.updateStatus(master);
+            }
+        }
+
+
+    }
+
         //폴더 이동 버튼 누르면 현재 수신 완료인 complete 폴더에서 move 폴더로 옮겨지고 상태 200 -> 300으로
         public void createMove(Logger logger){
             List<Master> masters = masterInfoService.selectByStatus(200);
@@ -218,11 +239,6 @@ public class Utils {
                 }
 
             }
-
-
-
-
-
         }
 
 
