@@ -2,7 +2,6 @@ package com.daishin.pdf.SchedulerConfig;
 
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Status;
-import com.daishin.pdf.response.ResponseCode;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import com.daishin.pdf.service.DetailInfoService;
@@ -16,7 +15,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

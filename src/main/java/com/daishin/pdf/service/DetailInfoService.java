@@ -4,7 +4,6 @@ import com.daishin.pdf.dto.Detail;
 import com.daishin.pdf.repository.DetailRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

@@ -5,8 +5,6 @@ import com.daishin.pdf.dto.Status;
 import com.daishin.pdf.service.StatusInfoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 

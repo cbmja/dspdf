@@ -6,7 +6,6 @@ import com.daishin.pdf.page.Search;
 import com.daishin.pdf.repository.MasterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service

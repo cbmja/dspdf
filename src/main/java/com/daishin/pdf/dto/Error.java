@@ -2,8 +2,6 @@ package com.daishin.pdf.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
-import org.springframework.stereotype.Repository;
-
 import java.time.LocalDateTime;
 
 @Data
