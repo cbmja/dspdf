@@ -198,7 +198,7 @@
                 <input type="hidden" name="pageElement" value="${p.getPageElement()}">
             </td>
             <td><input type="submit" value="상태 저장" onclick="prepareData()"></td>
-            <td class="move"><a href="/masters/move">파일 이동</a></td>
+            <td></td>
         </tr>
 
     </table>
