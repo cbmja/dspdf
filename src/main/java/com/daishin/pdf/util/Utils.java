@@ -191,11 +191,9 @@ public class Utils {
             return;
         }
 
-        String parentDirectory = "C:\\DATA\\complete";
         for(Master master : masters){
-            String directoryName = master.getMASTER_KEY();
-            Path directoryPath = Paths.get(parentDirectory, directoryName);
-            if(!Files.exists(directoryPath) || !Files.isDirectory(directoryPath)) {
+            Path directoryPath = Paths.get("C:\\DATA\\complete\\"+master.getMASTER_KEY());
+            if(!Files.exists(directoryPath)) {
                 //존재하지 않는 경우 (이동시킨 경우) 200-> 300
                 master.setSTATUS(300);
                 masterSaveService.updateStatus(master);
