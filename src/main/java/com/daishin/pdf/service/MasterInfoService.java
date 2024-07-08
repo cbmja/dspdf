@@ -19,8 +19,8 @@ public class MasterInfoService {
         return masterRepository.findMaster(MASTER_KEY);
     }
 
-    public List<Master> selectAll(){
-        return masterRepository.selectAll();
+    public List<Master> selectStatusUpper300(){
+        return masterRepository.selectStatusUpper300();
     }
 
     public List<Master> selectMastersByPage(Page page){

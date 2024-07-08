@@ -38,13 +38,10 @@ public class SchedulerConfiguration {
     //실시간(단일) json 생성 및 상태 변화 1 -> 2
     @Scheduled(cron = "00 03 14 * * *")
     public void run() { //////////////////////////////////////OK
-        if(checkTime()){
-
-            List<Status> statusList = statusInfoService.selectAll();
 
             Master master = new Master();
             master.setMASTER_KEY(LocalDate.now()+"");
-            master.setSTATUS(statusList.get(1).getSTATUS_CODE());
+            master.setSTATUS(200);
 
             int total = detailInfoService.countMaster(master.getMASTER_KEY());
             if(total <= 0){
@@ -62,23 +59,20 @@ public class SchedulerConfiguration {
             utils.saveJson(LocalDate.now()+"" , logger);
 
             //폴더 이동
-            int mdresult = utils.moveDir(master.getMASTER_KEY() , logger);
-            if(mdresult <= 0){
-                return ;
-            }
+            utils.moveDir(master.getMASTER_KEY() , logger);
 
-        }
     }
 
 
     // 3분마다 체크
     // 상태 변화 된 지 2시간이 지났으면 다음 상태로 (1(수신중)일때는 해당 안됨)
+    // 수신 완료된 폴더 중 이동 시킨 것이 있다면 200->300
     @Scheduled(fixedRate = 180000)
     public void changeStatus(){
 
-        //현재상태가 3,4,5,6 인 master만 select
+        //현재 상태가 300 이상인 master만 select
         //최종 단계가 7라고 가정
-        List<Master> masterList = masterInfoService.selectAll();
+        List<Master> masterList = masterInfoService.selectStatusUpper300();
         List<Status> statusList = statusInfoService.selectAll();
 
         if(!masterList.isEmpty() && !statusList.isEmpty()){
@@ -126,12 +120,6 @@ public class SchedulerConfiguration {
         //이동시킨 master 상태 변화 200 -> 300
         utils.checkDirectoryExists();
 
-    }
-
-
-    //현재 시각이 14:00 이후인지 체크하는 메서드
-    private boolean checkTime(){
-        return LocalTime.now().isAfter(LocalTime.of(14 , 0));
     }
 
 
