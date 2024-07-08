@@ -199,8 +199,6 @@ public class Utils {
                 masterSaveService.updateStatus(master);
             }
         }
-
-
     }
 
         //폴더 이동 버튼 누르면 현재 수신 완료인 complete 폴더에서 move 폴더로 옮겨지고 상태 200 -> 300으로
