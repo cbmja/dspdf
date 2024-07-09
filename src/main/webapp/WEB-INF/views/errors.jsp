@@ -312,7 +312,8 @@
         <li>
     </ul>
     <script>
-        function showModal(content) {
+        function showModal(encodedContent) {
+            var content = decodeURIComponent(encodedContent);
             document.getElementById('modalContent').innerText = content;
             document.getElementById('contentModal').style.display = "block";
         }
