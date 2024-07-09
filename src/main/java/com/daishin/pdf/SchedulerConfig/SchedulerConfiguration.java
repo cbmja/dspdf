@@ -96,8 +96,8 @@ public class SchedulerConfiguration {
                             m = matcher.group(2); // 'h'와 'm' 사이의 숫자
                         }
 
-                        Long hour = Long.parseLong(h);
-                        Long min = Long.parseLong(m);
+                        long hour = Long.parseLong(h);
+                        long min = Long.parseLong(m);
 
                         int nextCode = -1;
                         for(int i=0; i<statusList.size(); i++){
