@@ -35,8 +35,8 @@ public class SchedulerConfiguration {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //실시간(단일) json 생성 및 상태 변화 1 -> 2
-    @Scheduled(cron = "00 00 14 * * *")
-    public void run() { ////okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok
+    @Scheduled(cron = "00 03 14 * * *")
+    public void run() {
 
             Master master = new Master();
             master.setMASTER_KEY(LocalDate.now()+"");
@@ -66,7 +66,7 @@ public class SchedulerConfiguration {
     // 3분마다 체크
     // 설정 시간 만큼 시간이 경과 했으면 다음 상태로 (1(수신중)일때는 해당 안됨)
     // 수신 완료된 폴더 중 이동 시킨 것이 있다면 200->300
-    @Scheduled(fixedRate = 60000)
+    @Scheduled(fixedRate = 180000)
     public void changeStatus(){ //okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok
 
         //현재 상태가 300 이상이고 마지막 코드 미만인 master

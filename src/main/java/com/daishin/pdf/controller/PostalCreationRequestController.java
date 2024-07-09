@@ -34,6 +34,8 @@ public class PostalCreationRequestController {
 
         private final DetailDeleteService detailDeleteService;
 
+
+
         private final Logger logger = LoggerFactory.getLogger("daishin");
 
     @PostMapping("/detail")
@@ -123,6 +125,12 @@ public class PostalCreationRequestController {
                     response.put(ResponseCode.REMARK, ResponseCode.UPDATE +" : TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
                     return response;
                 }else{
+                    Error errors = new Error();
+                    errors.setREPOSITORY("DetailRepository");
+                    errors.setMASTER_KEY(detail.getMASTER());
+                    errors.setERROR_MESSAGE(ResponseCode.PROCESSED_REQUEST);
+                    errorRepository.save(errors);
+
                     response.put(ResponseCode.RESULT, ResponseCode.ERROR);
                     response.put(ResponseCode.REMARK, ResponseCode.PROCESSED_REQUEST  +"이미 처리가 완료된 요청 입니다. TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
                     logger.error(ResponseCode.PROCESSED_REQUEST);
