@@ -67,7 +67,7 @@ public class Detail {
             LocalTime currentTime = LocalTime.now();
 
             // 기준 시간 설정
-            LocalTime comparisonTime = LocalTime.of(14, 0);
+            LocalTime comparisonTime = LocalTime.of(15, 6);
 
             //14 이전이면 년도-월-오늘날짜
             if (currentTime.isBefore(comparisonTime)) {

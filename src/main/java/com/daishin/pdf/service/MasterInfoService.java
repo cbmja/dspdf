@@ -18,7 +18,7 @@ public class MasterInfoService {
         return masterRepository.findMaster(MASTER_KEY);
     }
 
-    public List<Master> selectStatusUpper300(int statusCode){
+    public List<Master> selectStatusBetween300AndLast(int statusCode){
         return masterRepository.selectStatusBetween300AndLast(statusCode);
     }
 

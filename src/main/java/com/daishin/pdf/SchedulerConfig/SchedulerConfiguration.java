@@ -35,8 +35,8 @@ public class SchedulerConfiguration {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
     //실시간(단일) json 생성 및 상태 변화 1 -> 2
-    @Scheduled(cron = "00 03 14 * * *")
-    public void run() { //////////////////////////////////////OK
+    @Scheduled(cron = "02 06 15 * * *")
+    public void run() { ////okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok
 
             Master master = new Master();
             master.setMASTER_KEY(LocalDate.now()+"");
@@ -67,12 +67,12 @@ public class SchedulerConfiguration {
     // 설정 시간 만큼 시간이 경과 했으면 다음 상태로 (1(수신중)일때는 해당 안됨)
     // 수신 완료된 폴더 중 이동 시킨 것이 있다면 200->300
     @Scheduled(fixedRate = 10000)
-    public void changeStatus(){
+    public void changeStatus(){ //okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok
 
         //현재 상태가 300 이상이고 마지막 코드 미만인 master
         //최종 단계가 7라고 가정
         List<Status> statusList = statusInfoService.selectAll();
-        List<Master> masterList = masterInfoService.selectStatusUpper300(statusList.get(statusList.size()-1).getSTATUS_CODE());
+        List<Master> masterList = masterInfoService.selectStatusBetween300AndLast(statusList.get(statusList.size()-1).getSTATUS_CODE());
         if(!masterList.isEmpty() && !statusList.isEmpty()){
 
             for(Master master : masterList){
@@ -121,7 +121,7 @@ public class SchedulerConfiguration {
     }
 
     //마지막 상태에서 1달 지난 master 삭제
-    @Scheduled(cron = "00 44 12 * * *")
+    @Scheduled(cron = "00 11 15 * * *")
     public void delete() {
 
         List<Status> statusList = statusInfoService.selectAll();
