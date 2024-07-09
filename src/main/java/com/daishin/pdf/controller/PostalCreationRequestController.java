@@ -126,7 +126,7 @@ public class PostalCreationRequestController {
                     return response;
                 }else{
                     response.put(ResponseCode.RESULT, ResponseCode.ERROR);
-                    response.put(ResponseCode.REMARK, ResponseCode.PROCESSED_REQUEST  +" : 이미 처리가 완료된 요청 입니다. TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                    response.put(ResponseCode.REMARK, ResponseCode.PROCESSED_REQUEST  +"이미 처리가 완료된 요청 입니다. TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
                     logger.error(ResponseCode.PROCESSED_REQUEST);
                     return  response;
                 }

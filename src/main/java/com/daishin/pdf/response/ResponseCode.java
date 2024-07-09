@@ -17,6 +17,6 @@ public interface ResponseCode {
     String FILE_ERROR = "FILE_ERROR";
     String JSON_ERROR = "JSON_ERROR";
     String MISSING_VALUE = "MISSING_VALUE : ";
-    String PROCESSED_REQUEST  = "PROCESSED_REQUEST  : ";
+    String PROCESSED_REQUEST  = "PROCESSED_REQUEST : ";
 
 }
