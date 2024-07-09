@@ -127,7 +127,7 @@ public class SchedulerConfiguration {
 
         List<Status> statusList = statusInfoService.selectAll();
         //마지막 상태인 master만 select
-        List<Master> masterList = masterInfoService.selectByStatus(statusList.getLast().getSTATUS_CODE());
+        List<Master> masterList = masterInfoService.selectByStatus(statusList.get(statusList.size()-1).getSTATUS_CODE());
         
         for(Master master : masterList){
             if(master.getSTATUS_TIME().isBefore(LocalDateTime.now().minusMonths(1L))){
