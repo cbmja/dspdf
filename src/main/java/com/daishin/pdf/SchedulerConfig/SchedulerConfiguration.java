@@ -122,7 +122,7 @@ public class SchedulerConfiguration {
     }
 
     //마지막 상태에서 1달 지난 master 삭제
-    @Scheduled(cron = "00 00 09 * * *")
+    @Scheduled(cron = "00 44 12 * * *")
     public void delete() {
 
         List<Status> statusList = statusInfoService.selectAll();

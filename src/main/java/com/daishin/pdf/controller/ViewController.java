@@ -150,6 +150,13 @@ public class ViewController {
     }
 
 
+    @GetMapping("/errors")
+    public String errorList(@ModelAttribute Search search, Model model) {
+
+        return "errors";
+    }
+
+
 /*
     @GetMapping("/masters/move")
     public String move(){

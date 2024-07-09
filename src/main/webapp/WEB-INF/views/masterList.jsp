@@ -11,7 +11,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>master_list</title>
 
         <style>
 
@@ -120,7 +120,9 @@
             background-color: #a3adac;
         }
 
-
+        .error-td{
+            background-color: #f5e9e9;
+        }
 
         </style>
 
@@ -198,11 +200,12 @@
                 <input type="hidden" name="pageElement" value="${p.getPageElement()}">
             </td>
             <td><input type="submit" value="상태 저장" onclick="prepareData()"></td>
-            <td></td>
+            </form>
+            <td class="error-td"><button id="err-button">에러 확인</button></td>
         </tr>
 
     </table>
-    </form>
+
 
     <ul>
         <li>
@@ -296,6 +299,11 @@
             const statusData = Object.fromEntries(statusMap);
             document.getElementById('statusData').value = JSON.stringify(statusData);
         }
+
+    document.getElementById("err-button").onclick = function () {
+        location.href = "/errors";
+    }
+
 </script>
 
 

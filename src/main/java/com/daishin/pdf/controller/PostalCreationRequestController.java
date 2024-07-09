@@ -19,7 +19,6 @@ import java.util.*;
 
 @Controller //우편 제작 요청 api
 @RequiredArgsConstructor
-@RequestMapping("/detail")
 public class PostalCreationRequestController {
 
         private final ErrorRepository errorRepository;
@@ -38,7 +37,7 @@ public class PostalCreationRequestController {
 
         private final Logger logger = LoggerFactory.getLogger("daishin");
 
-    @PostMapping
+    @PostMapping("/detail")
     @ResponseBody
     public Map<String , String> detail(@ModelAttribute Detail _detail){
 
@@ -190,26 +189,17 @@ public class PostalCreationRequestController {
         }
 
 
-
-        List<Status> statusList = statusInfoService.selectAll();
-        if(statusList.isEmpty()){
-            response.put(ResponseCode.RESULT, ResponseCode.ERROR);
-            response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
-            return response;
-        }
-
-
         //첫 저장
         if(findMaster == null){
             if(!detail.getTOTAL_SEND_CNT().equals("1")){
                 master.setTYPE("ARRANGEMENT"); //배치(대량)
                 master.setTOTAL_SEND_CNT(detail.getTOTAL_SEND_CNT());
             }else{
-                master.setTOTAL_SEND_CNT(statusList.get(0).getSTATUS_NAME());
+                master.setTOTAL_SEND_CNT("수신중");
                 master.setTYPE("REAL_TIME"); //실시간(단일)
             }
             master.setSEND_CNT(1);
-            master.setSTATUS(statusList.get(0).getSTATUS_CODE());
+            master.setSTATUS(100);
             //저장 실패시
             if(masterSaveService.save(master) <= 0){
                 response.put(ResponseCode.RESULT, ResponseCode.ERROR);
@@ -242,7 +232,7 @@ public class PostalCreationRequestController {
             //그룹의 마지막 건수일 경우
             if(detailGroupCnt==Integer.parseInt(detail.getTOTAL_SEND_CNT())){
 
-                master.setSTATUS(statusList.get(1).getSTATUS_CODE());
+                master.setSTATUS(200);
                 //업데이트 실패
                 if(masterSaveService.updateStatus(master) <=0){
                     response.put(ResponseCode.RESULT, ResponseCode.ERROR);
