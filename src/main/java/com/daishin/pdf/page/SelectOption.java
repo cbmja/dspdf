@@ -22,6 +22,17 @@ public class SelectOption {
         cateList.put("TYPE" , "타입");
         return cateList;
     }
+
+    public LinkedHashMap<String,String> getErrorCateList(){
+
+        LinkedHashMap<String,String> cateList = new LinkedHashMap<>();
+        cateList.put("CREATE_DATE" , "일자");
+        cateList.put("REPOSITORY" , "레포지토리");
+        cateList.put("MASTER_KEY" , "그룹");
+        return cateList;
+    }
+
+
     public List<Status> getStatusList(){
 
         /*      List<String> statusList = new ArrayList<>();
@@ -43,6 +54,14 @@ public class SelectOption {
 
         return sortCateList;
     }
+
+    public LinkedHashMap<String,String> getErrorSortCateList(){
+
+        LinkedHashMap<String,String> sortCateList = new LinkedHashMap<>();
+        sortCateList.put("CREATE_DATE" , "일자");
+        return sortCateList;
+    }
+
     public LinkedHashMap<String,String> getSortList(){
 
         LinkedHashMap<String,String> sortList = new LinkedHashMap<>();

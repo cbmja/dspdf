@@ -1,9 +1,12 @@
 package com.daishin.pdf.controller;
 
+import com.daishin.pdf.dto.Error;
 import com.daishin.pdf.dto.Master;
+import com.daishin.pdf.page.ErrorSearch;
 import com.daishin.pdf.page.Page;
 import com.daishin.pdf.page.Search;
 import com.daishin.pdf.page.SelectOption;
+import com.daishin.pdf.repository.ErrorRepository;
 import com.daishin.pdf.response.ResponseCode;
 import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
@@ -18,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.ErrorResponse;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +39,8 @@ public class ViewController {
     private final SelectOption selectOption;
 
     private final StatusInfoService statusInfoService;
+
+    private final ErrorRepository errorRepository;
 
     private final Utils utils;
 
@@ -151,21 +157,26 @@ public class ViewController {
 
 
     @GetMapping("/errors")
-    public String errorList(@ModelAttribute Search search, Model model) {
+    public String errorList(@ModelAttribute ErrorSearch search, Model model) {
+
+        //페이징 처리
+        Page page = new Page(search.getPage() , errorRepository.countSearch(search) , search);
+        model.addAttribute("p" , page);
+
+        List<Error> errorList = errorRepository.selectErrorsByPage(page);
+
+        model.addAttribute("errorList" , errorList);
+        model.addAttribute("search" , search);
+        //selectOption
+        model.addAttribute("cateList" , selectOption.getErrorCateList());
+        model.addAttribute("sortCateList" , selectOption.getErrorSortCateList());
+        model.addAttribute("sortList" , selectOption.getSortList());
+
 
         return "errors";
     }
 
 
-/*
-    @GetMapping("/masters/move")
-    public String move(){
-
-        utils.createMove(logger);
-
-        return "redirect:/masters";
-    }
-*/
 
 
 }

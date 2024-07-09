@@ -98,5 +98,68 @@ public class Page {
 
     }
 
+    /**
+     * 현재페이지 , 총 게시물 수
+     * @param page
+     * @param total
+     */
+    public Page(int page , int total , ErrorSearch search){
+
+        this.search = search.getSearch().trim();
+        this.cate = search.getCate();
+        this.sort = search.getSort();
+        this.sortCate = search.getSortCate();
+        this.pageElement = search.getPageElement();
+
+        this.total = total;
+        this.totalPage = total % this.pageElement > 0 ? total / this.pageElement + 1 : total / this.pageElement;
+
+        this.page = page;
+        if(this.page > this.totalPage){
+            this.page = this.totalPage;
+        }
+
+
+        this.startNum = (this.page - 1)*this.pageElement < 0 ? 0 : (this.page - 1)*this.pageElement;
+        this.endNum = this.page == this.totalPage ? this.total : startNum + this.pageElement - 1;
+
+
+        this.endPage = (( this.startNum / (this.pageElement * this.pageSize) ) * this.pageSize) + this.pageSize > this.totalPage
+                ? this.totalPage : (( this.startNum / (this.pageElement * this.pageSize) ) * this.pageSize) + this.pageSize;
+
+        this.startPage = ((( this.startNum / (this.pageElement * this.pageSize) ) * this.pageSize) + this.pageSize)-this.pageSize+1;
+
+        if(this.totalPage % this.pageSize == 0){
+
+        }else{
+            if(this.totalPage > this.pageSize){
+
+            }
+            if(this.totalPage < this.pageSize){
+
+            }
+
+        }
+
+        if(this.startPage == 1){
+            this.prev = false;
+        }else{
+            this.prev = true;
+        }
+
+        if(this.endPage == this.totalPage){
+            this.next = false;
+        }else{
+            this.next = true;
+        }
+
+        if(this.prev){ this.prev_ = this.startPage -1;
+        }else{this.prev_ =1;}
+
+        if(this.next){this.next_ = this.endPage+1;
+        }else{this.next_ = this.totalPage;}
+
+    }
+
 
 }
