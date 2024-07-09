@@ -83,7 +83,8 @@ public class PostalCreationRequestController {
                     //기존detail 삭제
                     detailDeleteService.deleteById(detail);
                     //pdf 파일 삭제
-                    utils.deletePdf();
+                    String pdfPath = existDetail.getPDF_PATH()+existDetail.getPDF_NM();
+                    utils.deletePdf(pdfPath , logger);
 
                     //pdf 저장
                     if(!utils.savePdf(detail , logger)){
