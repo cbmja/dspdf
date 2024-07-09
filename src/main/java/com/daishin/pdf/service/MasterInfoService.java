@@ -18,8 +18,8 @@ public class MasterInfoService {
         return masterRepository.findMaster(MASTER_KEY);
     }
 
-    public List<Master> selectStatusUpper300(){
-        return masterRepository.selectStatusUpper300();
+    public List<Master> selectStatusUpper300(int statusCode){
+        return masterRepository.selectStatusBetween300AndLast(statusCode);
     }
 
     public List<Master> selectMastersByPage(Page page){

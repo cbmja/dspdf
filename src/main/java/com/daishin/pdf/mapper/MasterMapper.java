@@ -20,7 +20,7 @@ public interface MasterMapper {
 
     void updateStatusAndTotalCnt(Master master);
 
-    List<Master> selectStatusUpper300();
+    List<Master> selectStatusBetween300AndLast(int statusCode);
 
     List<Master> selectMastersByPage(Page page);
 

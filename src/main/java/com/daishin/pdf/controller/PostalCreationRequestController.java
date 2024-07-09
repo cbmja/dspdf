@@ -3,7 +3,6 @@ package com.daishin.pdf.controller;
 import com.daishin.pdf.dto.Error;
 import com.daishin.pdf.dto.Master;
 import com.daishin.pdf.dto.Detail;
-import com.daishin.pdf.dto.Status;
 import com.daishin.pdf.log.LogCode;
 import com.daishin.pdf.repository.ErrorRepository;
 import com.daishin.pdf.response.ResponseCode;

@@ -12,6 +12,5 @@ public class Status {
     private String CHANGE_TYPE;
     private LocalDateTime CREATE_DATE;
     private String STATUS_NAME;
-    private String IS_LAST;
 
 }

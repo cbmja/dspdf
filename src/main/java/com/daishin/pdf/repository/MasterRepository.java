@@ -24,10 +24,10 @@ public class MasterRepository {
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
 
-    public List<Master> selectStatusUpper300(){
+    public List<Master> selectStatusBetween300AndLast(int statusCode){
         List<Master> list = new ArrayList<>();
         try{
-            list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectStatusUpper300");
+            list = sql.selectList("com.daishin.pdf.mapper.MasterMapper.selectStatusBetween300AndLast",statusCode);
         }catch (Exception e){
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();

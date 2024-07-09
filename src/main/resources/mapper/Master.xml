@@ -43,8 +43,8 @@
         SELECT * FROM dbo.MASTER WHERE ${cate} LIKE CONCAT('%',#{search},'%') ORDER BY ${sortCate} ${sort} OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
     </select>
 
-    <select id="selectStatusUpper300" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE STATUS >= 300
+    <select id="selectStatusBetween300AndLast" parameterType="int" resultType="Master">
+        SELECT * FROM dbo.MASTER WHERE STATUS >= 300 AND #{statusCode} > STATUS
     </select>
 
     <select id="countSearch" resultType="int" parameterType="com.daishin.pdf.page.Search">
