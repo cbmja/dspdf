@@ -8,6 +8,8 @@ public interface ResponseCode {
     String ERROR = "ERROR";
     String SUCCESS = "SUCCESS";
 
+    String UPDATE = "UPDATE";
+
 
     //VALUE
     String OK = "OK";
@@ -15,6 +17,6 @@ public interface ResponseCode {
     String FILE_ERROR = "FILE_ERROR";
     String JSON_ERROR = "JSON_ERROR";
     String MISSING_VALUE = "MISSING_VALUE : ";
-    String DUPLICATE_VALUE = "DUPLICATE_VALUE : ";
+    String PROCESSED_REQUEST  = "PROCESSED_REQUEST  : ";
 
 }

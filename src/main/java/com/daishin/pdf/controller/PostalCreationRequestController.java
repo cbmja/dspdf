@@ -34,6 +34,8 @@ public class PostalCreationRequestController {
 
         private final StatusInfoService statusInfoService;
 
+        private final DetailDeleteService detailDeleteService;
+
         private final Logger logger = LoggerFactory.getLogger("daishin");
 
     @PostMapping
@@ -69,14 +71,66 @@ public class PostalCreationRequestController {
         if(existDetail != null){
             //중복 값이 있는 경우
             if(existDetail.getError().isBlank()){
-                response.put(ResponseCode.RESULT, ResponseCode.ERROR);
-                response.put(ResponseCode.REMARK, ResponseCode.DUPLICATE_VALUE+"TR_KEY ["+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
-                Error error = new Error();
-                error.setMASTER_KEY(detail.getTR_KEY());
-                error.setERROR_MESSAGE(ResponseCode.DUPLICATE_VALUE+"TR_KEY ["+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
-                errorRepository.save(error);
-                logger.error(LogCode.DUPLICATE_VALUE+" : "+detail);
-                return response;
+                Master supMaster = masterInfoService.findMaster(detail.getMASTER());
+                if(supMaster != null && supMaster.getError().equals(ResponseCode.SQL_ERROR)){
+                    response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                    response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+                    return response;
+                }
+
+                // 수신중인 상태에서만 수정 가능.
+                if(supMaster.getSTATUS() == 100){
+                    //기존detail 삭제
+                    detailDeleteService.deleteById(detail);
+                    //pdf 파일 삭제
+                    utils.deletePdf();
+
+                    //pdf 저장
+                    if(!utils.savePdf(detail , logger)){
+                        response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                        response.put(ResponseCode.REMARK, ResponseCode.FILE_ERROR);
+                        return response;
+                    }
+                    //DB 저장(detail)
+                    if(detailSaveService.save(detail) <= 0){
+                        response.put(ResponseCode.RESULT , ResponseCode.ERROR);
+                        response.put(ResponseCode.REMARK , ResponseCode.SQL_ERROR);
+                        return response;
+                    }
+
+                    //DB에서 detail select -> master에 들어갈 데이터 수집
+                    Detail findDetail = detailInfoService.findDetail(detail);
+                    if(findDetail != null && findDetail.getError().equals(ResponseCode.SQL_ERROR)){
+                        response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                        response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+                        return response;
+                    }
+                    //db에서 직접 건드리지 않은 이상 null일 수 없음
+                    if(findDetail == null){
+                        response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                        response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+                        return response;
+                    }
+
+                    //master 수신시간 갱신
+                    supMaster.setRECEIVED_TIME(findDetail.getSAVE_DATE());
+                    if(masterSaveService.updateSendCnt(supMaster) <= 0){
+                        response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                        response.put(ResponseCode.REMARK, ResponseCode.SQL_ERROR);
+                        return response;
+                    }
+
+                    logger.info(ResponseCode.UPDATE +" : TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                    response.put(ResponseCode.RESULT, ResponseCode.OK);
+                    response.put(ResponseCode.REMARK, ResponseCode.UPDATE +" : TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                    return response;
+                }else{
+                    response.put(ResponseCode.RESULT, ResponseCode.ERROR);
+                    response.put(ResponseCode.REMARK, ResponseCode.PROCESSED_REQUEST  +" : 이미 처리가 완료된 요청 입니다. TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                    logger.error(ResponseCode.PROCESSED_REQUEST);
+                    return  response;
+                }
+
             }else if(existDetail.getError().equals(ResponseCode.SQL_ERROR)){
             //Sql Exception
                 response.put(ResponseCode.RESULT, ResponseCode.ERROR);
