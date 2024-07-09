@@ -120,7 +120,7 @@
             background-color: #a3adac;
         }
 
-        .error-td{
+        .error-button{
             background-color: #f5e9e9;
         }
 
@@ -137,12 +137,14 @@
         Page p = (Page)(request.getAttribute("p"));
     %>
 
-<div style="margin-top: 30px; margin-bottom: 10px;">
-    상태 검색시에는 코드로 검색해주세요
-    <c:forEach var="status" items="${statusList}">
-        / [${status.getSTATUS_NAME()} : ${status.getSTATUS_CODE()}]
-    </c:forEach>
-</div>
+<!-- SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 검색 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS -->
+
+    <div style="margin-top: 30px; margin-bottom: 10px;">
+        상태 검색시에는 코드로 검색해주세요
+        <c:forEach var="status" items="${statusList}">
+            / [${status.getSTATUS_NAME()} : ${status.getSTATUS_CODE()}]
+        </c:forEach>
+    </div>
 
     <form action="/masters" method="get">
         <input type="hidden" name="sort" value="${p.getSort()}">
@@ -157,7 +159,9 @@
         <input type="submit" value="검색">
     </form>
 
+<!-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 검색 EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
 
+<!-- SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS MASTER LIST SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS -->
 
     <form action="/masters/update" method="post">
     <table border="1" >
@@ -200,15 +204,18 @@
                 <input type="hidden" name="pageElement" value="${p.getPageElement()}">
             </td>
             <td><input type="submit" value="상태 저장" onclick="prepareData()"></td>
-            </form>
-            <td class="error-td"><button id="err-button">에러 확인</button></td>
+            <td></td>
         </tr>
-
     </table>
+</form>
 
+<!-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE MASTER LIST EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
 
     <ul>
         <li>
+
+<!-- SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 정렬 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS -->
+
             <li>
             <form action="/masters" method="get">
                     <input type="hidden" name="search" value="${search.getSearch()}">
@@ -230,9 +237,15 @@
                     <input type="submit" value="정렬">
                 </form>
             </li>
+
+<!-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 정렬 EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
+
             <li>
                 <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
             </li>
+
+<!-- SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 목록 수 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS -->
+
             <li>
             <form action="/masters" method="get">
                     <input type="hidden" name="search" value="${search.getSearch()}">
@@ -257,6 +270,18 @@
                 </form>
             </li>
 
+<!-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 목록 수 EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
+
+            <li>
+                <p>&nbsp;&nbsp;&nbsp;&nbsp;</p>
+            </li>
+
+            <li>
+                <button id="err-button">에러 확인</button>
+            </li>
+
+<!-- SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 페이징 버튼 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS -->
+
             <li>
             <ul>
                     <li>
@@ -280,11 +305,10 @@
                     </li>
             </ul>
             </li>
+
+<!-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 페이징 버튼 EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
         <li>
     </ul>
-
-
-
 
 <script>
     const statusMap = new Map();
