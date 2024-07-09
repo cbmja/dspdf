@@ -198,7 +198,7 @@
         </tr>
 
         <c:forEach var="error" items="${errorList}">
-        <tr class="table-row modal-cell" onclick="showModal('${fn:escapeXml(error.getERROR_MESSAGE())}')">
+        <tr class="table-row modal-cell" onclick="showModal('${error.getERROR_MESSAGE()}')">
             <td>${error.getID()}</td>
             <td>내용 확인</td>
             <td>${error.getCREATE_DATE()}</td>
