@@ -1,8 +1,3 @@
-<%@page import="com.daishin.pdf.dto.Master"%>
-<%@page import="com.daishin.pdf.page.Page"%>
-<%@page import="java.util.List"%>
-<%@page import="java.util.ArrayList"%>
-<%@page import= "java.util.LinkedHashMap" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
@@ -128,15 +123,6 @@
 
 </head>
 <body>
-    <%
-        List<Master> list = (List<Master>)request.getAttribute("masterList");
-        LinkedHashMap<String,String> cateList = (LinkedHashMap<String,String>)request.getAttribute("cateList");
-        List<String> statusList = (List<String>)request.getAttribute("statusList");
-        LinkedHashMap<String,String> sortCateList = (LinkedHashMap<String,String>)request.getAttribute("sortCateList");
-        LinkedHashMap<String,String> sortList = (LinkedHashMap<String,String>)request.getAttribute("sortList");
-        Page p = (Page)(request.getAttribute("p"));
-    %>
-
 <!-- SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 검색 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS -->
 
     <div style="margin-top: 30px; margin-bottom: 10px;">

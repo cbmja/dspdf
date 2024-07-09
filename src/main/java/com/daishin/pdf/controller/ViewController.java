@@ -48,10 +48,10 @@ public class ViewController {
         if(search.getCate().equals("TYPE")){
             String realTime = "실시간";
             String arrangement = "배치";
-            if(realTime.contains(search.getSearch())){
+            if(!search.getSearch().isBlank() && realTime.contains(search.getSearch())){
                 search.setSearch("REAL_TIME");
             }
-            if(arrangement.contains(search.getSearch())){
+            if(!search.getSearch().isBlank() && arrangement.contains(search.getSearch())){
                 search.setSearch("ARRANGEMENT");
             }
         }
