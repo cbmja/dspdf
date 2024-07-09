@@ -14,6 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
@@ -78,11 +79,11 @@ public class Utils {
     ///////////////////////
 
     //json 저장
-    public boolean saveJson(String master ,  Logger logger) {
+    public boolean saveJson(String master ,  Logger logger , String receivingPath , String completePath) {
 
 
         //저장경로 
-        String path = "C:\\DATA\\receiving\\"+master+"\\";
+        String path = receivingPath+master+"\\";
 
         Map<String , List> jsonList = new HashMap<>();
 
@@ -103,7 +104,7 @@ public class Utils {
 
         List<Detail> details = new ArrayList<>();
         for(Detail d : detailList){
-            d.setPDF_PATH("C:\\DATA\\complete\\"+d.getMASTER());
+            d.setPDF_PATH(completePath+d.getMASTER());
             details.add(d);
         }
 
@@ -135,11 +136,11 @@ public class Utils {
 
 
         //수신 완료 되면 receiving 에서 complete 폴더로 이동
-        public int moveDir(String masterKey , Logger logger){
+        public int moveDir(String masterKey , Logger logger, String receivingPath , String completePath){
 
                 int result = 1;
-                Path sourceDir = Paths.get("C:\\DATA\\receiving\\"+masterKey);
-                Path targetDir = Paths.get("C:\\DATA\\complete\\"+masterKey);
+                Path sourceDir = Paths.get(receivingPath+masterKey);
+                Path targetDir = Paths.get(completePath+masterKey);
 
                 try {
                     //이동시킬 폴더 생성
@@ -173,7 +174,7 @@ public class Utils {
                 }
 
                 for(Detail detail : details){
-                    detail.setPDF_PATH("C:\\DATA\\complete\\"+masterKey);
+                    detail.setPDF_PATH(completePath+masterKey);
                     if(detailSaveService.updatePdfPath(detail) < 0){
                         result = 0;
                         return result;
@@ -185,7 +186,7 @@ public class Utils {
 
 
 
-    public void checkDirectoryExists() {
+    public void checkDirectoryExists(String completePath) {
 
         List<Master> masters = masterInfoService.selectByStatus(200);
         if(masters.isEmpty()){
@@ -193,7 +194,7 @@ public class Utils {
         }
 
         for(Master master : masters){
-            Path directoryPath = Paths.get("C:\\DATA\\complete\\"+master.getMASTER_KEY());
+            Path directoryPath = Paths.get(completePath+master.getMASTER_KEY());
             if(!Files.exists(directoryPath)) {
                 //존재하지 않는 경우 (이동시킨 경우) 200-> 300
                 master.setSTATUS(300);

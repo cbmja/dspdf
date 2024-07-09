@@ -3,6 +3,7 @@ package com.daishin.pdf.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -56,7 +57,9 @@ public class Detail {
     private String error="";
 
 
-    public Detail detailSetting(Detail detail){
+
+
+    public Detail detailSetting(Detail detail , String receivingPath){
 
         // pdf_path , master 값 설정 SSS
         String path = "";
@@ -71,16 +74,16 @@ public class Detail {
 
             //14 이전이면 년도-월-오늘날짜
             if (currentTime.isBefore(comparisonTime)) {
-                path = "C:\\DATA\\receiving\\"+ LocalDate.now()+"\\";
+                path = receivingPath+ LocalDate.now()+"\\";
                 master = LocalDate.now()+"";
             } else {
                 //14 이후이면 년도-월-내일날짜
-                path = "C:\\DATA\\receiving\\"+LocalDate.now().plusDays(1L)+"\\";
+                path = receivingPath+LocalDate.now().plusDays(1L)+"\\";
                 master = LocalDate.now().plusDays(1L)+"";
             }
         } else {
             //대량
-            path = "C:\\DATA\\receiving\\"+ detail.getTR_KEY()+"\\";
+            path = receivingPath+ detail.getTR_KEY()+"\\";
             master = detail.getTR_KEY();
         }
         detail.setPDF_PATH(path);

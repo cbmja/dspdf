@@ -7,6 +7,7 @@ import com.daishin.pdf.service.MasterInfoService;
 import com.daishin.pdf.service.MasterSaveService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,12 +20,17 @@ import java.util.regex.Pattern;
 @SpringBootTest
 class PdfApplicationTests {
 
+/*
 	@Autowired
 	private MasterSaveService masterSaveService;
 	@Autowired
 	private MasterInfoService masterInfoService;
 	@Autowired
 	private DetailSaveService detailSaveService;
+
+	@Value("${storage.receivingPath}")
+	private String receivingPath;
+*/
 
 	@Test
 	void contextLoads() {
@@ -43,6 +49,7 @@ class PdfApplicationTests {
 			masterSaveService.save(master);
 		}
 */
+		//System.out.println(this.receivingPath);
 
 
 

@@ -11,6 +11,7 @@ import com.daishin.pdf.util.Utils;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
@@ -34,6 +35,10 @@ public class PostalCreationRequestController {
 
         private final DetailDeleteService detailDeleteService;
 
+    @Value("${storage.receivingPath}")
+    private String receivingPath;
+    @Value("${storage.completePath}")
+    private String completePath;
 
 
         private final Logger logger = LoggerFactory.getLogger("daishin");
@@ -64,7 +69,7 @@ public class PostalCreationRequestController {
         }
 
         //detail 값 세팅 : PDF_PATH , MASTER , PK
-        Detail detail = _detail.detailSetting(_detail);
+        Detail detail = _detail.detailSetting(_detail,receivingPath);
 
 
         //중복 체크
@@ -250,14 +255,14 @@ public class PostalCreationRequestController {
                 }
 
                 //JSON 파일 생성
-                if(!utils.saveJson(detail.getMASTER()  , logger)){
+                if(!utils.saveJson(detail.getMASTER()  , logger , receivingPath , completePath)){
                     response.put(ResponseCode.RESULT, ResponseCode.ERROR);
                     response.put(ResponseCode.REMARK, ResponseCode.JSON_ERROR);
                     return response;
                 }
 
                 //폴더 이동
-                int mdresult = utils.moveDir(detail.getMASTER() , logger);
+                int mdresult = utils.moveDir(detail.getMASTER() , logger , receivingPath , completePath);
                 if(mdresult == -1){
                     response.put(ResponseCode.RESULT, ResponseCode.ERROR);
                     response.put(ResponseCode.REMARK, ResponseCode.FILE_ERROR);

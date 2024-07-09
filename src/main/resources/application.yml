@@ -23,5 +23,10 @@ mybatis:
 #    map-underscore-to-camel-case: true
     
 storage:
-  path: C:\\DATA\\
-  
+  logPath: C:\\DATA\\log
+  receivingPath: C:\\DATA\\receiving\\
+  completePath: C:\\DATA\\complete\\
+
+logging:
+  file:
+    path: C:\\DATA\\log

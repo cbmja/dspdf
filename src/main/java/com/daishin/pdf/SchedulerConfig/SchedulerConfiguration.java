@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.Scheduled;
 import java.time.LocalDate;
@@ -31,6 +32,10 @@ public class SchedulerConfiguration {
 
     private final MasterDeleteService masterDeleteService;
     private final DetailDeleteService detailDeleteService;
+    @Value("${storage.receivingPath}")
+    private String receivingPath;
+    @Value("${storage.completePath}")
+    private String completePath;
 
     private final Logger logger = LoggerFactory.getLogger("daishin");
 
@@ -55,10 +60,10 @@ public class SchedulerConfiguration {
             }
 
             //json 파일 생성 및 폴더 이동 receiving -> complete
-            utils.saveJson(LocalDate.now()+"" , logger);
+            utils.saveJson(LocalDate.now()+"" , logger , receivingPath , completePath);
 
             //폴더 이동
-            utils.moveDir(master.getMASTER_KEY() , logger);
+            utils.moveDir(master.getMASTER_KEY() , logger , receivingPath , completePath);
 
     }
 
@@ -116,7 +121,7 @@ public class SchedulerConfiguration {
             }
         }
         //이동시킨 master 상태 변화 200 -> 300
-        utils.checkDirectoryExists();
+        utils.checkDirectoryExists(completePath);
 
     }
 
