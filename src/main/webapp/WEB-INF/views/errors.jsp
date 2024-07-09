@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
@@ -119,6 +120,45 @@
         }
 
 
+
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .modal-cell{
+            cursor: pointer;
+        }
         </style>
 
 </head>
@@ -158,16 +198,21 @@
         </tr>
 
         <c:forEach var="error" items="${errorList}">
-        <tr class="table-row">
+        <tr class="table-row modal-cell" onclick="showModal('${fn:escapeXml(error.getERROR_MESSAGE())}')">
             <td>${error.getID()}</td>
-            <td>${error.getERROR_MESSAGE()}</td>
+            <td>내용 확인</td>
             <td>${error.getCREATE_DATE()}</td>
             <td>${error.getREPOSITORY()}</td>
             <td>${error.getMASTER_KEY()}</td>
         </tr>
         </c:forEach>
     </table>
-
+    <div id="contentModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <p id="modalContent"></p>
+        </div>
+    </div>
 <!-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE MASTER LIST EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
     <ul>
         <li>
@@ -266,7 +311,23 @@
 <!-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE 페이징 버튼 EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
         <li>
     </ul>
+    <script>
+        function showModal(content) {
+            document.getElementById('modalContent').innerText = content;
+            document.getElementById('contentModal').style.display = "block";
+        }
 
+        function closeModal() {
+            document.getElementById('contentModal').style.display = "none";
+        }
+
+        window.onclick = function(event) {
+            var modal = document.getElementById('contentModal');
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+    </script>
 
 </body>
 </html>
