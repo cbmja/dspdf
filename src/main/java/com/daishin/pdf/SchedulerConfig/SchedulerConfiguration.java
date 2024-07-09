@@ -47,7 +47,7 @@ public class SchedulerConfiguration {
             return;
             }
 
-            master.setTOTAL_SEND_CNT(total+"");
+            master.setTOTAL_SEND_CNT(total);
 
             //master 작업 상태 업데이트
             if(masterSaveService.updateStatusAndTotalCnt(master) <= 0){

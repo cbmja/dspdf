@@ -199,11 +199,11 @@ public class PostalCreationRequestController {
 
         //첫 저장
         if(findMaster == null){
-            if(!detail.getTOTAL_SEND_CNT().equals("1")){
+            if(detail.getTOTAL_SEND_CNT() != 1){
                 master.setTYPE("ARRANGEMENT"); //배치(대량)
                 master.setTOTAL_SEND_CNT(detail.getTOTAL_SEND_CNT());
             }else{
-                master.setTOTAL_SEND_CNT("수신중");
+                master.setTOTAL_SEND_CNT(0);
                 master.setTYPE("REAL_TIME"); //실시간(단일)
             }
             master.setSEND_CNT(1);
@@ -228,7 +228,7 @@ public class PostalCreationRequestController {
 
 
         //배치(대량)그룹 전송 완료 처리 / status 갱신 : 100(수신중) -> 200(수신완료) , JSON 파일저장
-        if(!detail.getTOTAL_SEND_CNT().equals("1")){
+        if(detail.getTOTAL_SEND_CNT()!=1){
 
             int detailGroupCnt = detailInfoService.countGroup(detail);
             if(detailGroupCnt < 0){
@@ -238,7 +238,7 @@ public class PostalCreationRequestController {
             }
 
             //그룹의 마지막 건수일 경우
-            if(detailGroupCnt==Integer.parseInt(detail.getTOTAL_SEND_CNT())){
+            if(detailGroupCnt==detail.getTOTAL_SEND_CNT()){
 
                 master.setSTATUS(200);
                 //업데이트 실패
@@ -289,12 +289,11 @@ public class PostalCreationRequestController {
             errMsg += "TR_KEY , ";
         }
 
-        if(detail.getTOTAL_SEND_CNT() == null || detail.getTOTAL_SEND_CNT().isBlank()){
+        if(detail.getTOTAL_SEND_CNT() <= 0){
             errMsg += "TOTAL_SEND_CNT , ";
         }
 
-        if(detail.getTOTAL_SEND_CNT() != null && !detail.getTOTAL_SEND_CNT().isBlank() &&
-                !detail.getTOTAL_SEND_CNT().equals("1")){
+        if(detail.getTOTAL_SEND_CNT() > 1){
             if(detail.getDLV_CD() == null || detail.getDLV_CD().isBlank()){
             errMsg += "DLV_CD , ";
             }
@@ -306,7 +305,7 @@ public class PostalCreationRequestController {
         if(detail.getPRINT_TYPE_NM() == null || detail.getPRINT_TYPE_NM().isBlank()){
             errMsg += "PRINT_TYPE_NM , ";
         }
-        if(detail.getRECV_NUM() == null || detail.getRECV_NUM().isBlank()){
+        if(detail.getRECV_NUM() <= 0){
             errMsg += "RECV_NUM , ";
         }
         if(detail.getDM_LINK_KEY() == null || detail.getDM_LINK_KEY().isBlank()){

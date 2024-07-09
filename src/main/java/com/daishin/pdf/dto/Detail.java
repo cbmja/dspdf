@@ -16,17 +16,17 @@ public class Detail {
     @JsonProperty("TR_KEY")
     private String TR_KEY;
     @JsonProperty("TOTAL_SEND_CNT")
-    private String TOTAL_SEND_CNT;
+    private int TOTAL_SEND_CNT;
     @JsonProperty("DLV_TYPE_CD")
     private String DLV_TYPE_CD;
     @JsonProperty("PRINT_TYPE_NM")
     private String PRINT_TYPE_NM;
     @JsonProperty("PAGE_CNT")
-    private String PAGE_CNT;
+    private int PAGE_CNT;
     @JsonProperty("RET_YN")
     private String RET_YN;
     @JsonProperty("RECV_NUM")
-    private String RECV_NUM;
+    private int RECV_NUM;
     @JsonProperty("DM_LINK_KEY")
     private String DM_LINK_KEY;
     @JsonProperty("CIFNO")
@@ -62,7 +62,7 @@ public class Detail {
         String path = "";
         String master = "";
         //단일
-        if(detail.getTOTAL_SEND_CNT().equals("1")){
+        if(detail.getTOTAL_SEND_CNT() == 1){
 
             LocalTime currentTime = LocalTime.now();
 
