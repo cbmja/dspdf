@@ -190,7 +190,7 @@
             <td colspan="5">
                 총 검색 건수 : ${p.getTotal()}
                 <input type="hidden" id="statusData" name="statusData">
-                <input type="hidden" name="search" value="${p.getSearch()}">
+                <input type="hidden" name="search" value="${search.getSearch()}">
                 <input type="hidden" name="page" value="${p.getPage()}">
                 <input type="hidden" name="cate" value="${p.getCate()}">
                 <input type="hidden" name="sort" value="${p.getSort()}">
@@ -208,7 +208,7 @@
         <li>
             <li>
             <form action="/masters" method="get">
-                    <input type="hidden" name="search" value="${p.getSearch()}">
+                    <input type="hidden" name="search" value="${search.getSearch()}">
                     <input type="hidden" name="page" value="${p.getPage()}">
                     <input type="hidden" name="cate" value="${p.getCate()}">
                     <input type="hidden" name="pageElement" value="${p.getPageElement()}">
@@ -232,7 +232,7 @@
             </li>
             <li>
             <form action="/masters" method="get">
-                    <input type="hidden" name="search" value="${p.getSearch()}">
+                    <input type="hidden" name="search" value="${search.getSearch()}">
                     <input type="hidden" name="page" value="${p.getPage()}">
                     <input type="hidden" name="cate" value="${p.getCate()}">
                     <input type="hidden" name="sort" value="${p.getSort()}">
@@ -257,23 +257,23 @@
             <li>
             <ul>
                     <li>
-                        <a class="page-button" href="/masters?page=1&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> << </a>
+                        <a class="page-button" href="/masters?page=1&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> << </a>
                     </li>
                     <li>
-                        <a class="page-button" href="/masters?page=${p.getPage()-1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> < </a>
+                        <a class="page-button" href="/masters?page=${p.getPage()-1}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> < </a>
                     </li>
                     <li>
                     <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
                     <li>
-                                <a class="page-button<c:if test='${p.getPage() eq i}'> active </c:if> " href="/masters?page=${i}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}">${i}</a>
+                                <a class="page-button<c:if test='${p.getPage() eq i}'> active </c:if> " href="/masters?page=${i}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}">${i}</a>
                     </li>
                     </c:forEach>
 
                     <li>
-                        <a class="page-button" href="/masters?page=${p.getPage()+1}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> > </a>
+                        <a class="page-button" href="/masters?page=${p.getPage()+1}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> > </a>
                     </li>
                     <li>
-                        <a class="page-button" href="/masters?page=${p.getTotalPage()}&search=${p.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >> </a>
+                        <a class="page-button" href="/masters?page=${p.getTotalPage()}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >> </a>
                     </li>
             </ul>
             </li>

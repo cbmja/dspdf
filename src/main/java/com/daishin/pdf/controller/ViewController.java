@@ -44,6 +44,20 @@ public class ViewController {
     @GetMapping("/masters")
     public String masterList(@ModelAttribute Search search, Model model){
 
+        String realSearch = search.getSearch();
+        if(search.getCate().equals("TYPE")){
+            String realTime = "실시간";
+            String arrangement = "배치";
+            if(realTime.contains(search.getSearch())){
+                search.setSearch("REAL_TIME");
+            }
+            if(arrangement.contains(search.getSearch())){
+                search.setSearch("ARRANGEMENT");
+            }
+        }
+
+
+
         //페이징 처리
         Page page = new Page(search.getPage() , masterInfoService.countSearch(search) , search);
         model.addAttribute("p" , page);
@@ -56,6 +70,8 @@ public class ViewController {
         }).collect(Collectors.toList());
 
         model.addAttribute("masterList" , masterList);
+        search.setSearch(realSearch);
+        model.addAttribute("search" , search);
         //selectOption
         model.addAttribute("cateList" , selectOption.getCateList());
         model.addAttribute("statusList" , selectOption.getStatusList());
@@ -96,6 +112,18 @@ public class ViewController {
             }
 
         }
+
+        String realSearch = search.getSearch();
+        if(search.getCate().equals("TYPE")){
+            String realTime = "실시간";
+            String arrangement = "배치";
+            if(realTime.contains(search.getSearch())){
+                search.setSearch("REAL_TIME");
+            }
+            if(arrangement.contains(search.getSearch())){
+                search.setSearch("ARRANGEMENT");
+            }
+        }
         
         //수정 이후에도 이후 작업을 동일한 페이지에서 이어서 할 수 있도록 redirect 하지 않고 여기서 페이징 처리
         //페이징 처리
@@ -110,7 +138,8 @@ public class ViewController {
             return m;
         }).collect(Collectors.toList());
         model.addAttribute("masterList" , masterList);
-
+        search.setSearch(realSearch);
+        model.addAttribute("search" , search);
         //selectOption
         model.addAttribute("cateList" , selectOption.getCateList());
         model.addAttribute("statusList" , selectOption.getStatusList());
