@@ -16,17 +16,17 @@ public class Detail {
     @JsonProperty("TR_KEY")
     private String TR_KEY;
     @JsonProperty("TOTAL_SEND_CNT")
-    private int TOTAL_SEND_CNT;
+    private Integer TOTAL_SEND_CNT;
     @JsonProperty("DLV_TYPE_CD")
     private String DLV_TYPE_CD;
     @JsonProperty("PRINT_TYPE_NM")
     private String PRINT_TYPE_NM;
     @JsonProperty("PAGE_CNT")
-    private int PAGE_CNT;
+    private Integer PAGE_CNT;
     @JsonProperty("RET_YN")
     private String RET_YN;
     @JsonProperty("RECV_NUM")
-    private int RECV_NUM;
+    private Integer RECV_NUM;
     @JsonProperty("DM_LINK_KEY")
     private String DM_LINK_KEY;
     @JsonProperty("CIFNO")

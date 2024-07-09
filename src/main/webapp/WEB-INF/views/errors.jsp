@@ -279,7 +279,7 @@
             </li>
 
             <li>
-                <button id="err-button">에러 확인</button>
+                <button id="go-list">목록으로</button>
             </li>
 
 <!-- SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS 페이징 버튼 SSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS -->
@@ -327,6 +327,10 @@
                 modal.style.display = "none";
             }
         }
+
+            document.getElementById("go-list").onclick = function () {
+                location.href = "/masters";
+            }
     </script>
 
 </body>

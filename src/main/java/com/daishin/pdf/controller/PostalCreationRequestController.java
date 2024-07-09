@@ -289,11 +289,11 @@ public class PostalCreationRequestController {
             errMsg += "TR_KEY , ";
         }
 
-        if(detail.getTOTAL_SEND_CNT() <= 0){
+        if(detail.getTOTAL_SEND_CNT() == null || detail.getTOTAL_SEND_CNT() <= 0){
             errMsg += "TOTAL_SEND_CNT , ";
         }
 
-        if(detail.getTOTAL_SEND_CNT() > 1){
+        if(detail.getTOTAL_SEND_CNT() != null && detail.getTOTAL_SEND_CNT() > 1){
             if(detail.getDLV_CD() == null || detail.getDLV_CD().isBlank()){
             errMsg += "DLV_CD , ";
             }
@@ -305,7 +305,7 @@ public class PostalCreationRequestController {
         if(detail.getPRINT_TYPE_NM() == null || detail.getPRINT_TYPE_NM().isBlank()){
             errMsg += "PRINT_TYPE_NM , ";
         }
-        if(detail.getRECV_NUM() <= 0){
+        if(detail.getRECV_NUM() == null || detail.getRECV_NUM() <= 0){
             errMsg += "RECV_NUM , ";
         }
         if(detail.getDM_LINK_KEY() == null || detail.getDM_LINK_KEY().isBlank()){
