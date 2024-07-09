@@ -30,8 +30,8 @@ public class StatusRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("StatusRepository");
             errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
 
@@ -48,8 +48,8 @@ public class StatusRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("StatusRepository");
             errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
 

@@ -68,6 +68,7 @@ public class Utils {
             e.printStackTrace();
             Error error = new Error();
             error.setERROR_MESSAGE(e.getMessage()+"\n param : "+detail);
+            error.setERROR_CODE(LogCode.PDF_ERROR);
             errorRepository.save(error);
             result = false;
         }
@@ -123,6 +124,7 @@ public class Utils {
             Error error = new Error();
             error.setMASTER_KEY(master);
             error.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
+            error.setERROR_CODE(LogCode.JSON_ERROR);
             errorRepository.save(error);
             return false;
         }
@@ -158,6 +160,7 @@ public class Utils {
                     Error error = new Error();
                     error.setMASTER_KEY(masterKey);
                     error.setERROR_MESSAGE(e.getMessage()+"\n param : "+masterKey);
+                    error.setERROR_CODE(LogCode.FILE_MOVE_ERROR);
                     errorRepository.save(error);
                     result = -1;
                 }
@@ -211,6 +214,7 @@ public class Utils {
             e.printStackTrace();
             Error error = new Error();
             error.setERROR_MESSAGE(e.getMessage());
+            error.setERROR_CODE(LogCode.PDF_ERROR);
             errorRepository.save(error);
         }
     }

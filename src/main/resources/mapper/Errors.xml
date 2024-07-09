@@ -8,14 +8,14 @@
         INSERT INTO dbo.ERROR
         (ERROR_MESSAGE
         ,CREATE_DATE
-        ,REPOSITORY
         ,MASTER_KEY
+        ,ERROR_CODE
         )
         VALUES
         (#{ERROR_MESSAGE}
         ,GETDATE()
-        ,#{REPOSITORY}
         ,#{MASTER_KEY}
+        ,#{ERROR_CODE}
         )
     </insert>
 

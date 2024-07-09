@@ -27,7 +27,7 @@ public class SelectOption {
 
         LinkedHashMap<String,String> cateList = new LinkedHashMap<>();
         cateList.put("CREATE_DATE" , "일자");
-        cateList.put("REPOSITORY" , "레포지토리");
+        cateList.put("ERROR_CODE" , "에러 코드");
         cateList.put("MASTER_KEY" , "그룹");
         return cateList;
     }

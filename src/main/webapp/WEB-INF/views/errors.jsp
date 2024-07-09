@@ -193,7 +193,7 @@
             <th> NUM </th>
             <th> 내용 </th>
             <th> 일자 </th>
-            <th> 레퍼지토리 </th>
+            <th> 에러 코드 </th>
             <th> 그룹 </th>
         </tr>
 
@@ -202,7 +202,7 @@
             <td>${error.getID()}</td>
             <td>내용 확인</td>
             <td>${error.getCREATE_DATE()}</td>
-            <td>${error.getREPOSITORY()}</td>
+            <td>${error.getERROR_CODE()}</td>
             <td>${error.getMASTER_KEY()}</td>
         </tr>
         </c:forEach>

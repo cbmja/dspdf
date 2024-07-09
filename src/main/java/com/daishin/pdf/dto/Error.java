@@ -10,7 +10,8 @@ public class Error {
     private int ID;
     private String ERROR_MESSAGE;
     private LocalDateTime CREATE_DATE;
-    private String REPOSITORY;
     private String MASTER_KEY="";
+    private String ERROR_CODE;
+
 
 }

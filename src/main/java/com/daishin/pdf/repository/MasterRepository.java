@@ -32,8 +32,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
         return list;
@@ -49,9 +49,9 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("MasterRepository");
             errors.setMASTER_KEY(master.getMASTER_KEY());
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
         return result;
@@ -70,8 +70,8 @@ public class MasterRepository {
             e.printStackTrace();
             Error errors = new Error();
             errors.setMASTER_KEY(MASTER_KEY);
-            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+MASTER_KEY);
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
         return master;
@@ -89,8 +89,8 @@ public class MasterRepository {
             e.printStackTrace();
             Error errors = new Error();
             errors.setMASTER_KEY(master.getMASTER_KEY());
-            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
         return result;
@@ -107,9 +107,9 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("MasterRepository");
             errors.setMASTER_KEY(master.getMASTER_KEY());
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
         return result;
@@ -126,9 +126,9 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("MasterRepository");
             errors.setMASTER_KEY(master.getMASTER_KEY());
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+master);
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
         return result;
@@ -151,8 +151,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+page);
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
 
@@ -170,8 +170,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage()+"\n param : "+search);
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
         return result;
@@ -188,8 +188,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
 
@@ -205,8 +205,8 @@ public class MasterRepository {
             logger.error(LogCode.SQL_ERROR);
             e.printStackTrace();
             Error errors = new Error();
-            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
         return list;
@@ -221,8 +221,8 @@ public class MasterRepository {
             e.printStackTrace();
             Error errors = new Error();
             errors.setMASTER_KEY(master.getMASTER_KEY());
-            errors.setREPOSITORY("MasterRepository");
             errors.setERROR_MESSAGE(e.getMessage());
+            errors.setERROR_CODE(LogCode.SQL_ERROR);
             errorsRepository.save(errors);
         }
         return result;
