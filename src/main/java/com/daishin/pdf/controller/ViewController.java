@@ -41,7 +41,6 @@ public class ViewController {
 
     private final ErrorRepository errorRepository;
 
-    private final Utils utils;
 
     private final Logger logger = LoggerFactory.getLogger("daishin");
 

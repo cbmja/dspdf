@@ -25,6 +25,7 @@ public class PostalCreationRequestController {
 
         private final DetailSaveService detailSaveService;
         private final DetailInfoService detailInfoService;
+        private final DetailDeleteService detailDeleteService;
 
         private final Utils utils;
 
@@ -32,7 +33,7 @@ public class PostalCreationRequestController {
         private final MasterSaveService masterSaveService;
 
 
-        private final DetailDeleteService detailDeleteService;
+
 
     @Value("${storage.receivingPath}")
     private String receivingPath;

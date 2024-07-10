@@ -24,14 +24,16 @@ import java.util.regex.Pattern;
 public class SchedulerConfiguration {
 
     private final Utils utils;
+
     private final MasterSaveService masterSaveService;
     private final MasterInfoService masterInfoService;
-    private final DetailInfoService detailInfoService;
+    private final MasterDeleteService masterDeleteService;
 
     private final StatusInfoService statusInfoService;
 
-    private final MasterDeleteService masterDeleteService;
     private final DetailDeleteService detailDeleteService;
+    private final DetailInfoService detailInfoService;
+
     @Value("${storage.receivingPath}")
     private String receivingPath;
     @Value("${storage.completePath}")
