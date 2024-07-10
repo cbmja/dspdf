@@ -2,14 +2,14 @@ package com.daishin.pdf.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @Data
+@ToString(exclude = {"PK", "SAVE_DATE" , "PDF_PATH" ,"MASTER" , "PDF_NM" , "error"})
 public class Detail {
 
     @JsonProperty("PK")

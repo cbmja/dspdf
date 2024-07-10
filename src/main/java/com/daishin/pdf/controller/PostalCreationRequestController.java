@@ -31,7 +31,6 @@ public class PostalCreationRequestController {
         private final MasterInfoService masterInfoService;
         private final MasterSaveService masterSaveService;
 
-        private final StatusInfoService statusInfoService;
 
         private final DetailDeleteService detailDeleteService;
 
@@ -53,7 +52,7 @@ public class PostalCreationRequestController {
         Map<String , String> response = new LinkedHashMap<>();
 
         //요청 정보 log
-        logger.info(LogCode.DETAIL_REQUEST +" : " +_detail);
+        logger.info(LogCode.DETAIL_REQUEST +" : " +_detail.toString());
 
         //필수 항목 누락 체크
         List<Object> checkList = detailCheck(_detail);
