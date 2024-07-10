@@ -24,6 +24,6 @@ mybatis:
     
 storage:
   logPath: C:\DATA\log
-  receivingPath: C:\\DATA\\receiving\\
-  completePath: C:\\DATA\\complete\\
+  receivingPath: C:\DATA\receiving\
+  completePath: C:\DATA\complete\
 
