@@ -27,4 +27,8 @@
         SELECT * FROM dbo.ERROR WHERE ${cate} LIKE CONCAT('%',#{search},'%') ORDER BY ${sortCate} ${sort} OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
     </select>
 
+    <select id="selectById" parameterType="String" resultType="Error">
+        SELECT * FROM dbo.ERROR WHERE ID = #{id}
+    </select>
+
 </mapper>

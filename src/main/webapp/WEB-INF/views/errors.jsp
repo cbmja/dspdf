@@ -119,46 +119,6 @@
             background-color: #f5e9e9;
         }
 
-
-
-
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            padding-top: 100px;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
-
-        .close {
-            color: #aaa;
-            float: right;
-            font-size: 28px;
-            font-weight: bold;
-        }
-
-        .close:hover,
-        .close:focus {
-            color: black;
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .modal-cell{
-            cursor: pointer;
-        }
         </style>
 
 </head>
@@ -198,21 +158,16 @@
         </tr>
 
         <c:forEach var="error" items="${errorList}">
-        <tr class="table-row modal-cell" onclick="showModal('${error.getERROR_MESSAGE()}')">
+        <tr class="table-row">
             <td>${error.getID()}</td>
-            <td>내용 확인</td>
+            <td>    <button onclick="openNewWindow('${error.getID()}')">내용 확인</button></td>
             <td>${error.getCREATE_DATE()}</td>
             <td>${error.getERROR_CODE()}</td>
             <td>${error.getMASTER_KEY()}</td>
         </tr>
         </c:forEach>
     </table>
-    <div id="contentModal" class="modal">
-        <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
-            <p id="modalContent"></p>
-        </div>
-    </div>
+
 <!-- EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE MASTER LIST EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE -->
     <ul>
         <li>
@@ -312,26 +267,14 @@
         <li>
     </ul>
     <script>
-        function showModal(encodedContent) {
-            var content = decodeURIComponent(encodedContent);
-            document.getElementById('modalContent').innerText = content;
-            document.getElementById('contentModal').style.display = "block";
+
+        document.getElementById("go-list").onclick = function () {
+            location.href = "/masters";
         }
 
-        function closeModal() {
-            document.getElementById('contentModal').style.display = "none";
+        function openNewWindow(id) {
+            window.open('/error/detail?errorId='+id);
         }
-
-        window.onclick = function(event) {
-            var modal = document.getElementById('contentModal');
-            if (event.target == modal) {
-                modal.style.display = "none";
-            }
-        }
-
-            document.getElementById("go-list").onclick = function () {
-                location.href = "/masters";
-            }
     </script>
 
 </body>

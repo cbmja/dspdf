@@ -54,6 +54,10 @@ public class ErrorRepository {
         return errors;
     }
 
+    public Error selectById(String id){
+        return sql.selectOne("com.daishin.pdf.mapper.ErrorMapper.selectById" , id);
+    }
+
 }
 
 

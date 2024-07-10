@@ -16,4 +16,6 @@ public interface ErrorsMapper {
     int countSearch(ErrorSearch errorSearch);
 
     List<Error> selectErrorsByPage(Page page);
+
+    Error selectById(String id);
 }

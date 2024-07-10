@@ -175,7 +175,13 @@ public class ViewController {
         return "errors";
     }
 
+    @GetMapping("/error/detail")
+    public String errorDetail(@RequestParam String errorId, Model model) {
 
+        model.addAttribute("error" , errorRepository.selectById(errorId));
+
+        return "error_detail";
+    }
 
 
 }
