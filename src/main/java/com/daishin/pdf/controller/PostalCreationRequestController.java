@@ -326,10 +326,6 @@ public class PostalCreationRequestController {
         if(detail.getRECV_ADDR() == null || detail.getRECV_ADDR().isBlank()){
             errMsg += "RECV_ADDR , ";
         }
-        /*
-        if(detail.getCIFNO() == null || detail.getCIFNO().isBlank()){
-            errMsg += "CIFNO , ";
-        }*/
         if(detail.getFile() == null || detail.getFile().isEmpty()){
             errMsg += "pdf file , ";
         }
