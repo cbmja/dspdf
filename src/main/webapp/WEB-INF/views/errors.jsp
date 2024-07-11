@@ -136,6 +136,8 @@
         <input type="hidden" name="sort" value="${p.getSort()}">
         <input type="hidden" name="sortCate" value="${p.getSortCate()}">
         <input type="hidden" name="pageElement" value="${p.getPageElement()}">
+        <input type="datetime-local" name="startDate" value="${search.getStartDate()}">
+        <input type="datetime-local" name="endDate" value="${search.getEndDate()}">
         <select name="cate">
             <c:forEach var="cate" items="${cateList}">
                 <option value="${cate.key}" <c:if test="${p.getCate() eq cate.key}">selected</c:if> >${cate.value}</option>
@@ -180,6 +182,8 @@
                     <input type="hidden" name="page" value="${p.getPage()}">
                     <input type="hidden" name="cate" value="${p.getCate()}">
                     <input type="hidden" name="pageElement" value="${p.getPageElement()}">
+                    <input type="hidden" name="startDate" value="${search.getStartDate()}">
+                    <input type="hidden" name="endDate" value="${search.getEndDate()}">
 
                     <select name="sortCate">
                     <c:forEach var="sortCate" items="${sortCateList}">
@@ -210,7 +214,8 @@
                     <input type="hidden" name="cate" value="${p.getCate()}">
                     <input type="hidden" name="sort" value="${p.getSort()}">
                     <input type="hidden" name="sortCate" value="${p.getSortCate()}">
-
+                    <input type="hidden" name="startDate" value="${search.getStartDate()}">
+                    <input type="hidden" name="endDate" value="${search.getEndDate()}">
                     <select name="pageElement" style="margin-lift: 15px;">
                         <option value="10" <c:if test="${p.getPageElement() eq 10}"> selected </c:if> >10</option>
                         <option value="20" <c:if test="${p.getPageElement() eq 20}"> selected </c:if> >20</option>
@@ -242,23 +247,23 @@
             <li>
             <ul>
                     <li>
-                        <a class="page-button" href="/errors?page=1&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> << </a>
+                        <a class="page-button" href="/errors?page=1&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}&startDate=${search.getStartDate()}&endDate=${search.getEndDate()}"> << </a>
                     </li>
                     <li>
-                        <a class="page-button" href="/errors?page=${p.getPage()-1}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> < </a>
+                        <a class="page-button" href="/errors?page=${p.getPage()-1}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}&startDate=${search.getStartDate()}&endDate=${search.getEndDate()}"> < </a>
                     </li>
                     <li>
                     <c:forEach var="i" begin="${p.getStartPage()}" end="${p.getStartPage()+(p.getEndPage()-p.getStartPage())}">
                     <li>
-                                <a class="page-button<c:if test='${p.getPage() eq i}'> active </c:if> " href="/errors?page=${i}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}">${i}</a>
+                                <a class="page-button<c:if test='${p.getPage() eq i}'> active </c:if> " href="/errors?page=${i}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}&startDate=${search.getStartDate()}&endDate=${search.getEndDate()}">${i}</a>
                     </li>
                     </c:forEach>
 
                     <li>
-                        <a class="page-button" href="/errors?page=${p.getPage()+1}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> > </a>
+                        <a class="page-button" href="/errors?page=${p.getPage()+1}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}&startDate=${search.getStartDate()}&endDate=${search.getEndDate()}"> > </a>
                     </li>
                     <li>
-                        <a class="page-button" href="/errors?page=${p.getTotalPage()}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}"> >> </a>
+                        <a class="page-button" href="/errors?page=${p.getTotalPage()}&search=${search.getSearch()}&cate=${p.getCate()}&sort=${p.getSort()}&sortCate=${p.getSortCate()}&pageElement=${p.getPageElement()}&startDate=${search.getStartDate()}&endDate=${search.getEndDate()}"> >> </a>
                     </li>
             </ul>
             </li>

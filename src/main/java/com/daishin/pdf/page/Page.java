@@ -2,6 +2,8 @@ package com.daishin.pdf.page;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 @Data
 public class Page {
 
@@ -11,6 +13,8 @@ public class Page {
     private String sort;
     private String cate;
     private String sortCate;
+    private LocalDateTime startDate = LocalDateTime.now().minusDays(1);
+    private LocalDateTime endDate = LocalDateTime.now().plusDays(1);
 
     private int total;//총 게시물 수 ok
     
@@ -110,6 +114,9 @@ public class Page {
         this.sort = search.getSort();
         this.sortCate = search.getSortCate();
         this.pageElement = search.getPageElement();
+        this.startDate = search.getStartDate();
+        this.endDate = search.getEndDate();
+
 
         this.total = total;
         this.totalPage = total % this.pageElement > 0 ? total / this.pageElement + 1 : total / this.pageElement;
