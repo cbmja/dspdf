@@ -48,11 +48,11 @@
     </insert>
 
     <select id="countGroup" parameterType="Detail" resultType="int">
-        SELECT COUNT(*) FROM dbo.DETAIL WHERE TR_KEY = #{TR_KEY}
+        SELECT COUNT(*) FROM dbo.DETAIL WITH(NOLOCK) WHERE TR_KEY = #{TR_KEY}
     </select>
 
     <select id="countMaster" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM dbo.DETAIL WHERE MASTER = #{MASTER}
+        SELECT COUNT(*) FROM dbo.DETAIL WITH(NOLOCK) WHERE MASTER = #{MASTER}
     </select>
 
 <!--
@@ -61,15 +61,15 @@
     </select>
 -->
     <select id="getTrGroup" parameterType="Detail" resultType="hashmap">
-        SELECT * FROM dbo.DETAIL WHERE TR_KEY = #{TR_KEY}
+        SELECT * FROM dbo.DETAIL WITH(NOLOCK) WHERE TR_KEY = #{TR_KEY}
     </select>
 
     <select id="getMasterGroup" parameterType="String" resultType="Detail">
-        SELECT * FROM dbo.DETAIL WHERE MASTER = #{MASTER}
+        SELECT * FROM dbo.DETAIL WITH(NOLOCK) WHERE MASTER = #{MASTER}
     </select>
 
     <select id="findDetail" parameterType="Detail" resultType="Detail">
-        SELECT * FROM dbo.DETAIL WHERE PK = #{PK}
+        SELECT * FROM dbo.DETAIL WITH(NOLOCK) WHERE PK = #{PK}
     </select>
 
     <update id="updatePdfPath" parameterType="Detail">

@@ -20,15 +20,15 @@
     </insert>
 
     <select id="countSearch" resultType="int" parameterType="com.daishin.pdf.page.ErrorSearch">
-        SELECT COUNT(*) FROM dbo.ERROR WHERE ${cate} LIKE CONCAT('%',#{search},'%') AND CREATE_DATE BETWEEN #{startDate} AND #{endDate}
+        SELECT COUNT(*) FROM dbo.ERROR WITH(NOLOCK) WHERE ${cate} LIKE CONCAT('%',#{search},'%') AND CREATE_DATE BETWEEN #{startDate} AND #{endDate}
     </select>
 
     <select id="selectErrorsByPage" parameterType="com.daishin.pdf.page.Page" resultType="Error">
-        SELECT * FROM dbo.ERROR WHERE ${cate} LIKE CONCAT('%',#{search},'%') AND CREATE_DATE BETWEEN #{startDate} AND #{endDate} ORDER BY ${sortCate} ${sort} OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
+        SELECT * FROM dbo.ERROR WITH(NOLOCK) WHERE ${cate} LIKE CONCAT('%',#{search},'%') AND CREATE_DATE BETWEEN #{startDate} AND #{endDate} ORDER BY ${sortCate} ${sort} OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
     </select>
 
     <select id="selectById" parameterType="String" resultType="Error">
-        SELECT * FROM dbo.ERROR WHERE ID = #{id}
+        SELECT * FROM dbo.ERROR WITH(NOLOCK) WHERE ID = #{id}
     </select>
 
 </mapper>

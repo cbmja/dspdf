@@ -24,7 +24,7 @@
     </insert>
 
     <select id="findMaster" parameterType="String" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE MASTER_KEY = #{MASTER_KEY}
+        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE MASTER_KEY = #{MASTER_KEY}
     </select>
 
     <update id="updateSendCnt" parameterType="Master">
@@ -40,23 +40,23 @@
     </update>
 
     <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE ${cate} LIKE CONCAT('%',#{search},'%') ORDER BY ${sortCate} ${sort} OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
+        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE ${cate} LIKE CONCAT('%',#{search},'%') ORDER BY ${sortCate} ${sort} OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
     </select>
 
     <select id="selectStatusBetween300AndLast" parameterType="int" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE STATUS >= 300 AND #{statusCode} > STATUS
+        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE STATUS >= 300 AND #{statusCode} > STATUS
     </select>
 
     <select id="countSearch" resultType="int" parameterType="com.daishin.pdf.page.Search">
-        SELECT COUNT(*) FROM dbo.MASTER WHERE ${cate} LIKE CONCAT('%',#{search},'%')
+        SELECT COUNT(*) FROM dbo.MASTER WITH(NOLOCK) WHERE ${cate} LIKE CONCAT('%',#{search},'%')
     </select>
 
     <select id="selectStatusBetween2_7" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE STATUS > 2 AND 7 > STATUS
+        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE STATUS > 2 AND 7 > STATUS
     </select>
 
     <select id="selectByStatus" parameterType="int" resultType="Master">
-        SELECT * FROM dbo.MASTER WHERE STATUS = #{status}
+        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE STATUS = #{status}
     </select>
 
     <delete id="deleteById" parameterType="Master">
