@@ -62,7 +62,7 @@ public class PostalCreationRequestController {
             response.put(ResponseCode.REMARK, ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
             Error error = new Error();
             error.setMASTER_KEY(_detail.getTR_KEY());
-            error.setERROR_MESSAGE("누락 : "+(String)(checkList.get(0)));
+            error.setERROR_MESSAGE("정보 누락 : "+(String)(checkList.get(0))+" / "+_detail.toString());
             error.setERROR_CODE(ResponseCode.MISSING_VALUE);
             errorRepository.save(error);
             return response;
@@ -134,7 +134,7 @@ public class PostalCreationRequestController {
                 }else{
                     Error errors = new Error();
                     errors.setMASTER_KEY(detail.getMASTER());
-                    errors.setERROR_MESSAGE("이미 처리가 완료된 요청 입니다. TR_KEY [ "+detail.getTR_KEY()+" ] / RECV_NUM [ "+detail.getRECV_NUM()+" ]");
+                    errors.setERROR_MESSAGE("이미 처리가 완료된 요청 입니다. : "+_detail.toString());
                     errors.setERROR_CODE(ResponseCode.PROCESSED_REQUEST);
                     errorRepository.save(errors);
 
