@@ -61,7 +61,7 @@ public class PostalCreationRequestController {
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
             Error error = new Error();
-            error.setMASTER_KEY(_detail.getTR_KEY());
+            error.setMASTER_KEY(_detail.getMASTER() != null ? _detail.getMASTER() : "");
             error.setERROR_MESSAGE("정보 누락 : "+(String)(checkList.get(0))+" / "+_detail.toString());
             error.setERROR_CODE(ResponseCode.MISSING_VALUE);
             errorRepository.save(error);
