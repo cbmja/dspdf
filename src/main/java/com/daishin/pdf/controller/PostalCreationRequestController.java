@@ -14,7 +14,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @Controller //우편 제작 요청 api
@@ -61,7 +64,21 @@ public class PostalCreationRequestController {
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.MISSING_VALUE+(String)(checkList.get(0)));
             Error error = new Error();
-            error.setMASTER_KEY(_detail.getMASTER() != null ? _detail.getMASTER() : "");
+            String masterKey = _detail.getTR_KEY();
+            if(_detail.getTOTAL_SEND_CNT() != null){
+                if(_detail.getTOTAL_SEND_CNT() == 1){
+                    LocalTime currentTime = LocalTime.now();
+                    // 기준 시간 설정
+                    LocalTime comparisonTime = LocalTime.of(14, 0);
+                    if (currentTime.isBefore(comparisonTime)) {
+                        masterKey = LocalDate.now()+"";
+                    } else {
+                        //14 이후이면 년도-월-내일날짜
+                        masterKey = LocalDate.now().plusDays(1L)+"";
+                    }
+                }
+            }
+            error.setMASTER_KEY(masterKey);
             error.setERROR_MESSAGE("정보 누락 : "+(String)(checkList.get(0))+" / "+_detail.toString());
             error.setERROR_CODE(ResponseCode.MISSING_VALUE);
             errorRepository.save(error);
