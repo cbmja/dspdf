@@ -5,7 +5,7 @@
 <mapper namespace="com.daishin.pdf.mapper.DetailMapper">
 
     <insert id = "save" parameterType="Detail">
-        INSERT INTO dbo.DETAIL
+        INSERT INTO DETAIL
         (PK
         ,TR_KEY
         ,TOTAL_SEND_CNT
@@ -42,17 +42,17 @@
         ,#{RECV_ADDR}
         ,#{RECV_ADDR_DETAIL}
         ,#{PDF_PATH}
-        ,GETDATE()
+        ,NOW()
         ,#{MASTER}
         ,#{PDF_NM})
     </insert>
 
     <select id="countGroup" parameterType="Detail" resultType="int">
-        SELECT COUNT(*) FROM dbo.DETAIL WITH(NOLOCK) WHERE TR_KEY = #{TR_KEY}
+        SELECT COUNT(*) FROM DETAIL WHERE TR_KEY = #{TR_KEY}
     </select>
 
     <select id="countMaster" parameterType="String" resultType="int">
-        SELECT COUNT(*) FROM dbo.DETAIL WITH(NOLOCK) WHERE MASTER = #{MASTER}
+        SELECT COUNT(*) FROM DETAIL WHERE MASTER = #{MASTER}
     </select>
 
 <!--
@@ -61,23 +61,23 @@
     </select>
 -->
     <select id="getTrGroup" parameterType="Detail" resultType="hashmap">
-        SELECT * FROM dbo.DETAIL WITH(NOLOCK) WHERE TR_KEY = #{TR_KEY}
+        SELECT * FROM DETAIL WHERE TR_KEY = #{TR_KEY}
     </select>
 
     <select id="getMasterGroup" parameterType="String" resultType="Detail">
-        SELECT * FROM dbo.DETAIL WITH(NOLOCK) WHERE MASTER = #{MASTER}
+        SELECT * FROM DETAIL WHERE MASTER = #{MASTER}
     </select>
 
     <select id="findDetail" parameterType="Detail" resultType="Detail">
-        SELECT * FROM dbo.DETAIL WITH(NOLOCK) WHERE PK = #{PK}
+        SELECT * FROM DETAIL WHERE PK = #{PK}
     </select>
 
     <update id="updatePdfPath" parameterType="Detail">
-        UPDATE dbo.DETAIL SET PDF_PATH = #{PDF_PATH} WHERE MASTER = #{MASTER}
+        UPDATE DETAIL SET PDF_PATH = #{PDF_PATH} WHERE MASTER = #{MASTER}
     </update>
 
     <delete id="deleteById" parameterType="Detail">
-        DELETE FROM dbo.DETAIL WHERE PK = #{PK}
+        DELETE FROM DETAIL WHERE PK = #{PK}
     </delete>
 
 </mapper>

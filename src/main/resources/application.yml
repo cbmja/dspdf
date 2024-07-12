@@ -11,10 +11,10 @@ spring:
       suffix: .jsp
       
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=DAISHIN;encrypt=true;trustServerCertificate=true
-    username: pdfuser
+    url: jdbc:mysql://127.0.0.1:3306/daishin?serverTimezone=UTC&characterEncoding=UTF-8
+    username: root
     password: 1234
-    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
 mybatis:
   mapper-locations: mapper/*.xml

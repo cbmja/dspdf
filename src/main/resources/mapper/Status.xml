@@ -5,11 +5,11 @@
 <mapper namespace="com.daishin.pdf.mapper.StatusMapper">
 
     <select id="selectAll" resultType="Status">
-        SELECT * FROM dbo.STATUS WITH(NOLOCK) ORDER BY STATUS_CODE ASC
+        SELECT * FROM STATUS ORDER BY STATUS_CODE ASC
     </select>
 
     <select id="selectByStatusCode" parameterType="int" resultType="Status">
-        SELECT * FROM dbo.STATUS WITH(NOLOCK) WHERE STATUS_CODE = #{statusCode}
+        SELECT * FROM STATUS WHERE STATUS_CODE = #{statusCode}
     </select>
 
 </mapper>

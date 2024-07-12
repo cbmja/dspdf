@@ -4,8 +4,8 @@
 
 <mapper namespace="com.daishin.pdf.mapper.MasterMapper">
 
-    <insert id = "save" parameterType="Master">
-        INSERT INTO dbo.MASTER
+    <insert id="save" parameterType="Master">
+        INSERT INTO MASTER
         (MASTER_KEY
         ,TOTAL_SEND_CNT
         ,STATUS
@@ -19,48 +19,50 @@
         ,#{STATUS}
         ,#{SEND_CNT}
         ,#{RECEIVED_TIME}
-        ,GETDATE()
+        ,NOW()
         ,#{TYPE})
     </insert>
 
     <select id="findMaster" parameterType="String" resultType="Master">
-        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE MASTER_KEY = #{MASTER_KEY}
+        SELECT * FROM MASTER WHERE MASTER_KEY = #{MASTER_KEY}
     </select>
 
     <update id="updateSendCnt" parameterType="Master">
-        UPDATE dbo.MASTER SET SEND_CNT = #{SEND_CNT} , RECEIVED_TIME = #{RECEIVED_TIME} WHERE MASTER_KEY = #{MASTER_KEY}
+        UPDATE MASTER SET SEND_CNT = #{SEND_CNT}, RECEIVED_TIME = #{RECEIVED_TIME} WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 
     <update id="updateStatus" parameterType="Master">
-        UPDATE dbo.MASTER SET STATUS = #{STATUS} , STATUS_TIME = GETDATE() WHERE MASTER_KEY = #{MASTER_KEY}
+        UPDATE MASTER SET STATUS = #{STATUS}, STATUS_TIME = NOW() WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 
     <update id="updateStatusAndTotalCnt" parameterType="Master">
-        UPDATE dbo.MASTER SET STATUS = #{STATUS} , TOTAL_SEND_CNT = #{TOTAL_SEND_CNT} , STATUS_TIME = GETDATE() WHERE MASTER_KEY = #{MASTER_KEY}
+        UPDATE MASTER SET STATUS = #{STATUS}, TOTAL_SEND_CNT = #{TOTAL_SEND_CNT}, STATUS_TIME = NOW() WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 
     <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="Master">
-        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE ${cate} LIKE CONCAT('%',#{search},'%') ORDER BY ${sortCate} ${sort} OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
+        SELECT * FROM MASTER WHERE ${cate} LIKE CONCAT('%', #{search}, '%')
+        ORDER BY ${sortCate} ${sort}
+        LIMIT #{startNum}, #{pageElement}
     </select>
 
     <select id="selectStatusBetween300AndLast" parameterType="int" resultType="Master">
-        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE STATUS >= 300 AND #{statusCode} > STATUS
+        SELECT * FROM MASTER WHERE STATUS >= 300 AND #{statusCode} > STATUS
     </select>
 
     <select id="countSearch" resultType="int" parameterType="com.daishin.pdf.page.Search">
-        SELECT COUNT(*) FROM dbo.MASTER WITH(NOLOCK) WHERE ${cate} LIKE CONCAT('%',#{search},'%')
+        SELECT COUNT(*) FROM MASTER WHERE ${cate} LIKE CONCAT('%', #{search}, '%')
     </select>
 
     <select id="selectStatusBetween2_7" resultType="Master">
-        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE STATUS > 2 AND 7 > STATUS
+        SELECT * FROM MASTER WHERE STATUS > 2 AND 7 > STATUS
     </select>
 
     <select id="selectByStatus" parameterType="int" resultType="Master">
-        SELECT * FROM dbo.MASTER WITH(NOLOCK) WHERE STATUS = #{status}
+        SELECT * FROM MASTER WHERE STATUS = #{status}
     </select>
 
     <delete id="deleteById" parameterType="Master">
-        DELETE FROM dbo.MASTER WHERE MASTER_KEY = #{MASTER_KEY}
+        DELETE FROM MASTER WHERE MASTER_KEY = #{MASTER_KEY}
     </delete>
 
 </mapper>
