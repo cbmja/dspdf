@@ -79,7 +79,7 @@ public class SchedulerConfiguration {
         //현재 상태가 300 이상이고 마지막 코드 미만인 master
         //최종 단계가 7라고 가정
         List<Status> statusList = statusInfoService.selectAll();
-        List<Master> masterList = masterInfoService.selectStatusBetween300AndLast(statusList.get(statusList.size()-1).getSTATUS_CODE());
+        List<Master> masterList = masterInfoService.selectStatusBetween300AndLast(statusList.get(statusList.size()-2).getSTATUS_CODE());
         if(!masterList.isEmpty() && !statusList.isEmpty()){
 
             for(Master master : masterList){
@@ -133,7 +133,7 @@ public class SchedulerConfiguration {
 
         List<Status> statusList = statusInfoService.selectAll();
         //마지막 상태인 master만 select
-        List<Master> masterList = masterInfoService.selectByStatus(statusList.get(statusList.size()-1).getSTATUS_CODE());
+        List<Master> masterList = masterInfoService.selectByStatus(statusList.get(statusList.size()-2).getSTATUS_CODE());
         
         for(Master master : masterList){
             if(master.getSTATUS_TIME().isBefore(LocalDateTime.now().minusMonths(1L))){
