@@ -74,7 +74,7 @@ public class SchedulerConfiguration {
     // 설정 시간 만큼 시간이 경과 했으면 다음 상태로 (1(수신중)일때는 해당 안됨)
     // 수신 완료된 폴더 중 이동 시킨 것이 있다면 200->300
     @Scheduled(fixedRate = 180000)
-    public void changeStatus(){ //okokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokokok
+    public void changeStatus(){
 
         //현재 상태가 300 이상이고 마지막 코드 미만인 master
         //최종 단계가 7라고 가정
