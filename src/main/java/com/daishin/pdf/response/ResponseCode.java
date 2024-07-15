@@ -8,7 +8,7 @@ public interface ResponseCode {
     String ERROR = "ERROR";
     String SUCCESS = "SUCCESS";
 
-    String UPDATE = "UPDATE";
+    String DUPLICATE = "DUPLICATE";
 
 
     //VALUE
