@@ -101,6 +101,7 @@ public class PostalCreationRequestController {
             error.setERROR_MESSAGE(ResponseCode.DUPLICATE +" 중복된 요청 : "+_detail.toString());
             error.setMASTER_KEY(detail.getMASTER());
             error.setERROR_CODE(ResponseCode.DUPLICATE);
+            errorRepository.save(error);
             return  response;
             }else if(existDetail.getError().equals(ResponseCode.SQL_ERROR)){
             //Sql Exception
