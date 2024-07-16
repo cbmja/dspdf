@@ -97,6 +97,10 @@ public class PostalCreationRequestController {
             response.put(ResponseCode.RESULT, ResponseCode.ERROR);
             response.put(ResponseCode.REMARK, ResponseCode.DUPLICATE +" 중복된 요청 : "+_detail.toString());
             logger.error(ResponseCode.PROCESSED_REQUEST);
+            Error error = new Error();
+            error.setERROR_MESSAGE(ResponseCode.DUPLICATE +" 중복된 요청 : "+_detail.toString());
+            error.setMASTER_KEY(detail.getMASTER());
+            error.setERROR_CODE(ResponseCode.DUPLICATE);
             return  response;
             }else if(existDetail.getError().equals(ResponseCode.SQL_ERROR)){
             //Sql Exception
