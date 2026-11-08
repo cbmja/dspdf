@@ -42,7 +42,7 @@
         ,#{RECV_ADDR}
         ,#{RECV_ADDR_DETAIL}
         ,#{PDF_PATH}
-        ,NOW()
+        ,CURRENT_TIMESTAMP
         ,#{MASTER}
         ,#{PDF_NM})
     </insert>

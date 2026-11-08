@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<configuration scan="true">
+<configuration>
 
     <!-- 로그 파일이 저장될 경로 -->
-    <property name="LOG_PATH" value="D:\DATA\logs"/>
+    <springProperty scope="context" name="LOG_PATH" source="storage.logPath" defaultValue="D:/DATA/logs"/>
     
     <!-- 로그 파일 이름 -->
     <property name="LOG_FILE_NAME" value="daesinPdf"/>

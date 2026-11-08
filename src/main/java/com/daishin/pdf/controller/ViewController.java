@@ -16,10 +16,13 @@ import com.daishin.pdf.util.Utils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -46,7 +49,7 @@ public class ViewController {
 
 
     @GetMapping("/masters")
-    public String masterList(@ModelAttribute Search search, Model model){
+    public String masterList(@Valid @ModelAttribute Search search, Model model){
 
         String realSearch = search.getSearch();
         if(search.getCate().equals("TYPE")){
@@ -86,10 +89,28 @@ public class ViewController {
     }
 
     @PostMapping("/masters/update")
-    public String changeStatus(@RequestParam("statusData") String statusData , @ModelAttribute Search search , Model model) throws JsonProcessingException {
+    public String changeStatus(@RequestParam("statusData") String statusData , @Valid @ModelAttribute Search search , Model model) throws JsonProcessingException {
 
         ObjectMapper objectMapper = new ObjectMapper();
         Map<String, String> statusMap = objectMapper.readValue(statusData, new TypeReference<Map<String, String>>() {});
+
+        if (statusMap == null || statusMap.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "상태 변경 대상이 없습니다");
+        }
+        for (Map.Entry<String, String> entry : statusMap.entrySet()) {
+            int status;
+            try {
+                status = Integer.parseInt(entry.getValue());
+            } catch (NumberFormatException e) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 상태 코드");
+            }
+            if (statusInfoService.selectByStatusCode(status) == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "등록되지 않은 상태 코드");
+            }
+            if (masterInfoService.findMaster(entry.getKey()) == null) {
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "작업을 찾을 수 없습니다");
+            }
+        }
 
         for(String master_key : statusMap.keySet()){
             Master master = masterInfoService.findMaster(master_key);
@@ -155,7 +176,11 @@ public class ViewController {
 
 
     @GetMapping("/errors")
-    public String errorList(@ModelAttribute ErrorSearch search, Model model) {
+    public String errorList(@Valid @ModelAttribute ErrorSearch search, Model model) {
+
+        if (search.getStartDate().isAfter(search.getEndDate())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "조회 시작일이 종료일보다 늦습니다");
+        }
 
         //페이징 처리
         Page page = new Page(search.getPage() , errorRepository.countSearch(search) , search);
@@ -175,12 +200,23 @@ public class ViewController {
     }
 
     @GetMapping("/error/detail")
-    public String errorDetail(@RequestParam String errorId, Model model) {
+    public String errorDetail(@RequestParam int errorId, Model model) {
 
-        model.addAttribute("error" , errorRepository.selectById(errorId));
+        if (errorId < 1) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "잘못된 오류 ID");
+        }
+        Error error = errorRepository.selectById(Integer.toString(errorId));
+        if (error == null) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "오류를 찾을 수 없습니다");
+        }
+        model.addAttribute("error" , error);
 
         return "error_detail";
     }
 
+    @ExceptionHandler(JsonProcessingException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void invalidStatusJson() {
+    }
 
 }

@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -116,7 +117,7 @@ public class Utils {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(new JavaTimeModule());
             String jsonlist = mapper.writeValueAsString(jsonList);
-            FileWriter fileWriter = new FileWriter(path+master+".json");
+            FileWriter fileWriter = new FileWriter(path+master+".json", StandardCharsets.UTF_8);
             fileWriter.write(jsonlist);
             fileWriter.close();
         } catch (Exception e) {

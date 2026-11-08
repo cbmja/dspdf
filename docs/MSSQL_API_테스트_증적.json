@@ -1,0 +1,1062 @@
+{
+  "executedAt" : "2026-11-08T19:20:51.763179500+09:00",
+  "database" : "dspdf_it_20261108192036321574500",
+  "httpBaseUrl" : "http://127.0.0.1:51072",
+  "sqlServerVersion" : "Microsoft SQL Server 2022 (RTM-CU27-GDR) (KB5126934) - 16.0.4305.5 (X64) \n\tOct  2 2026 17:28:11 \n\tCopyright (C) 2022 Microsoft Corporation\n\tDeveloper Edition (64-bit) on Linux (Ubuntu 22.04.5 LTS) <X64>",
+  "jdbcVersion" : "12.6.5.0",
+  "javaVersion" : "17.0.15",
+  "testMode" : "Real HTTP + embedded Tomcat/JSP + Microsoft JDBC + real SQL Server; no mocks",
+  "results" : [ {
+    "id" : "API-001",
+    "title" : "전체 경로와 스케줄 격리",
+    "expected" : "업무 경로 5개 및 자동 스케줄 비활성",
+    "exchanges" : [ ],
+    "observations" : [ "등록 경로=[GET /error/detail, GET /errors, GET /masters, POST /detail, POST /masters/update]; scheduler.enabled=false" ],
+    "result" : "PASS",
+    "elapsedMs" : 135
+  }, {
+    "id" : "API-002",
+    "title" : "단일 우편 정상 접수",
+    "expected" : "HTTP 200 및 OK/SUCCESS, 한글 DB 및 PDF 보존",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-SINGLE-001",
+        "File" : "SINGLE-001-1.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "1",
+        "TR_KEY" : "SINGLE-001"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-002-1.json",
+      "bodyPreview" : "{\"결과\":\"OK\",\"비고\":\"SUCCESS\"}"
+    } ],
+    "observations" : [ "DB={PK=SINGLE-001_1, TR_KEY=SINGLE-001, TOTAL_SEND_CNT=1, DLV_TYPE_CD=01, PRINT_TYPE_NM=양면, PAGE_CNT=1, RET_YN=N, RECV_NUM=1, DM_LINK_KEY=DM-SINGLE-001, CIFNO=00001234, DLV_CD=01, RECV_NM=가상수신자, RECV_POST_CD=01234, RECV_ADDR=테스트시 가상로 123, RECV_ADDR_DETAIL=테스트동 101호, PDF_PATH=C:\\project\\ds-pdf\\dspdf\\target\\mssql-it\\20261108192036321574500\\receiving\\2026-11-09\\, SAVE_DATE=2026-11-08 19:20:44.15, MASTER=2026-11-09, PDF_NM=SINGLE-001-1.pdf}; PDF 바이트 동일; MASTER.STATUS=100" ],
+    "result" : "PASS",
+    "elapsedMs" : 686
+  }, {
+    "id" : "API-003",
+    "title" : "대량 첫 요청",
+    "expected" : "HTTP 200 및 상태 100, SEND_CNT=1",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-BULK-003",
+        "File" : "BULK-003-1.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "2",
+        "TR_KEY" : "BULK-003"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-003-1.json",
+      "bodyPreview" : "{\"결과\":\"OK\",\"비고\":\"SUCCESS\"}"
+    } ],
+    "observations" : [ "MASTER={MASTER_KEY=BULK-003, TOTAL_SEND_CNT=2, STATUS=100, SEND_CNT=1, RECEIVED_TIME=2026-11-08 19:20:44.41, STATUS_TIME=2026-11-08 19:20:44.423, TYPE=ARRANGEMENT}" ],
+    "result" : "PASS",
+    "elapsedMs" : 148
+  }, {
+    "id" : "API-004",
+    "title" : "대량 마지막 요청과 파일 이동",
+    "expected" : "2건 접수, 상태 200, JSON 및 PDF 2개 complete 이동",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-BULK-004",
+        "File" : "BULK-004-1.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "2",
+        "TR_KEY" : "BULK-004"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-004-1.json",
+      "bodyPreview" : "{\"결과\":\"OK\",\"비고\":\"SUCCESS\"}"
+    }, {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-BULK-004",
+        "File" : "BULK-004-2.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "2",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "2",
+        "TR_KEY" : "BULK-004"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-004-2.json",
+      "bodyPreview" : "{\"결과\":\"OK\",\"비고\":\"SUCCESS\"}"
+    } ],
+    "observations" : [ "JSON={\"detail\":[{\"PK\":\"BULK-004_1\",\"TR_KEY\":\"BULK-004\",\"TOTAL_SEND_CNT\":2,\"DLV_TYPE_CD\":\"01\",\"PRINT_TYPE_NM\":\"양면\",\"PAGE_CNT\":1,\"RET_YN\":\"N\",\"RECV_NUM\":1,\"DM_LINK_KEY\":\"DM-BULK-004\",\"CIFNO\":\"00001234\",\"DLV_CD\":\"01\",\"RECV_NM\":\"가상수신자\",\"RECV_POST_CD\":\"01234\",\"RECV_ADDR\":\"테스트시 가상로 123\",\"RECV_ADDR_DETAIL\":\"테스트동 101호\",\"PDF_PATH\":\"C:\\\\project\\\\ds-pdf\\\\dspdf\\\\target\\\\mssql-it\\\\20261108192036321574500\\\\complete\\\\BULK-004\",\"SAVE_DATE\":[2026,11,8,19,20,44,570000000],\"MASTER\":\"BULK-004\",\"PDF_NM\":\"BULK-004-1.pdf\",\"File\":null},{\"PK\":\"BULK-004_2\",\"TR_KEY\":\"BULK-004\",\"TOTAL_SEND_CNT\":2,\"DLV_TYPE_CD\":\"01\",\"PRINT_TYPE_NM\":\"양면\",\"PAGE_CNT\":1,\"RET_YN\":\"N\",\"RECV_NUM\":2,\"DM_LINK_KEY\":\"DM-BULK-004\",\"CIFNO\":\"00001234\",\"DLV_CD\":\"01\",\"RECV_NM\":\"가상수신자\",\"RECV_POST_CD\":\"01234\",\"RECV_ADDR\":\"테스트시 가상로 123\",\"RECV_ADDR_DETAIL\":\"테스트동 101호\",\"PDF_PATH\":\"C:\\\\project\\\\ds-pdf\\\\dspdf\\\\target\\\\mssql-it\\\\20261108192036321574500\\\\complete\\\\BULK-004\",\"SAVE_DATE\":[2026,11,8,19,20,44,667000000],\"MASTER\":\"BULK-004\",\"PDF_NM\":\"BULK-004-2.pdf\",\"File\":null}],\"master\":[{\"MASTER_KEY\":\"BULK-004\",\"TOTAL_SEND_CNT\":2,\"SEND_CNT\":2,\"STATUS\":200,\"RECEIVED_TIME\":[2026,11,8,19,20,44,667000000],\"STATUS_TIME\":[2026,11,8,19,20,44,687000000],\"TYPE\":\"ARRANGEMENT\"}]}; receiving 디렉터리 제거; complete PDF 2건 존재", "MASTER={MASTER_KEY=BULK-004, TOTAL_SEND_CNT=2, STATUS=200, SEND_CNT=2, RECEIVED_TIME=2026-11-08 19:20:44.667, STATUS_TIME=2026-11-08 19:20:44.687, TYPE=ARRANGEMENT}" ],
+    "result" : "PASS",
+    "elapsedMs" : 393
+  }, {
+    "id" : "API-005",
+    "title" : "중복 접수",
+    "expected" : "HTTP 200 및 ERROR/DUPLICATE, 원본 1건 유지",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-DUP-005",
+        "File" : "DUP-005-1.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "2",
+        "TR_KEY" : "DUP-005"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-005-1.json",
+      "bodyPreview" : "{\"결과\":\"OK\",\"비고\":\"SUCCESS\"}"
+    }, {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-DUP-005",
+        "File" : "DUP-005-1.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "2",
+        "TR_KEY" : "DUP-005"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-005-2.json",
+      "bodyPreview" : "{\"결과\":\"ERROR\",\"비고\":\"DUPLICATE 중복된 요청 : Detail(TR_KEY=DUP-005, TOTAL_SEND_CNT=2, DLV_TYPE_CD=01, PRINT_TYPE_NM=양면, PAGE_CNT=1, RET_YN=N, RECV_NUM=1, DM_LINK_KEY=DM-DUP-005, CIFNO=00001234, DLV_CD=01, RECV_NM=가상수신자, RECV_POST_CD=01234, RECV_ADDR=테스트시 가상로 123, RECV_ADDR_DETAIL=테스트동 101호, File=org.springframework.web.multipart.support.StandardMultipartHttpServletRequest$StandardMultipartFile@7a4a74bb)\"}"
+    } ],
+    "observations" : [ "DETAIL=1; DUPLICATE 오류 이력=1" ],
+    "result" : "PASS",
+    "elapsedMs" : 216
+  }, {
+    "id" : "API-006",
+    "title" : "필수 수신자 누락",
+    "expected" : "HTTP 200 및 ERROR/MISSING_VALUE, 저장 없음",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-MISSING-006",
+        "File" : "MISSING-006-1.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "2",
+        "TR_KEY" : "MISSING-006"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-006-1.json",
+      "bodyPreview" : "{\"결과\":\"ERROR\",\"비고\":\"MISSING_VALUE : RECV_NM\"}"
+    } ],
+    "observations" : [ "DETAIL=0; 누락 오류 이력=1" ],
+    "result" : "PASS",
+    "elapsedMs" : 131
+  }, {
+    "id" : "API-007",
+    "title" : "파일 누락",
+    "expected" : "HTTP 200 및 ERROR/MISSING_VALUE",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-NOFILE-007",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "2",
+        "TR_KEY" : "NOFILE-007"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-007-1.json",
+      "bodyPreview" : "{\"결과\":\"ERROR\",\"비고\":\"MISSING_VALUE : pdf file\"}"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 112
+  }, {
+    "id" : "API-008",
+    "title" : "잘못된 숫자 바인딩",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "TOTAL_SEND_CNT" : "abc"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-008-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:45 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 127
+  }, {
+    "id" : "API-009",
+    "title" : "작업 목록 기본 조회",
+    "expected" : "HTTP 200 및 JSP 실제 렌더링",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : { },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-009-1.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 2641
+  }, {
+    "id" : "API-010",
+    "title" : "숫자 상태 검색",
+    "expected" : "HTTP 200, STATUS=200 작업만 표시",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "cate" : "STATUS",
+        "search" : "200"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-010-1.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 총 검색 건수 : 1 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 75
+  }, {
+    "id" : "API-011",
+    "title" : "타입 한글 검색",
+    "expected" : "실시간을 REAL_TIME으로 검색",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "cate" : "TYPE",
+        "search" : "실시간"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-011-1.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 1 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 78
+  }, {
+    "id" : "API-012",
+    "title" : "작업 페이징과 동일 시각 정렬",
+    "expected" : "2페이지 PAGE-03만 표시",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "page" : "2",
+        "pageElement" : "2",
+        "search" : "PAGE-",
+        "sort" : "ASC"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-012-1.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 총 검색 건수 : 3 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 2 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 63
+  }, {
+    "id" : "API-013",
+    "title" : "작업 빈 결과",
+    "expected" : "HTTP 200, 총 검색 건수 0",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "search" : "NOT-FOUND"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-013-1.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 총 검색 건수 : 0 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 59
+  }, {
+    "id" : "API-014",
+    "title" : "허용되지 않은 검색 컬럼",
+    "expected" : "HTTP 400, 테이블 보존",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "cate" : "MASTER_KEY; DROP TABLE MASTER;--"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-014-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:48 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 115
+  }, {
+    "id" : "API-015",
+    "title" : "잘못된 정렬",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "DESC;--"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-015-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:48 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 51
+  }, {
+    "id" : "API-016",
+    "title" : "페이지 크기 0",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "pageElement" : "0"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-016-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:48 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 49
+  }, {
+    "id" : "API-017",
+    "title" : "일반 상태 변경",
+    "expected" : "HTTP 200, 상태 300 및 STATUS_TIME 갱신",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/masters/update",
+      "input" : {
+        "statusData" : "{\"BATCH-SEED\":\"300\"}"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-017-1.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-11-08T19:20:48.643 異쒕젰以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    } ],
+    "observations" : [ "MASTER={MASTER_KEY=BATCH-SEED, TOTAL_SEND_CNT=2, STATUS=300, SEND_CNT=2, RECEIVED_TIME=2026-01-01 10:00:00.0, STATUS_TIME=2026-11-08 19:20:48.643, TYPE=ARRANGEMENT}" ],
+    "result" : "PASS",
+    "elapsedMs" : 104
+  }, {
+    "id" : "API-018",
+    "title" : "실시간 수신중 복귀",
+    "expected" : "TOTAL_SEND_CNT가 0으로 초기화",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/masters/update",
+      "input" : {
+        "statusData" : "{\"RT-SEED\":\"100\"}"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-018-1.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 RT-SEED 1 / 0 2026-01-01T10:00 2026-11-08T19:20:48.737 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    } ],
+    "observations" : [ "MASTER={MASTER_KEY=RT-SEED, TOTAL_SEND_CNT=0, STATUS=100, SEND_CNT=1, RECEIVED_TIME=2026-01-01 10:00:00.0, STATUS_TIME=2026-11-08 19:20:48.737, TYPE=REAL_TIME}" ],
+    "result" : "PASS",
+    "elapsedMs" : 88
+  }, {
+    "id" : "API-019",
+    "title" : "실시간 수신 완료",
+    "expected" : "전체 건수를 실제 DETAIL 수로 갱신",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-RT-019",
+        "File" : "RT-019-1.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "1",
+        "TR_KEY" : "RT-019"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-019-1.json",
+      "bodyPreview" : "{\"결과\":\"OK\",\"비고\":\"SUCCESS\"}"
+    }, {
+      "method" : "POST",
+      "path" : "/masters/update",
+      "input" : {
+        "statusData" : "{\"2026-11-09\":\"200\"}"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-019-2.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 2026-11-09 1 / 1 2026-11-08T19:20:48.873 2026-11-08T19:20:48.913 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 6 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    } ],
+    "observations" : [ "MASTER={MASTER_KEY=2026-11-09, TOTAL_SEND_CNT=1, STATUS=200, SEND_CNT=1, RECEIVED_TIME=2026-11-08 19:20:48.873, STATUS_TIME=2026-11-08 19:20:48.913, TYPE=REAL_TIME}" ],
+    "result" : "PASS",
+    "elapsedMs" : 169
+  }, {
+    "id" : "API-020",
+    "title" : "잘못된 상태 JSON",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/masters/update",
+      "input" : {
+        "statusData" : "not-json"
+      },
+      "status" : 400,
+      "contentType" : "",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-020-1.html",
+      "bodyPreview" : ""
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 43
+  }, {
+    "id" : "API-021",
+    "title" : "없는 작업 상태 변경",
+    "expected" : "HTTP 404",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/masters/update",
+      "input" : {
+        "statusData" : "{\"UNKNOWN\":\"300\"}"
+      },
+      "status" : 404,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-021-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:49 KST 2026 There was an unexpected error (type=Not Found, status=404)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 61
+  }, {
+    "id" : "API-022",
+    "title" : "미등록 상태 코드",
+    "expected" : "HTTP 400, 기존 상태 보존",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/masters/update",
+      "input" : {
+        "statusData" : "{\"BATCH-SEED\":\"777\"}"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-022-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:49 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 50
+  }, {
+    "id" : "API-023",
+    "title" : "빈 상태 변경",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/masters/update",
+      "input" : {
+        "statusData" : "{}"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-023-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:49 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 43
+  }, {
+    "id" : "API-024",
+    "title" : "오류 목록",
+    "expected" : "HTTP 200, SAMPLE_ERROR 렌더링",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : { },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-024-1.html",
+      "bodyPreview" : "error_list 일자 에러 코드 그룹 NUM 내용 일자 에러 코드 그룹 1 내용 확인 2026-11-08T19:20:49.190 SAMPLE_ERROR BATCH-SEED 일자 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 목록으로 1 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 614
+  }, {
+    "id" : "API-025",
+    "title" : "오류 날짜 문자열 검색",
+    "expected" : "ISO 날짜 검색 성공",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : {
+        "cate" : "CREATE_DATE",
+        "search" : "2026-11-08"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-025-1.html",
+      "bodyPreview" : "error_list 일자 에러 코드 그룹 NUM 내용 일자 에러 코드 그룹 1 내용 확인 2026-11-08T19:20:49.807 SAMPLE_ERROR BATCH-SEED 일자 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 목록으로 1 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 61
+  }, {
+    "id" : "API-026",
+    "title" : "오류 페이징",
+    "expected" : "2페이지의 두 번째 오류만 표시",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : {
+        "page" : "2",
+        "pageElement" : "1",
+        "sort" : "ASC"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-026-1.html",
+      "bodyPreview" : "error_list 일자 에러 코드 그룹 NUM 내용 일자 에러 코드 그룹 2 내용 확인 2026-11-08T19:20:49.863 SECOND_CODE SECOND-ERROR 일자 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 목록으로 1 2 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 53
+  }, {
+    "id" : "API-027",
+    "title" : "오류 날짜 범위",
+    "expected" : "범위 밖 데이터 제외",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : {
+        "endDate" : "2000-01-02T00:00",
+        "startDate" : "2000-01-01T00:00"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-027-1.html",
+      "bodyPreview" : "error_list 일자 에러 코드 그룹 NUM 내용 일자 에러 코드 그룹 일자 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 목록으로 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 52
+  }, {
+    "id" : "API-028",
+    "title" : "역전된 날짜 범위",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : {
+        "endDate" : "2026-01-01T00:00",
+        "startDate" : "2026-02-01T00:00"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-028-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:49 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 38
+  }, {
+    "id" : "API-029",
+    "title" : "오류 검색 SQL 입력 차단",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : {
+        "sortCate" : "CREATE_DATE; DROP TABLE ERROR;--"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-029-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:50 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 46
+  }, {
+    "id" : "API-030",
+    "title" : "오류 상세 정상",
+    "expected" : "HTTP 200 및 한글 원문",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/error/detail",
+      "input" : {
+        "errorId" : "1"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-030-1.html",
+      "bodyPreview" : "error_list 샘플 오류 메시지 한글 주소 검증"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 374
+  }, {
+    "id" : "API-031",
+    "title" : "없는 오류 상세",
+    "expected" : "HTTP 404",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/error/detail",
+      "input" : {
+        "errorId" : "999999"
+      },
+      "status" : 404,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-031-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:50 KST 2026 There was an unexpected error (type=Not Found, status=404)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 61
+  }, {
+    "id" : "API-032",
+    "title" : "잘못된 오류 ID",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/error/detail",
+      "input" : {
+        "errorId" : "abc"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-032-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:50 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 55
+  }, {
+    "id" : "API-033",
+    "title" : "필수 파라미터 누락",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/error/detail",
+      "input" : { },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-033-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:50 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 47
+  }, {
+    "id" : "SCH-001",
+    "title" : "시간 경과 자동 상태 전환",
+    "expected" : "오래된 AUTO 300만 400으로 전환",
+    "exchanges" : [ ],
+    "observations" : [ "MASTER={MASTER_KEY=PAGE-01, TOTAL_SEND_CNT=2, STATUS=400, SEND_CNT=1, RECEIVED_TIME=2026-01-01 10:00:00.0, STATUS_TIME=2026-11-08 19:20:50.623, TYPE=ARRANGEMENT}", "MASTER={MASTER_KEY=PAGE-02, TOTAL_SEND_CNT=2, STATUS=300, SEND_CNT=1, RECEIVED_TIME=2026-01-01 10:00:00.0, STATUS_TIME=2026-11-08 19:30:50.61, TYPE=ARRANGEMENT}" ],
+    "result" : "PASS",
+    "elapsedMs" : 73
+  }, {
+    "id" : "SCH-002",
+    "title" : "1개월 경과 삭제",
+    "expected" : "대상 상태의 오래된 MASTER와 DETAIL만 삭제, ERROR 및 PDF 보존",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-OLD-DELETE",
+        "File" : "OLD-DELETE-1.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "2",
+        "TR_KEY" : "OLD-DELETE"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/SCH-002-1.json",
+      "bodyPreview" : "{\"결과\":\"OK\",\"비고\":\"SUCCESS\"}"
+    } ],
+    "observations" : [ "오래된 MASTER/DETAIL=0; 최근 MASTER=1; ERROR=1; PDF 존재" ],
+    "result" : "PASS",
+    "elapsedMs" : 194
+  }, {
+    "id" : "SCH-003",
+    "title" : "당일 단일 마감",
+    "expected" : "당일 묶음 상태 200, 전체 건수 1, JSON과 PDF 이동",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/detail",
+      "input" : {
+        "CIFNO" : "00001234",
+        "DLV_CD" : "01",
+        "DLV_TYPE_CD" : "01",
+        "DM_LINK_KEY" : "DM-CLOSE-TODAY",
+        "File" : "CLOSE-TODAY-1.pdf (application/pdf, 413 bytes)",
+        "PAGE_CNT" : "1",
+        "PRINT_TYPE_NM" : "양면",
+        "RECV_ADDR" : "테스트시 가상로 123",
+        "RECV_ADDR_DETAIL" : "테스트동 101호",
+        "RECV_NM" : "가상수신자",
+        "RECV_NUM" : "1",
+        "RECV_POST_CD" : "01234",
+        "RET_YN" : "N",
+        "TOTAL_SEND_CNT" : "1",
+        "TR_KEY" : "CLOSE-TODAY"
+      },
+      "status" : 200,
+      "contentType" : "application/json",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/SCH-003-1.json",
+      "bodyPreview" : "{\"결과\":\"OK\",\"비고\":\"SUCCESS\"}"
+    } ],
+    "observations" : [ "MASTER={MASTER_KEY=2026-11-08, TOTAL_SEND_CNT=1, STATUS=200, SEND_CNT=1, RECEIVED_TIME=2026-11-08 19:20:50.97, STATUS_TIME=2026-11-08 19:20:51.017, TYPE=REAL_TIME}" ],
+    "result" : "PASS",
+    "elapsedMs" : 239
+  }, {
+    "id" : "API-035",
+    "title" : "전체 작업 정렬 조합",
+    "expected" : "허용 컬럼 5개와 방향 2개 모두 조회 성공",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "ASC",
+        "sortCate" : "MASTER_KEY"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-1.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "DESC",
+        "sortCate" : "MASTER_KEY"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-2.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "ASC",
+        "sortCate" : "STATUS"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-3.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "DESC",
+        "sortCate" : "STATUS"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-4.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "ASC",
+        "sortCate" : "RECEIVED_TIME"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-5.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "DESC",
+        "sortCate" : "RECEIVED_TIME"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-6.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "ASC",
+        "sortCate" : "STATUS_TIME"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-7.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "DESC",
+        "sortCate" : "STATUS_TIME"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-8.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "ASC",
+        "sortCate" : "TYPE"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-9.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "sort" : "DESC",
+        "sortCate" : "TYPE"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-035-10.html",
+      "bodyPreview" : "master_list 상태 검색시에는 코드로 검색해주세요 / [�닔�떊以� : 100] / [�닔�떊�셿猷� : 200] / [異쒕젰以� : 300] / [諛쒖넚�셿猷� : 400] / [�삤瑜� : 900] 그룹키 현재 상태 타입 그룹키 현재 수신 건수 / 총 건수 마지막 건수 수신 시각 현재 상태 시작 시각 현재 상태 상태 수정 타입 RT-SEED 1 / 0 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 실시간 BATCH-SEED 2 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊�셿猷� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-01 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-02 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 PAGE-03 1 / 2 2026-01-01T10:00 2026-01-01T10:00 �닔�떊以� �닔�떊以� �닔�떊�셿猷� 異쒕젰以� 諛쒖넚�셿猷� �삤瑜� 배치 총 검색 건수 : 5 그룹키 현재 상태 마지막 건수 수신 시각 상태 변경 시각 타입 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 에러 확인 1 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 357
+  }, {
+    "id" : "API-036",
+    "title" : "오류 코드 검색",
+    "expected" : "SAMPLE_ERROR 검색과 다른 코드 제외",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : {
+        "cate" : "ERROR_CODE",
+        "search" : "SAMPLE_ERROR"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-036-1.html",
+      "bodyPreview" : "error_list 일자 에러 코드 그룹 NUM 내용 일자 에러 코드 그룹 1 내용 확인 2026-11-08T19:20:51.470 SAMPLE_ERROR BATCH-SEED 일자 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 목록으로 1 > >>"
+    }, {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : {
+        "cate" : "ERROR_CODE",
+        "search" : "NO_MATCH"
+      },
+      "status" : 200,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-036-2.html",
+      "bodyPreview" : "error_list 일자 에러 코드 그룹 NUM 내용 일자 에러 코드 그룹 일자 오름차순 내림차순 &nbsp;&nbsp;&nbsp;&nbsp; 10 20 30 40 50 60 70 80 90 100 &nbsp;&nbsp;&nbsp;&nbsp; 목록으로 > >>"
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 70
+  }, {
+    "id" : "API-037",
+    "title" : "잘못된 날짜 형식",
+    "expected" : "HTTP 400",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : {
+        "startDate" : "not-a-date"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-037-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:51 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 43
+  }, {
+    "id" : "API-038",
+    "title" : "페이지 입력 범위",
+    "expected" : "음수 페이지와 200 초과 크기 HTTP 400",
+    "exchanges" : [ {
+      "method" : "GET",
+      "path" : "/masters",
+      "input" : {
+        "page" : "-1"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-038-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:51 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    }, {
+      "method" : "GET",
+      "path" : "/errors",
+      "input" : {
+        "pageElement" : "201"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-038-2.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:51 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 58
+  }, {
+    "id" : "API-039",
+    "title" : "숫자가 아닌 상태 코드",
+    "expected" : "HTTP 400 및 상태 보존",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/masters/update",
+      "input" : {
+        "statusData" : "{\"BATCH-SEED\":\"abc\"}"
+      },
+      "status" : 400,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-039-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:51 KST 2026 There was an unexpected error (type=Bad Request, status=400)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 47
+  }, {
+    "id" : "API-040",
+    "title" : "여러 작업 변경 사전 검사",
+    "expected" : "없는 작업이 섞이면 HTTP 404 및 정상 작업도 보존",
+    "exchanges" : [ {
+      "method" : "POST",
+      "path" : "/masters/update",
+      "input" : {
+        "statusData" : "{\"BATCH-SEED\":\"300\",\"UNKNOWN\":\"300\"}"
+      },
+      "status" : 404,
+      "contentType" : "text/html;charset=UTF-8",
+      "bodyFile" : "target/mssql-it/20261108192036321574500/API-040-1.html",
+      "bodyPreview" : "Whitelabel Error Page This application has no explicit mapping for /error, so you are seeing this as a fallback. Sun Nov 08 19:20:51 KST 2026 There was an unexpected error (type=Not Found, status=404)."
+    } ],
+    "observations" : [ ],
+    "result" : "PASS",
+    "elapsedMs" : 52
+  }, {
+    "id" : "API-034",
+    "title" : "모든 공개 경로의 HTTP 실행 확인",
+    "expected" : "등록 업무 경로 5개 모두 실제 호출",
+    "exchanges" : [ ],
+    "observations" : [ "HTTP 실행 경로=[GET /error/detail, GET /errors, GET /masters, POST /detail, POST /masters/update]" ],
+    "result" : "PASS",
+    "elapsedMs" : 34
+  } ]
+}

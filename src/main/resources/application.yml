@@ -11,10 +11,10 @@ spring:
       suffix: .jsp
       
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/daishin?serverTimezone=UTC&characterEncoding=UTF-8
-    username: root
-    password: 1234
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:sqlserver://${DB_HOST:localhost}:${DB_PORT:1433};databaseName=${DB_NAME:daishin};encrypt=true;trustServerCertificate=${DB_TRUST_SERVER_CERTIFICATE:false}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
 
 mybatis:
   mapper-locations: mapper/*.xml
@@ -23,7 +23,10 @@ mybatis:
 #    map-underscore-to-camel-case: true
     
 storage:
-  logPath: D:\DATA\log
-  receivingPath: D:\DATA\receiving\
-  completePath: D:\DATA\complete\
+  logPath: ${LOG_PATH:D:/DATA/logs}
+  receivingPath: ${RECEIVING_PATH:D:/DATA/receiving/}
+  completePath: ${COMPLETE_PATH:D:/DATA/complete/}
+
+scheduler:
+  enabled: ${SCHEDULER_ENABLED:true}
 

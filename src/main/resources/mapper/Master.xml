@@ -4,6 +4,13 @@
 
 <mapper namespace="com.daishin.pdf.mapper.MasterMapper">
 
+    <sql id="searchColumn">
+        <choose>
+            <when test="cate == 'STATUS'">CAST(STATUS AS NVARCHAR(20))</when>
+            <otherwise>${cate}</otherwise>
+        </choose>
+    </sql>
+
     <insert id="save" parameterType="Master">
         INSERT INTO MASTER
         (MASTER_KEY
@@ -19,7 +26,7 @@
         ,#{STATUS}
         ,#{SEND_CNT}
         ,#{RECEIVED_TIME}
-        ,NOW()
+        ,CURRENT_TIMESTAMP
         ,#{TYPE})
     </insert>
 
@@ -32,17 +39,18 @@
     </update>
 
     <update id="updateStatus" parameterType="Master">
-        UPDATE MASTER SET STATUS = #{STATUS}, STATUS_TIME = NOW() WHERE MASTER_KEY = #{MASTER_KEY}
+        UPDATE MASTER SET STATUS = #{STATUS}, STATUS_TIME = CURRENT_TIMESTAMP WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 
     <update id="updateStatusAndTotalCnt" parameterType="Master">
-        UPDATE MASTER SET STATUS = #{STATUS}, TOTAL_SEND_CNT = #{TOTAL_SEND_CNT}, STATUS_TIME = NOW() WHERE MASTER_KEY = #{MASTER_KEY}
+        UPDATE MASTER SET STATUS = #{STATUS}, TOTAL_SEND_CNT = #{TOTAL_SEND_CNT}, STATUS_TIME = CURRENT_TIMESTAMP WHERE MASTER_KEY = #{MASTER_KEY}
     </update>
 
     <select id="selectMastersByPage" parameterType="com.daishin.pdf.page.Page" resultType="Master">
-        SELECT * FROM MASTER WHERE ${cate} LIKE CONCAT('%', #{search}, '%')
+        SELECT * FROM MASTER WHERE <include refid="searchColumn"/> LIKE CONCAT(N'%', #{search}, N'%')
         ORDER BY ${sortCate} ${sort}
-        LIMIT #{startNum}, #{pageElement}
+        <if test="sortCate != 'MASTER_KEY'">, MASTER_KEY ASC</if>
+        OFFSET #{startNum} ROWS FETCH NEXT #{pageElement} ROWS ONLY
     </select>
 
     <select id="selectStatusBetween300AndLast" parameterType="int" resultType="Master">
@@ -50,7 +58,7 @@
     </select>
 
     <select id="countSearch" resultType="int" parameterType="com.daishin.pdf.page.Search">
-        SELECT COUNT(*) FROM MASTER WHERE ${cate} LIKE CONCAT('%', #{search}, '%')
+        SELECT COUNT(*) FROM MASTER WHERE <include refid="searchColumn"/> LIKE CONCAT(N'%', #{search}, N'%')
     </select>
 
     <select id="selectStatusBetween2_7" resultType="Master">
